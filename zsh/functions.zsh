@@ -3,6 +3,11 @@
 #########################################
 
 gc() {
+    if [[ -z "$*" ]]; then
+        echo "Usage: gc \"mensaje\""
+        return 1
+    fi
+
     git commit -m "$*"
 }
 

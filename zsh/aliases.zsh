@@ -4,10 +4,16 @@
 
 alias ll='eza -lah --icons'
 
+#### Git ####
 alias gs='git status'
 alias ga='git add .'
 alias gp='git push'
 alias gpl='git pull'
+alias gl='git log --oneline --graph --decorate --all'
+alias gd='git diff'
+alias gcm='git commit -m'
+alias gck='git checkout'
+alias gb='git branch'
 
 alias ls='lsd'
 
