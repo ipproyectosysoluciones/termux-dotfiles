@@ -1,0 +1,19 @@
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+# Powerlevel10k Instant Prompt
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+#########################################
+# MODULES
+#########################################
+
+source ~/.config/zsh/exports.zsh
+source ~/.config/zsh/history.zsh
+source ~/.config/zsh/plugins.zsh
+source ~/.config/zsh/aliases.zsh
+source ~/.config/zsh/functions.zsh
+source ~/.config/zsh/ssh.zsh
+source ~/.config/zsh/tmux.zsh
+source ~/.config/zsh/p10k.zsh
