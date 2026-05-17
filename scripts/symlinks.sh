@@ -58,6 +58,12 @@ create_link "$HOME/.config/termux/termux.properties" "$HOME/.termux/termux.prope
 
 create_link "$HOME/.config/zsh/zshrc" "$HOME/.zshrc"
 
+# =========================================
+# NVIM
+# =========================================
+
+create_link "$DOTFILES/nvim" "$HOME/.config/nvim"
+
 echo
 echo "================================="
 echo "Symlinks completed"
