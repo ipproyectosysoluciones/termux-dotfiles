@@ -23,17 +23,27 @@ fi
 # =========================================
 
 echo
-echo "[1/3] Installing packages..."
+echo "[1/4] Installing packages..."
 echo
 
 bash "$DOTFILES/scripts/packages.sh"
+
+# =========================================
+# PLUGINS
+# =========================================
+
+echo
+echo "[2/4] Installing plugins..."
+echo
+
+bash "$DOTFILES/scripts/plugins.sh"
 
 # =========================================
 # SYMLINKS
 # =========================================
 
 echo
-echo "[2/3] Creating symlinks..."
+echo "[3/4] Creating symlinks..."
 echo
 
 bash "$DOTFILES/scripts/symlinks.sh"
@@ -43,7 +53,7 @@ bash "$DOTFILES/scripts/symlinks.sh"
 # =========================================
 
 echo
-echo "[3/3] Configuring storage..."
+echo "[4/4] Configuring storage..."
 echo
 
 if [[ ! -d "$HOME/storage" ]]; then
