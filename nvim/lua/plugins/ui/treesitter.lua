@@ -1,38 +1,55 @@
--- Resaltado de sintaxis con Treesitter
 return {
-  "nvim-treesitter/nvim-treesitter",
-  branch = "main",
-  event = "BufReadPre",
-  build = ":TSUpdate",
-  config = function()
-    -- Setup solo acepta install_dir, nada más
-    require("nvim-treesitter").setup()
+  {
+    "nvim-treesitter/nvim-treesitter",
 
-    -- Instalar parsers
-    local parsers = {
-      "html", "css", "javascript", "typescript", "tsx",
-      "bash", "json", "markdown", "markdown_inline",
-      "yaml", "toml", "lua", "vim", "vimdoc",
-      "sql", "dockerfile", "gitignore", "regex", "query",
-    }
-    require("nvim-treesitter.install").install(parsers)
+    event = { "BufReadPre", "BufNewFile" },
 
-    -- Highlight e indent via autocmd (nueva forma)
-    vim.api.nvim_create_autocmd("FileType", {
-      callback = function(ev)
-        -- Activa treesitter highlight
-        local ok = pcall(vim.treesitter.start, ev.buf)
+    build = ":TSUpdate",
 
-        -- Activa indent
-        if ok then
-          vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-        end
-      end,
-    })
+    opts = {
+      ensure_installed = {
+        "bash",
+        "css",
+        "dockerfile",
+        "gitignore",
+        "html",
+        "javascript",
+        "json",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "regex",
+        "sql",
+        "toml",
+        "tsx",
+        "typescript",
+        "vim",
+        "vimdoc",
+        "yaml",
+      },
 
-    -- incremental selection
-    vim.keymap.set("n", "<C-space>", function()
-      require("nvim-treesitter.incremental_selection").init_selection()
-    end, { silent = true })
-  end,
+      highlight = {
+        enable = true,
+      },
+
+      indent = {
+        enable = true,
+      },
+
+      incremental_selection = {
+        enable = true,
+
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = false,
+          node_decremental = "<bs>",
+        },
+      },
+    },
+
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
 }
