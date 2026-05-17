@@ -6,7 +6,11 @@ node_modules
 *.pem
 *.key
 *.pub
-plugins/
+
+nvim/lazy-lock.json
+nvim/.cache/
+nvim/plugin/
+
 .cache/
 .zcompdump*
 tmux/plugins
