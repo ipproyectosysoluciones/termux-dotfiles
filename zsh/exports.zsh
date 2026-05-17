@@ -5,6 +5,10 @@
 export GOPATH=$HOME/go
 export PATH="$HOME/bin:$GOPATH/bin:$PATH"
 
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME/bin:$PATH"
+export SHELL=/data/data/com.termux/files/usr/bin/zsh
+
 export EDITOR=nvim
 export VISUAL=nvim
 
