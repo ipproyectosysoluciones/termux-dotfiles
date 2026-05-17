@@ -23,7 +23,7 @@ fi
 # =========================================
 
 echo
-echo "[1/4] Installing packages..."
+echo "[1/5] Installing packages..."
 echo
 
 bash "$DOTFILES/scripts/packages.sh"
@@ -33,17 +33,27 @@ bash "$DOTFILES/scripts/packages.sh"
 # =========================================
 
 echo
-echo "[2/4] Installing plugins..."
+echo "[2/5] Installing plugins..."
 echo
 
 bash "$DOTFILES/scripts/plugins.sh"
+
+# =========================================
+# TMUX PLUGINS
+# =========================================
+
+echo
+echo "[3/5] Installing tmux plugins..."
+echo
+
+bash "$DOTFILES/scripts/tmux_plugins.sh"
 
 # =========================================
 # SYMLINKS
 # =========================================
 
 echo
-echo "[3/4] Creating symlinks..."
+echo "[4/5] Creating symlinks..."
 echo
 
 bash "$DOTFILES/scripts/symlinks.sh"
@@ -53,7 +63,7 @@ bash "$DOTFILES/scripts/symlinks.sh"
 # =========================================
 
 echo
-echo "[4/4] Configuring storage..."
+echo "[5/5] Configuring storage..."
 echo
 
 if [[ ! -d "$HOME/storage" ]]; then
