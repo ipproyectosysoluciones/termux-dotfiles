@@ -1,79 +1,45 @@
 return {
-
-  -- =====================================
-  -- Telescope
-  -- =====================================
-
   {
-    "nvim-telescope/telescope.nvim",
+    "nvimdev/dashboard-nvim",
 
-    cmd = "Telescope",
-
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-
-    keys = {
-      { "<leader>ff", "<cmd>Telescope find_files<cr>" },
-      { "<leader>fg", "<cmd>Telescope live_grep<cr>" },
-      { "<leader>fb", "<cmd>Telescope buffers<cr>" },
-      { "<leader>fh", "<cmd>Telescope help_tags<cr>" },
-    },
-  },
-
-  -- =====================================
-  -- Which Key
-  -- =====================================
-
-  {
-    "folke/which-key.nvim",
-
-    event = "VeryLazy",
-
-    opts = {},
-  },
-
-  -- =====================================
-  -- Bufferline
-  -- =====================================
-
-  {
-    "akinsho/bufferline.nvim",
-
-    version = "*",
+    event = "VimEnter",
 
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
+
+    config = function()
+      require("dashboard").setup({
+        theme = "hyper",
+
+        config = {
+          header = {
+            "NVIM DEV ENV",
+            "----------------",
+          },
+
+          shortcut = {
+            {
+              desc = "Find File",
+              group = "Label",
+              action = "Telescope find_files",
+              key = "f",
+            },
+            {
+              desc = "Recent Files",
+              group = "Label",
+              action = "Telescope oldfiles",
+              key = "r",
+            },
+            {
+              desc = "Config",
+              group = "Label",
+              action = "e ~/.config/nvim",
+              key = "c",
+            },
+          },
+        },
+      })
+    end,
   },
-
-  -- =====================================
-  -- Indent Guides
-  -- =====================================
-
-  {
-    "lukas-reineke/indent-blankline.nvim",
-
-    main = "ibl",
-
-    opts = {},
-  },
-
-  -- =====================================
-  -- Better UI Messages
-  -- =====================================
-
-  {
-    "folke/noice.nvim",
-
-    event = "VeryLazy",
-
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
-    },
-
-    opts = {},
-  },
-
 }
