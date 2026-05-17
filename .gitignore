@@ -3,8 +3,10 @@
 .env.*
 node_modules
 .DS_Store
-.env
-.env.*
 *.pem
 *.key
 *.pub
+plugins/
+.cache/
+.zcompdump*
+tmux/plugins
