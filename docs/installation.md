@@ -1,0 +1,356 @@
+# Installation Guide
+
+## Overview
+
+This repository contains:
+
+- Zsh configuration
+- Tmux configuration
+- Termux configuration
+- Neovim configuration
+- Utility scripts
+- Plugin bootstrap automation
+- Symlink management
+
+The environment is designed for:
+
+- Android + Termux
+- Development with:
+  - Node.js
+  - Go
+  - Git
+  - Docker
+  - Kubernetes
+  - Neovim
+  - Tmux
+
+---
+
+# Requirements
+
+## Android
+
+Recommended:
+
+- Android 10+
+- Physical keyboard support recommended
+
+---
+
+# Install Termux
+
+Install:
+
+- Termux
+- Termux:API
+
+Recommended source:
+
+- F-Droid
+
+Avoid outdated Play Store versions.
+
+---
+
+# Initial Termux Setup
+
+Update packages:
+
+```bash
+pkg update && pkg upgrade -y
+```
+
+Install Git:
+
+```bash
+pkg install git -y
+```
+
+Install curl:
+
+```bash
+pkg install curl -y
+```
+
+Grant storage access:
+
+```bash
+termux-setup-storage
+```
+
+---
+
+# Clone Repository
+
+Clone dotfiles repository:
+
+```bash
+git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git ~/dotfiles
+```
+
+Enter repository:
+
+```bash
+cd ~/dotfiles
+```
+
+---
+
+# Run Installer
+
+Give execution permissions:
+
+```bash
+chmod +x scripts/*.sh
+```
+
+Run main installer:
+
+```bash
+./scripts/install.sh
+```
+
+The installer will:
+
+- Install packages
+- Create symbolic links
+- Install tmux plugins
+- Configure Zsh
+- Configure Neovim
+- Configure Termux
+- Prepare development environment
+
+---
+
+# Restart Environment
+
+Close Termux completely.
+
+Open again.
+
+Then reload shell:
+
+```bash
+exec zsh
+```
+
+---
+
+# Verify Installation
+
+## Verify Zsh
+
+```bash
+echo $SHELL
+```
+
+Expected:
+
+```text
+/data/data/com.termux/files/usr/bin/zsh
+```
+
+---
+
+## Verify Tmux
+
+```bash
+tmux ls
+```
+
+---
+
+## Verify Neovim
+
+```bash
+nvim
+```
+
+---
+
+## Verify Git
+
+```bash
+git --version
+```
+
+---
+
+## Verify Node.js
+
+```bash
+node -v
+```
+
+---
+
+## Verify Go
+
+```bash
+go version
+```
+
+---
+
+# SSH Configuration
+
+Generate SSH key:
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+Start ssh-agent:
+
+```bash
+eval "$(ssh-agent -s)"
+```
+
+Add key:
+
+```bash
+ssh-add ~/.ssh/id_ed25519
+```
+
+Show public key:
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Add the key to GitHub.
+
+---
+
+# Repository Structure
+
+```text
+dotfiles/
+├── docs
+├── scripts
+├── termux
+├── tmux
+└── zsh
+```
+
+---
+
+# Useful Commands
+
+## Reload Zsh
+
+```bash
+source ~/.zshrc
+```
+
+---
+
+## Reload Tmux
+
+```bash
+tmux source-file ~/.tmux.conf
+```
+
+---
+
+## Reload Termux Settings
+
+```bash
+termux-reload-settings
+```
+
+---
+
+# Common Problems
+
+## Permission denied
+
+Fix:
+
+```bash
+chmod +x scripts/*.sh
+```
+
+---
+
+## Tmux plugins not loading
+
+Install TPM plugins manually:
+
+```bash
+~/.tmux/plugins/tpm/scripts/install_plugins.sh
+```
+
+---
+
+## SSH key asks passphrase repeatedly
+
+Verify ssh-agent:
+
+```bash
+ssh-add -l
+```
+
+---
+
+# Backup
+
+Create backup:
+
+```bash
+cp -r ~/.config ~/config_backup
+```
+
+Backup dotfiles:
+
+```bash
+cp -r ~/dotfiles ~/dotfiles_backup
+```
+
+---
+
+# Update Dotfiles
+
+Enter repository:
+
+```bash
+cd ~/dotfiles
+```
+
+Pull changes:
+
+```bash
+git pull
+```
+
+Reload environment:
+
+```bash
+exec zsh
+```
+
+---
+
+# Recommended Workflow
+
+- Use `tmux` for sessions
+- Use `zoxide` for navigation
+- Use `Neovim` for editing
+- Store projects inside:
+
+```text
+~/Projects
+```
+
+---
+
+# Notes
+
+This setup is optimized for:
+
+- Mobile development
+- SSH workflows
+- Git workflows
+- DevOps tooling
+- Kubernetes workflows
+- Terminal-first productivity
