@@ -1,5 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+source "$(dirname "$0")/../utils/logger.sh"
+
 echo "================================="
 echo "Installing TPM..."
 echo "================================="

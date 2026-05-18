@@ -6,6 +6,8 @@ echo "================================="
 
 DOTFILES="$HOME/dotfiles"
 
+source "$(dirname "$0")/../utils/logger.sh"
+
 mkdir -p "$HOME/.config"
 
 create_link() {
@@ -19,12 +21,12 @@ create_link() {
         echo "[!] Backing up existing: $target"
         mv "$target" "${target}.backup"
 
-        ln -s "$source" "$target"
+        ln -sf "$source" "$target"
 
         echo "[+] Linked: $target"
 
     else
-        ln -s "$source" "$target"
+        ln -sf "$source" "$target"
 
         echo "[+] Linked: $target"
     fi

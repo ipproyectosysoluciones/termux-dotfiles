@@ -4,6 +4,8 @@ echo "================================="
 echo "Installing ZSH plugins..."
 echo "================================="
 
+source "$(dirname "$0")/../utils/logger.sh"
+
 PLUGINS_DIR="$HOME/.zsh-plugins"
 
 mkdir -p "$PLUGINS_DIR"

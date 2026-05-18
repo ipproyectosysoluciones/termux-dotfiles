@@ -4,6 +4,8 @@ echo "================================="
 echo "Installing Termux packages..."
 echo "================================="
 
+source "$(dirname "$0")/../utils/logger.sh"
+
 pkg update -y
 pkg upgrade -y
 
