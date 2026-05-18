@@ -27,3 +27,6 @@ alias debian='proot-distro login debian'
 
 alias deb='proot-distro login debian --bind /data/data/com.termux/files/home:/termux --user dev'
 
+alias sshgithub='ssh-add -t 24h ~/.ssh/id_ed25519_github'
+alias sshmain='ssh-add -t 24h ~/.ssh/id_ed25519'
+

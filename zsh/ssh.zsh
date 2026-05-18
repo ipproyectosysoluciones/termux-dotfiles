@@ -5,7 +5,7 @@
 export SSH_ENV="$HOME/.ssh/agent.env"
 
 start_ssh_agent() {
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
+    ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
 
     chmod 600 "$SSH_ENV"
 
@@ -22,6 +22,3 @@ else
     start_ssh_agent
 fi
 
-if ! ssh-add -l >/dev/null 2>&1; then
-    ssh-add ~/.ssh/id_ed25519 >/dev/null 2>&1
-fi
