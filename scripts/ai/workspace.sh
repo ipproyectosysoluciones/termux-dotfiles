@@ -30,8 +30,7 @@ if ! tmux has-session -t $SESSION 2>/dev/null; then
 fi
 
 if [ -n "$TMUX" ]; then
-  tmux switch-client -t $SESSION
+    tmux switch-client -t $SESSION
 else
-  tmux attach-session -t $SESSION
+    tmux attach -t $SESSION
 fi
-

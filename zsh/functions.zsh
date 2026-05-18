@@ -64,6 +64,6 @@ dev() {
 # DEBIAN
 #########################################
 
-ai() {
+ai-deb() {
     proot-distro login debian --shared-tmp
 }
