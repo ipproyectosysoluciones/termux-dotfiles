@@ -1,17 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+source ~/dotfiles/scripts/ai/utils.sh
+
 SESSION="gentle"
 
-if ! tmux has-session -t $SESSION 2>/dev/null; then
-    tmux new-session -d -s $SESSION
+create_session "$SESSION" \
+"cd ~/Projects && echo 'Gentle AI runtime'"
 
-    tmux send-keys -t $SESSION "cd ~/Projects" C-m
-    tmux send-keys -t $SESSION "echo 'Gentle AI runtime'" C-m
-fi
-
-if [ -n "$TMUX" ]; then
-    tmux switch-client -t $SESSION
-else
-    tmux attach -t $SESSION
-fi
+attach_or_switch "$SESSION"
 

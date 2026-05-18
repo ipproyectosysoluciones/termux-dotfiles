@@ -1,14 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+source ~/dotfiles/scripts/ai/utils.sh
+
 SESSION="nvim"
 
-if ! tmux has-session -t $SESSION 2>/dev/null; then
-    tmux new-session -d -s $SESSION "cd ~/Projects && nvim"
-fi
+create_session "$SESSION" "cd ~/Projects && nvim"
 
-if [ -n "$TMUX" ]; then
-    tmux switch-client -t $SESSION
-else
-    tmux attach -t $SESSION
-fi
+attach_or_switch "$SESSION"
 
