@@ -3,5 +3,6 @@
 tmux display-popup \
     -w 70% \
     -h 70% \
-    -E "~/dotfiles/scripts/ai/menu.sh"
+    -E "$HOME/dotfiles/scripts/ai/menu.sh"
+
 

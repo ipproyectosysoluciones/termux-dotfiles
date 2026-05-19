@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-source ~/dotfiles/scripts/ai/ui.sh
+source "$HOME/dotfiles/scripts/ai/utils.sh"
 
 clear
 
