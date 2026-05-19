@@ -31,3 +31,5 @@ alias sshgithub='ssh-add -t 24h ~/.ssh/id_ed25519_github'
 alias sshmain='ssh-add -t 24h ~/.ssh/id_ed25519'
 
 alias ai='~/dotfiles/scripts/ai/menu.sh'
+alias aip='~/dotfiles/scripts/ai/popup.sh'
+
