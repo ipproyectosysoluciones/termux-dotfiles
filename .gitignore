@@ -14,3 +14,6 @@ nvim/plugin/
 .cache/
 .zcompdump*
 tmux/plugins
+
+shellcheck-report.txt
+
