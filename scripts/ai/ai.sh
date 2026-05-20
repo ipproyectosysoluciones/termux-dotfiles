@@ -7,7 +7,7 @@ BASE_DIR="$HOME/dotfiles/scripts/ai"
 source "$BASE_DIR/core/project.sh"
 source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
-
+source "$BASE_DIR/core/layout.sh"
 PROJECT_ROOT="$(detect_project)"
 
 PROJECT_NAME="$(project_name "$PROJECT_ROOT")"
@@ -25,9 +25,27 @@ echo "[ai] branch  : $GIT_BRANCH"
 echo "[ai] root    : $PROJECT_ROOT"
 echo
 
+NEW_SESSION="false"
+
+if ! session_exists "$SESSION_NAME"; then
+    NEW_SESSION="true"
+fi
+
 ensure_workspace \
     "$SESSION_NAME" \
     "$PROJECT_ROOT"
+
+if [[ "$NEW_SESSION" == "true" ]]; then
+
+    LAYOUT="$(select_layout "$PROJECT_TYPE")"
+
+    echo "[ai] layout  : $LAYOUT"
+    echo
+
+    apply_layout \
+        "$SESSION_NAME" \
+        "$LAYOUT"
+fi
 
 attach_workspace "$SESSION_NAME"
 
