@@ -9,7 +9,11 @@ create_wrapper() {
 
   cat > "$PREFIX_BIN/$name" <<EOF
 #!/data/data/com.termux/files/usr/bin/bash
-proot-distro login debian -- $name "\$@"
+
+proot-distro login debian \
+  --bind \$HOME:/termux \
+  --user dev -- \
+  $name "\$@"
 EOF
 
   chmod +x "$PREFIX_BIN/$name"

@@ -2,7 +2,11 @@
 # SSH AGENT
 #########################################
 
-export SSH_ENV="$HOME/.ssh/agent.env"
+if [[ -d "/termux/.ssh" ]]; then
+  export SSH_ENV="/termux/.ssh/agent.env"
+else
+  export SSH_ENV="$HOME/.ssh/agent.env"
+fi
 
 start_ssh_agent() {
     ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
