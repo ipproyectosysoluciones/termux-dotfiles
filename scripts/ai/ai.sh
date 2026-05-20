@@ -9,6 +9,8 @@ source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
 source "$BASE_DIR/core/layout.sh"
 source "$BASE_DIR/core/registry.sh"
+source "$BASE_DIR/core/selector.sh"
+
 PROJECT_ROOT="$(detect_project)"
 
 PROJECT_NAME="$(project_name "$PROJECT_ROOT")"
@@ -28,6 +30,17 @@ echo
 
 NEW_SESSION="false"
 LAYOUT="existing"
+
+if [[ "${1:-}" == "switch" ]]; then
+
+    SESSION="$(select_session)"
+
+    if [[ -n "$SESSION" ]]; then
+        attach_workspace "$SESSION"
+    fi
+
+    exit 0
+fi
 
 if ! session_exists "$SESSION_NAME"; then
     NEW_SESSION="true"
