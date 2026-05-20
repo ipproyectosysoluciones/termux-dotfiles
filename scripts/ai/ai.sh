@@ -8,6 +8,7 @@ source "$BASE_DIR/core/project.sh"
 source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
 source "$BASE_DIR/core/layout.sh"
+source "$BASE_DIR/core/registry.sh"
 PROJECT_ROOT="$(detect_project)"
 
 PROJECT_NAME="$(project_name "$PROJECT_ROOT")"
@@ -26,6 +27,7 @@ echo "[ai] root    : $PROJECT_ROOT"
 echo
 
 NEW_SESSION="false"
+LAYOUT="existing"
 
 if ! session_exists "$SESSION_NAME"; then
     NEW_SESSION="true"
@@ -46,6 +48,13 @@ if [[ "$NEW_SESSION" == "true" ]]; then
         "$SESSION_NAME" \
         "$LAYOUT"
 fi
+
+save_session \
+    "$SESSION_NAME" \
+    "$PROJECT_NAME" \
+    "$PROJECT_TYPE" \
+    "$LAYOUT" \
+    "$GIT_BRANCH"
 
 attach_workspace "$SESSION_NAME"
 
