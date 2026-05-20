@@ -1,8 +1,23 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+source "$HOME/dotfiles/scripts/ai/core/runtime.sh"
+
 select_layout() {
 
     local project_type="$1"
+
+    local env
+    env="$(environment_type)"
+
+    if [[ "$env" == "mobile" ]]; then
+        echo "mobile"
+        return
+    fi
+
+    if [[ "$env" == "remote" ]]; then
+        echo "remote"
+        return
+    fi
 
     case "$project_type" in
         node)
