@@ -1,32 +1,49 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-is_ssh() {
-    [[ -n "${SSH_CONNECTION:-}" ]]
-}
+detect_runtime() {
 
-is_termux() {
-    [[ -d "/data/data/com.termux" ]]
-}
+    ########################################
+    # MOBILE
+    ########################################
 
-terminal_width() {
-    tput cols 2>/dev/null || echo 80
-}
-
-environment_type() {
-
-    local width
-    width="$(terminal_width)"
-
-    if is_ssh; then
-        echo "remote"
-        return
-    fi
-
-    if is_termux && [[ "$width" -lt 140 ]]; then
+    if [[ -d "/data/data/com.termux" ]]; then
         echo "mobile"
         return
     fi
 
-    echo "desktop"
+    ########################################
+    # REMOTE
+    ########################################
+
+    if [[ -n "${SSH_CONNECTION:-}" ]]; then
+        echo "remote"
+        return
+    fi
+
+    ########################################
+    # DEFAULT
+    ########################################
+
+    echo "local"
+}
+
+detect_tmux_mode() {
+
+    if [[ -n "${TMUX:-}" ]]; then
+        echo "nested"
+        return
+    fi
+
+    echo "standalone"
+}
+
+detect_network() {
+
+    if ping -c 1 1.1.1.1 >/dev/null 2>&1; then
+        echo "online"
+        return
+    fi
+
+    echo "offline"
 }
 

@@ -8,6 +8,8 @@ source "$BASE_DIR/core/intelligence.sh"
 source "$BASE_DIR/core/metadata.sh"
 source "$BASE_DIR/core/state.sh"
 source "$BASE_DIR/core/hooks.sh"
+source "$BASE_DIR/core/runtime.sh"
+source "$BASE_DIR/core/policies.sh"
 source "$BASE_DIR/core/project.sh"
 source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
@@ -26,11 +28,23 @@ GIT_BRANCH="$(git_branch "$PROJECT_ROOT")"
 
 SESSION_NAME="$PROJECT_NAME"
 
+RUNTIME_MODE="$(detect_runtime)"
+
+NETWORK_MODE="$(detect_network)"
+
+TMUX_MODE="$(detect_tmux_mode)"
+
+RUNTIME_POLICY="$(detect_policy)"
+
 echo
 echo "[ai] project : $PROJECT_NAME"
 echo "[ai] type    : $PROJECT_TYPE"
 echo "[ai] branch  : $GIT_BRANCH"
 echo "[ai] root    : $PROJECT_ROOT"
+echo "[ai] runtime : $RUNTIME_MODE"
+echo "[ai] network : $NETWORK_MODE"
+echo "[ai] tmux    : $TMUX_MODE"
+echo "[ai] policy  : $RUNTIME_POLICY"
 echo
 
 NEW_SESSION="false"
@@ -90,10 +104,8 @@ if [[ "$NEW_SESSION" == "true" ]]; then
     apply_layout \
         "$SESSION_NAME" \
         "$LAYOUT"
+    run_startup_hooks "$SESSION_NAME"
 fi
-
-run_startup_hooks "$SESSION_NAME"
-
 
 save_session \
     "$SESSION_NAME" \
