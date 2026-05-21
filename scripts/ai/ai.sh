@@ -4,6 +4,8 @@ set -euo pipefail
 
 BASE_DIR="$HOME/dotfiles/scripts/ai"
 
+source "$BASE_DIR/core/intelligence.sh"
+source "$BASE_DIR/core/state.sh"
 source "$BASE_DIR/core/project.sh"
 source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
@@ -32,17 +34,21 @@ echo
 NEW_SESSION="false"
 LAYOUT="existing"
 
-if [[ "${1:-}" == "ask" ]]; then
-
     shift
 
     PROVIDER="$(select_provider "$PROJECT_TYPE")"
+    save_state
 
     echo "[ai] provider : $PROVIDER"
     echo
 
     run_provider "$PROVIDER" "$@"
 
+    exit 0
+fi
+
+if [[ "${1:-}" == "resume" ]]; then
+    resume_last_session
     exit 0
 fi
 
