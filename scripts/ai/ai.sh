@@ -10,6 +10,7 @@ source "$BASE_DIR/core/workspace.sh"
 source "$BASE_DIR/core/layout.sh"
 source "$BASE_DIR/core/registry.sh"
 source "$BASE_DIR/core/selector.sh"
+source "$BASE_DIR/core/router.sh"
 
 PROJECT_ROOT="$(detect_project)"
 
@@ -30,6 +31,20 @@ echo
 
 NEW_SESSION="false"
 LAYOUT="existing"
+
+if [[ "${1:-}" == "ask" ]]; then
+
+    shift
+
+    PROVIDER="$(select_provider "$PROJECT_TYPE")"
+
+    echo "[ai] provider : $PROVIDER"
+    echo
+
+    run_provider "$PROVIDER" "$@"
+
+    exit 0
+fi
 
 if [[ "${1:-}" == "switch" ]]; then
 
