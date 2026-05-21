@@ -14,6 +14,7 @@ source "$BASE_DIR/core/project.sh"
 source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
 source "$BASE_DIR/core/layout.sh"
+source "$BASE_DIR/core/doctor.sh"
 source "$BASE_DIR/core/registry.sh"
 source "$BASE_DIR/core/selector.sh"
 source "$BASE_DIR/core/router.sh"
@@ -67,6 +68,11 @@ if [[ "${1:-}" == "ask" ]]; then
 
     run_provider "$PROVIDER" "$@"
 
+    exit 0
+fi
+
+if [[ "${1:-}" == "doctor" ]]; then
+    run_doctor
     exit 0
 fi
 

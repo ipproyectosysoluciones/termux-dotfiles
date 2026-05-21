@@ -2,18 +2,34 @@
 
 set -euo pipefail
 
-PREFIX_BIN="$PREFIX/bin"
+PREFIX_BIN="$HOME/.local/bin"
+
+mkdir -p "$PREFIX_BIN"
 
 create_wrapper() {
+
   local name="$1"
 
   cat > "$PREFIX_BIN/$name" <<EOF
 #!/data/data/com.termux/files/usr/bin/bash
 
-proot-distro login debian \
-  --bind \$HOME:/termux \
-  --user dev -- \
-  $name "\$@"
+########################################
+# INSIDE DEBIAN
+########################################
+
+if [[ -f /etc/debian_version ]]; then
+    exec $name "\$@"
+fi
+
+########################################
+# TERMUX -> DEBIAN
+########################################
+
+exec proot-distro login debian \
+    --bind \$HOME:/termux \
+    --user dev -- \
+    env PATH="/home/dev/.opencode/bin:/home/dev/.local/share/pnpm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+    $name "\$@"
 EOF
 
   chmod +x "$PREFIX_BIN/$name"
@@ -27,6 +43,8 @@ EOF
 
 create_wrapper gemini
 create_wrapper claude
+create_wrapper opencode
+create_wrapper gentle-ai
 
 ########################################
 # NODE

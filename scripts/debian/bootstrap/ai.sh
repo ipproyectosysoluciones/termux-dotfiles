@@ -2,26 +2,33 @@
 
 set -euo pipefail
 
+ROOT="$HOME/dotfiles/scripts/debian"
+
 echo "[debian] Installing AI tooling..."
 
 ########################################
 # GEMINI CLI
 ########################################
 
-npm install -g @google/gemini-cli
+if ! command -v gemini >/dev/null 2>&1; then
+    npm install -g @google/gemini-cli
+fi
 
 ########################################
 # CLAUDE CODE
 ########################################
 
-npm install -g @anthropic-ai/claude-code
+if ! command -v claude >/dev/null 2>&1; then
+    npm install -g @anthropic-ai/claude-code
+fi
 
 ########################################
 # OPENCODE
 ########################################
 
-# Ajustar nombre real luego
-# npm install -g opencode-ai
+if ! command -v opencode >/dev/null 2>&1; then
+    bash "$ROOT/bootstrap/opencode.sh"
+fi
 
 ########################################
 # VERIFY
@@ -33,7 +40,7 @@ echo
 
 which gemini || true
 which claude || true
+which opencode || true
 
 echo
 echo "[debian] AI tooling installed"
-
