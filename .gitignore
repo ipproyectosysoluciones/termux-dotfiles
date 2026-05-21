@@ -17,3 +17,6 @@ tmux/plugins
 
 shellcheck-report.txt
 
+.ai/
+.local/share/ai/
+

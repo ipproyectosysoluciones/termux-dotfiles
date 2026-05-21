@@ -5,7 +5,9 @@ set -euo pipefail
 BASE_DIR="$HOME/dotfiles/scripts/ai"
 
 source "$BASE_DIR/core/intelligence.sh"
+source "$BASE_DIR/core/metadata.sh"
 source "$BASE_DIR/core/state.sh"
+source "$BASE_DIR/core/hooks.sh"
 source "$BASE_DIR/core/project.sh"
 source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
@@ -34,9 +36,16 @@ echo
 NEW_SESSION="false"
 LAYOUT="existing"
 
+ensure_workspace_metadata
+
+load_workspace_metadata || true
+
+if [[ "${1:-}" == "ask" ]]; then
+
     shift
 
     PROVIDER="$(select_provider "$PROJECT_TYPE")"
+
     save_state
 
     echo "[ai] provider : $PROVIDER"
@@ -82,6 +91,9 @@ if [[ "$NEW_SESSION" == "true" ]]; then
         "$SESSION_NAME" \
         "$LAYOUT"
 fi
+
+run_startup_hooks "$SESSION_NAME"
+
 
 save_session \
     "$SESSION_NAME" \
