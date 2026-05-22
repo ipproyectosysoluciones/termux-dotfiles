@@ -19,3 +19,21 @@ attach_workspace() {
     fi
 }
 
+workspace_initialized() {
+
+    local session="$1"
+
+    tmux show-option \
+        -t "$session" \
+        -qv @ai_initialized 2>/dev/null
+}
+
+mark_workspace_initialized() {
+
+    local session="$1"
+
+    tmux set-option \
+        -t "$session" \
+        -q @ai_initialized "true"
+}
+

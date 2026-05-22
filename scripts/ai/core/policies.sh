@@ -2,6 +2,10 @@
 
 detect_policy() {
 
+    local runtime
+
+    runtime="$(detect_runtime)"
+
     ########################################
     # OFFLINE
     ########################################
@@ -15,7 +19,7 @@ detect_policy() {
     # MOBILE
     ########################################
 
-    if [[ "$RUNTIME_MODE" == "mobile" ]]; then
+   if [[ "$runtime" == "mobile" ]]; then
         echo "lightweight"
         return
     fi
@@ -24,8 +28,8 @@ detect_policy() {
     # REMOTE
     ########################################
 
-    if [[ "$RUNTIME_MODE" == "remote" ]]; then
-        echo "remote-safe"
+   if [[ "$runtime" == "remote" ]]; then
+        echo "balanced"
         return
     fi
 

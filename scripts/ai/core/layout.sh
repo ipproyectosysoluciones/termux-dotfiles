@@ -8,7 +8,7 @@ select_layout() {
 
     local env
 
-    env="$RUNTIME_MODE"
+    env="$(detect_runtime)"
 
     ########################################
     # MOBILE
