@@ -2,15 +2,7 @@
 
 set -euo pipefail
 
-########################################
-# BASE
-########################################
-
 BASE_DIR="$HOME/dotfiles/scripts/ai"
-
-########################################
-# CORE
-########################################
 
 source "$BASE_DIR/core/intelligence.sh"
 source "$BASE_DIR/core/metadata.sh"
@@ -25,12 +17,22 @@ source "$BASE_DIR/core/layout.sh"
 source "$BASE_DIR/core/doctor.sh"
 source "$BASE_DIR/core/provider_selector.sh"
 source "$BASE_DIR/core/routing.sh"
-source "$BASE_DIR/core/registry.sh"
-source "$BASE_DIR/core/selector.sh"
 source "$BASE_DIR/core/router.sh"
 
 ########################################
-# PROJECT
+# RUNTIME STATE
+########################################
+
+RUNTIME_MODE="$(detect_runtime)"
+NETWORK_MODE="$(detect_network)"
+TMUX_MODE="$(detect_tmux_mode)"
+POLICY_MODE="$(detect_policy)"
+
+PROMPT="${*:-}"
+INTENT_MODE="$(detect_intent "$PROMPT")"
+
+########################################
+# WORKSPACE STATE
 ########################################
 
 PROJECT_ROOT="$(detect_project)"
@@ -41,24 +43,7 @@ GIT_BRANCH="$(git_branch "$PROJECT_ROOT")"
 SESSION_NAME="$PROJECT_NAME"
 
 ########################################
-# RUNTIME
-########################################
-
-RUNTIME_MODE="$(detect_runtime)"
-NETWORK_MODE="$(detect_network)"
-TMUX_MODE="$(detect_tmux_mode)"
-POLICY_MODE="$(detect_policy)"
-
-########################################
-# PROMPT / INTENT
-########################################
-
-PROMPT="${*:-}"
-
-INTENT_MODE="$(detect_intent "$PROMPT")"
-
-########################################
-# DISPLAY
+# HEADER
 ########################################
 
 echo
@@ -70,23 +55,11 @@ echo "[ai] runtime : $RUNTIME_MODE"
 echo "[ai] network : $NETWORK_MODE"
 echo "[ai] tmux    : $TMUX_MODE"
 echo "[ai] policy  : $POLICY_MODE"
-# echo # "[ai] intent  : $INTENT_MODE"
-printf '[ai] intent  : <%s>\n' "$INTENT_MODE"
-printf '[debug] selector input : <%s>\n' "$INTENT_MODE"
+echo "[ai] intent  : $INTENT_MODE"
 echo
 
 ########################################
-# METADATA
-########################################
-
-LAYOUT="existing"
-
-ensure_workspace_metadata
-
-load_workspace_metadata || true
-
-########################################
-# COMMANDS
+# DOCTOR
 ########################################
 
 if [[ "${1:-}" == "doctor" ]]; then
@@ -94,10 +67,22 @@ if [[ "${1:-}" == "doctor" ]]; then
     exit 0
 fi
 
+########################################
+# RESUME
+########################################
+
 if [[ "${1:-}" == "resume" ]]; then
-    resume_last_session
+
+    load_current_workspace
+
+    attach_workspace "$SESSION_NAME"
+
     exit 0
 fi
+
+########################################
+# SWITCH
+########################################
 
 if [[ "${1:-}" == "switch" ]]; then
 
@@ -111,12 +96,10 @@ if [[ "${1:-}" == "switch" ]]; then
 fi
 
 ########################################
-# ASK MODE
+# PROVIDER
 ########################################
 
-if [[ "${1:-}" == "ask" ]]; then
-
-    shift
+if [[ "${1:-}" != "" ]]; then
 
     PROVIDER="$(select_provider \
         "$PROJECT_TYPE" \
@@ -124,34 +107,10 @@ if [[ "${1:-}" == "ask" ]]; then
         "$POLICY_MODE" \
         "$INTENT_MODE")"
 
-    save_state
-
     echo "[ai] provider : $PROVIDER"
     echo
 
-    run_provider "$PROVIDER" "$@"
-
-    exit 0
-fi
-
-########################################
-# DIRECT PROMPT MODE
-########################################
-
-if [[ $# -gt 0 ]]; then
-
-    PROVIDER="$(select_provider \
-        "$PROJECT_TYPE" \
-        "$RUNTIME_MODE" \
-        "$POLICY_MODE" \
-        "$INTENT_MODE")"
-
-    save_state
-
-    echo "[ai] provider : $PROVIDER"
-    echo
-
-    run_provider "$PROVIDER" "$@"
+    run_provider "$PROVIDER" "$PROMPT"
 
     exit 0
 fi
@@ -165,14 +124,14 @@ ensure_workspace \
     "$PROJECT_ROOT"
 
 ########################################
-# BOOTSTRAP
+# INIT
 ########################################
 
 if [[ "$(workspace_initialized "$SESSION_NAME")" != "true" ]]; then
 
     LAYOUT="$(select_layout "$PROJECT_TYPE")"
 
-    echo "[ai] layout  : $LAYOUT"
+    echo "[ai] layout : $LAYOUT"
     echo
 
     apply_layout \
@@ -182,10 +141,15 @@ if [[ "$(workspace_initialized "$SESSION_NAME")" != "true" ]]; then
     run_startup_hooks "$SESSION_NAME"
 
     mark_workspace_initialized "$SESSION_NAME"
+
+else
+
+    LAYOUT="existing"
+
 fi
 
 ########################################
-# SESSION SAVE
+# SAVE STATE
 ########################################
 
 save_session \
@@ -194,6 +158,14 @@ save_session \
     "$PROJECT_TYPE" \
     "$LAYOUT" \
     "$GIT_BRANCH"
+
+save_current_workspace \
+    "$SESSION_NAME" \
+    "$PROJECT_NAME" \
+    "$PROJECT_ROOT" \
+    "$PROJECT_TYPE" \
+    "$GIT_BRANCH" \
+    "$LAYOUT"
 
 ########################################
 # ATTACH

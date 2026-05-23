@@ -2,37 +2,15 @@
 
 detect_intent() {
 
-    local prompt="$*"
+    local prompt="${1:-}"
 
-    ########################################
-    # QUICK
-    ########################################
-
-    if echo "$prompt" | grep -Eqi \
-        "quick|fast|simple|fix|error|debug"; then
-
-        echo "lightweight"
-        return
-    fi
-
-    ########################################
-    # ARCHITECTURE
-    ########################################
-
-    if echo "$prompt" | grep -Eqi \
-        "architecture|kubernetes|infra|helm|docker|cluster"; then
-
-        echo "architecture"
-        return
-    fi
+    prompt="$(echo "$prompt" | tr '[:upper:]' '[:lower:]')"
 
     ########################################
     # RESEARCH
     ########################################
 
-    if echo "$prompt" | grep -Eqi \
-        "research|analyze|compare|investigate|rag"; then
-
+    if [[ "$prompt" =~ research|investigate|analyze|rag|architecture ]]; then
         echo "research"
         return
     fi
@@ -41,10 +19,17 @@ detect_intent() {
     # CODING
     ########################################
 
-    if echo "$prompt" | grep -Eqi \
-        "code|refactor|typescript|node|react|bug"; then
-
+    if [[ "$prompt" =~ fix|bug|error|refactor|code|implement ]]; then
         echo "coding"
+        return
+    fi
+
+    ########################################
+    # DEVOPS
+    ########################################
+
+    if [[ "$prompt" =~ kubernetes|docker|helm|cluster|deploy|cicd ]]; then
+        echo "devops"
         return
     fi
 
@@ -52,6 +37,6 @@ detect_intent() {
     # DEFAULT
     ########################################
 
-    echo "general"
+    echo "lightweight"
 }
 

@@ -1,28 +1,54 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-AI_STATE_DIR="$HOME/.local/share/ai"
+STATE_DIR="$HOME/.ai/state"
 
-STATE_FILE="$AI_STATE_DIR/state.env"
+mkdir -p "$STATE_DIR"
 
-mkdir -p "$AI_STATE_DIR"
+########################################
+# CURRENT WORKSPACE
+########################################
 
-save_state() {
+save_current_workspace() {
 
-    mkdir -p "$AI_STATE_DIR"
+    local session="$1"
+    local project="$2"
+    local root="$3"
+    local type="$4"
+    local branch="$5"
+    local layout="$6"
 
-    cat > "$STATE_FILE" <<EOF
-LAST_SESSION="${SESSION_NAME:-unknown}"
-LAST_PROJECT="${PROJECT_NAME:-unknown}"
-LAST_PROVIDER="${PROVIDER:-unknown}"
-LAST_PATH="${PROJECT_ROOT:-$HOME}"
-LAST_TYPE="${PROJECT_TYPE:-generic}"
-LAST_ACCESS="$(date +%s)"
+    cat > "$STATE_DIR/current_workspace" <<EOF
+SESSION_NAME="$session"
+PROJECT_NAME="$project"
+PROJECT_ROOT="$root"
+PROJECT_TYPE="$type"
+GIT_BRANCH="$branch"
+LAYOUT="$layout"
+UPDATED_AT="$(date +%s)"
 EOF
 }
 
-load_state() {
+########################################
+# LOAD
+########################################
 
-    [[ -f "$STATE_FILE" ]] || return 1
+load_current_workspace() {
 
-    source "$STATE_FILE"
+    local file="$STATE_DIR/current_workspace"
+
+    if [[ ! -f "$file" ]]; then
+        return 1
+    fi
+
+    source "$file"
 }
+
+########################################
+# CLEAR
+########################################
+
+clear_current_workspace() {
+
+    rm -f "$STATE_DIR/current_workspace"
+}
+

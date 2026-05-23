@@ -1,14 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-source "$HOME/dotfiles/scripts/ai/providers/claude.sh"
-source "$HOME/dotfiles/scripts/ai/providers/gemini.sh"
-source "$HOME/dotfiles/scripts/ai/providers/opencode.sh"
-
 run_provider() {
 
-    local provider="${1:-opencode}"
+    local provider="$1"
 
-    shift || true
+    shift
 
     case "$provider" in
 
@@ -28,6 +24,7 @@ run_provider() {
             echo "[ai] unknown provider: $provider"
             return 1
             ;;
+
     esac
 }
 

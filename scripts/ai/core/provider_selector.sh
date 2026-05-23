@@ -2,60 +2,50 @@
 
 select_provider() {
 
-    local project_type="$1"
-    local runtime_mode="$2"
-    local policy_mode="$3"
-    local intent_mode="$4"
+    local project_type="${1:-generic}"
+    local runtime="${2:-mobile}"
+    local policy="${3:-lightweight}"
+    local intent="${4:-lightweight}"
+
+    echo "[debug] selector input : <$intent>" >&2
 
     ########################################
-    # INTENT FIRST
+    # RESEARCH
     ########################################
 
-    case "$intent_mode" in
+    if [[ "$intent" == "research" ]]; then
+        echo "opencode"
+        return
+    fi
 
-        research)
-            echo "gemini"
-            return
-            ;;
+    ########################################
+    # DEVOPS
+    ########################################
 
-        architecture)
-            echo "claude"
-            return
-            ;;
+    if [[ "$intent" == "devops" ]]; then
+        echo "claude"
+        return
+    fi
 
-        coding)
-            echo "claude"
-            return
-            ;;
+    ########################################
+    # CODING
+    ########################################
 
-        lightweight)
+    if [[ "$intent" == "coding" ]]; then
+
+        if [[ "$runtime" == "mobile" ]]; then
             echo "opencode"
             return
-            ;;
+        fi
 
-    esac
+        echo "claude"
+        return
+    fi
 
     ########################################
-    # POLICY FALLBACK
+    # DEFAULT
     ########################################
 
-    case "$policy_mode" in
-
-        lightweight)
-            echo "opencode"
-            ;;
-
-        balanced)
-            echo "claude"
-            ;;
-
-        heavy)
-            echo "gemini"
-            ;;
-
-        *)
-            echo "claude"
-            ;;
-
-    esac
+    echo "opencode"
 }
+

@@ -1,39 +1,77 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-ensure_workspace() {
-    local session="$1"
-    local path="$2"
+WORKSPACE_DB="$HOME/.ai/workspaces"
 
-    if ! session_exists "$session"; then
-        tmux new-session -d -s "$session" -c "$path"
-    fi
+mkdir -p "$WORKSPACE_DB"
+
+########################################
+# METADATA
+########################################
+
+ensure_workspace_metadata() {
+
+    mkdir -p "$WORKSPACE_DB"
 }
 
-attach_workspace() {
-    local session="$1"
+load_workspace_metadata() {
 
-    if [[ -n "${TMUX:-}" ]]; then
-        tmux switch-client -t "$session"
-    else
-        tmux attach -t "$session"
-    fi
+    return 0
 }
+
+########################################
+# WORKSPACE INIT STATE
+########################################
 
 workspace_initialized() {
 
     local session="$1"
 
-    tmux show-option \
-        -t "$session" \
-        -qv @ai_initialized 2>/dev/null
+    if [[ -f "$WORKSPACE_DB/$session.initialized" ]]; then
+        echo "true"
+    else
+        echo "false"
+    fi
 }
 
 mark_workspace_initialized() {
 
     local session="$1"
 
-    tmux set-option \
-        -t "$session" \
-        -q @ai_initialized "true"
+    touch "$WORKSPACE_DB/$session.initialized"
+}
+
+########################################
+# CREATE WORKSPACE
+########################################
+
+ensure_workspace() {
+
+    local session="$1"
+    local root="$2"
+
+    ########################################
+    # EXISTING SESSION
+    ########################################
+
+    if tmux has-session -t "$session" 2>/dev/null; then
+        return 0
+    fi
+
+    ########################################
+    # CREATE SESSION
+    ########################################
+
+    tmux new-session \
+        -d \
+        -s "$session" \
+        -c "$root"
+
+    ########################################
+    # DEFAULT WINDOW NAME
+    ########################################
+
+    tmux rename-window \
+        -t "$session:1" \
+        "main"
 }
 
