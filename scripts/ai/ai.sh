@@ -4,6 +4,14 @@ set -euo pipefail
 
 BASE_DIR="$HOME/dotfiles/scripts/ai"
 
+########################################
+# CORE
+########################################
+
+source "$BASE_DIR/core/registry.sh"
+source "$BASE_DIR/core/routing.sh"
+source "$BASE_DIR/core/provider_selector.sh"
+
 source "$BASE_DIR/core/intelligence.sh"
 source "$BASE_DIR/core/metadata.sh"
 source "$BASE_DIR/core/state.sh"
@@ -15,24 +23,11 @@ source "$BASE_DIR/core/session.sh"
 source "$BASE_DIR/core/workspace.sh"
 source "$BASE_DIR/core/layout.sh"
 source "$BASE_DIR/core/doctor.sh"
-source "$BASE_DIR/core/provider_selector.sh"
-source "$BASE_DIR/core/routing.sh"
+
 source "$BASE_DIR/core/router.sh"
 
 ########################################
-# RUNTIME STATE
-########################################
-
-RUNTIME_MODE="$(detect_runtime)"
-NETWORK_MODE="$(detect_network)"
-TMUX_MODE="$(detect_tmux_mode)"
-POLICY_MODE="$(detect_policy)"
-
-PROMPT="${*:-}"
-INTENT_MODE="$(detect_intent "$PROMPT")"
-
-########################################
-# WORKSPACE STATE
+# PROJECT
 ########################################
 
 PROJECT_ROOT="$(detect_project)"
@@ -40,7 +35,22 @@ PROJECT_NAME="$(project_name "$PROJECT_ROOT")"
 PROJECT_TYPE="$(project_type "$PROJECT_ROOT")"
 GIT_BRANCH="$(git_branch "$PROJECT_ROOT")"
 
-SESSION_NAME="$PROJECT_NAME"
+########################################
+# RUNTIME
+########################################
+
+RUNTIME_MODE="$(detect_runtime)"
+NETWORK_MODE="$(detect_network)"
+TMUX_MODE="$(detect_tmux_mode)"
+POLICY_MODE="$(detect_policy)"
+
+########################################
+# PROMPT
+########################################
+
+PROMPT="${*:-}"
+
+INTENT_MODE="$(detect_intent "$PROMPT")"
 
 ########################################
 # HEADER
@@ -72,26 +82,7 @@ fi
 ########################################
 
 if [[ "${1:-}" == "resume" ]]; then
-
-    load_current_workspace
-
-    attach_workspace "$SESSION_NAME"
-
-    exit 0
-fi
-
-########################################
-# SWITCH
-########################################
-
-if [[ "${1:-}" == "switch" ]]; then
-
-    SESSION="$(select_session)"
-
-    if [[ -n "$SESSION" ]]; then
-        attach_workspace "$SESSION"
-    fi
-
+    resume_last_session
     exit 0
 fi
 
@@ -99,77 +90,20 @@ fi
 # PROVIDER
 ########################################
 
-if [[ "${1:-}" != "" ]]; then
-
-    PROVIDER="$(select_provider \
+PROVIDER="$(
+    select_provider \
         "$PROJECT_TYPE" \
         "$RUNTIME_MODE" \
         "$POLICY_MODE" \
-        "$INTENT_MODE")"
+        "$INTENT_MODE"
+)"
 
-    echo "[ai] provider : $PROVIDER"
-    echo
-
-    run_provider "$PROVIDER" "$PROMPT"
-
-    exit 0
-fi
+echo "[ai] provider : $PROVIDER"
+echo
 
 ########################################
-# WORKSPACE
+# EXECUTION
 ########################################
 
-ensure_workspace \
-    "$SESSION_NAME" \
-    "$PROJECT_ROOT"
-
-########################################
-# INIT
-########################################
-
-if [[ "$(workspace_initialized "$SESSION_NAME")" != "true" ]]; then
-
-    LAYOUT="$(select_layout "$PROJECT_TYPE")"
-
-    echo "[ai] layout : $LAYOUT"
-    echo
-
-    apply_layout \
-        "$SESSION_NAME" \
-        "$LAYOUT"
-
-    run_startup_hooks "$SESSION_NAME"
-
-    mark_workspace_initialized "$SESSION_NAME"
-
-else
-
-    LAYOUT="existing"
-
-fi
-
-########################################
-# SAVE STATE
-########################################
-
-save_session \
-    "$SESSION_NAME" \
-    "$PROJECT_NAME" \
-    "$PROJECT_TYPE" \
-    "$LAYOUT" \
-    "$GIT_BRANCH"
-
-save_current_workspace \
-    "$SESSION_NAME" \
-    "$PROJECT_NAME" \
-    "$PROJECT_ROOT" \
-    "$PROJECT_TYPE" \
-    "$GIT_BRANCH" \
-    "$LAYOUT"
-
-########################################
-# ATTACH
-########################################
-
-attach_workspace "$SESSION_NAME"
+run_provider "$PROVIDER" "$PROMPT"
 

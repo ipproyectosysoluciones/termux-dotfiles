@@ -1,47 +1,91 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-AI_STATE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/ai"
+########################################
+# PROVIDER REGISTRY
+########################################
 
-SESSION_DIR="$AI_STATE_DIR/sessions"
+AI_PROVIDERS=(
+    "opencode"
+    "claude"
+    "gemini"
+)
 
-mkdir -p "$SESSION_DIR"
+########################################
+# CAPABILITIES
+########################################
 
-session_file() {
-    echo "$SESSION_DIR/$1.env"
+provider_supports() {
+
+    local provider="$1"
+    local capability="$2"
+
+    case "$provider:$capability" in
+
+        ########################################
+        # OPENCODE
+        ########################################
+
+        opencode:coding)
+            return 0
+            ;;
+
+        opencode:research)
+            return 0
+            ;;
+
+        opencode:lightweight)
+            return 0
+            ;;
+
+        opencode:mobile)
+            return 0
+            ;;
+
+        ########################################
+        # CLAUDE
+        ########################################
+
+        claude:architecture)
+            return 0
+            ;;
+
+        claude:devops)
+            return 0
+            ;;
+
+        claude:long_context)
+            return 0
+            ;;
+
+        ########################################
+        # GEMINI
+        ########################################
+
+        gemini:research)
+            return 0
+            ;;
+
+        gemini:web)
+            return 0
+            ;;
+
+        gemini:multimodal)
+            return 0
+            ;;
+
+    esac
+
+    return 1
 }
 
-save_session() {
+########################################
+# HEALTH
+########################################
 
-    local session="$1"
-    local project="$2"
-    local type="$3"
-    local layout="$4"
-    local branch="$5"
+provider_available() {
 
-    cat > "$(session_file "$session")" <<EOF
-SESSION=$session
-PROJECT=$project
-TYPE=$type
-LAYOUT=$layout
-BRANCH=$branch
-LAST_USED=$(date +%s)
-EOF
-}
+    local provider="$1"
 
-load_session() {
-
-    local session="$1"
-
-    local file
-    file="$(session_file "$session")"
-
-    if [[ -f "$file" ]]; then
-        source "$file"
-    fi
-}
-
-list_sessions() {
-    ls "$SESSION_DIR" 2>/dev/null \
-        | sed 's/\.env$//'
+    command -v "$provider" >/dev/null 2>&1
 }
 

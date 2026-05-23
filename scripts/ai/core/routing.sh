@@ -10,17 +10,17 @@ detect_intent() {
     # RESEARCH
     ########################################
 
-    if [[ "$prompt" =~ research|investigate|analyze|rag|architecture ]]; then
+    if [[ "$prompt" =~ research|investigate|analyze|rag ]]; then
         echo "research"
         return
     fi
 
     ########################################
-    # CODING
+    # ARCHITECTURE
     ########################################
 
-    if [[ "$prompt" =~ fix|bug|error|refactor|code|implement ]]; then
-        echo "coding"
+    if [[ "$prompt" =~ architecture|design|system|distributed|event\ sourcing ]]; then
+        echo "architecture"
         return
     fi
 
@@ -30,6 +30,15 @@ detect_intent() {
 
     if [[ "$prompt" =~ kubernetes|docker|helm|cluster|deploy|cicd ]]; then
         echo "devops"
+        return
+    fi
+
+    ########################################
+    # CODING
+    ########################################
+
+    if [[ "$prompt" =~ fix|bug|error|refactor|code|implement|auth ]]; then
+        echo "coding"
         return
     fi
 

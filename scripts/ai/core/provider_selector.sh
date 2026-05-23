@@ -7,13 +7,32 @@ select_provider() {
     local policy="${3:-lightweight}"
     local intent="${4:-lightweight}"
 
-    echo "[debug] selector input : <$intent>" >&2
-
     ########################################
     # RESEARCH
     ########################################
 
     if [[ "$intent" == "research" ]]; then
+
+        if provider_available gemini; then
+            echo "gemini"
+            return
+        fi
+
+        echo "opencode"
+        return
+    fi
+
+    ########################################
+    # ARCHITECTURE
+    ########################################
+
+    if [[ "$intent" == "architecture" ]]; then
+
+        if provider_available gemini; then
+            echo "gemini"
+            return
+        fi
+
         echo "opencode"
         return
     fi
@@ -23,8 +42,11 @@ select_provider() {
     ########################################
 
     if [[ "$intent" == "devops" ]]; then
-        echo "claude"
-        return
+
+        if provider_available opencode; then
+            echo "opencode"
+            return
+        fi
     fi
 
     ########################################
@@ -33,13 +55,10 @@ select_provider() {
 
     if [[ "$intent" == "coding" ]]; then
 
-        if [[ "$runtime" == "mobile" ]]; then
+        if provider_available opencode; then
             echo "opencode"
             return
         fi
-
-        echo "claude"
-        return
     fi
 
     ########################################
