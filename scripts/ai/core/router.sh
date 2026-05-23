@@ -6,28 +6,56 @@ source "$HOME/dotfiles/scripts/ai/providers/opencode.sh"
 
 run_provider() {
 
-    local provider="${1:-opencode}"
+    local provider="${1:-}"
+    shift
 
-    shift || true
+    local prompt="${*:-}"
 
     case "$provider" in
 
-        claude)
-            run_claude "$@"
-            ;;
-
-        gemini)
-            run_gemini "$@"
-            ;;
+        ########################################
+        # OPENCODE
+        ########################################
 
         opencode)
-            run_opencode run "$*"
+
+            run_opencode \
+                run \
+                --prompt "$prompt"
+
             ;;
 
+        ########################################
+        # GEMINI
+        ########################################
+
+        gemini)
+
+            run_gemini \
+                --prompt "$prompt"
+
+            ;;
+
+        ########################################
+        # CLAUDE
+        ########################################
+
+        claude)
+
+            run_claude "$prompt"
+
+            ;;
+
+        ########################################
+        # DEFAULT
+        ########################################
+
         *)
+
             echo "[ai] unknown provider: $provider"
             return 1
             ;;
+
     esac
 }
 

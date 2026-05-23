@@ -16,7 +16,11 @@ source "$BASE_DIR/core/intelligence.sh"
 source "$BASE_DIR/core/metadata.sh"
 source "$BASE_DIR/core/state.sh"
 source "$BASE_DIR/core/hooks.sh"
+source "$BASE_DIR/core/memory.sh"
+source "$BASE_DIR/core/hydration.sh"
 source "$BASE_DIR/core/runtime.sh"
+source "$BASE_DIR/core/paths.sh"
+source "$BASE_DIR/core/sync.sh"
 source "$BASE_DIR/core/policies.sh"
 source "$BASE_DIR/core/project.sh"
 source "$BASE_DIR/core/session.sh"
@@ -49,6 +53,8 @@ POLICY_MODE="$(detect_policy)"
 ########################################
 
 PROMPT="${*:-}"
+
+HYDRATED_PROMPT=""
 
 INTENT_MODE="$(detect_intent "$PROMPT")"
 
@@ -102,8 +108,28 @@ echo "[ai] provider : $PROVIDER"
 echo
 
 ########################################
+# MEMORY CONTEXT
+########################################
+
+MEMORY_CONTEXT="$(
+    memory_project_context "$PROJECT_NAME"
+)"
+
+export MEMORY_CONTEXT
+
+########################################
 # EXECUTION
 ########################################
 
-run_provider "$PROVIDER" "$PROMPT"
+memory_save "user" "$PROMPT"
+
+HYDRATED_PROMPT="$(
+    build_context "$PROMPT"
+)"
+
+mirror_project \
+    "$PROJECT_ROOT" \
+    "$PROJECT_NAME"
+
+run_provider "$PROVIDER" "$HYDRATED_PROMPT"
 
