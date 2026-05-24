@@ -19,6 +19,12 @@ source "$BASE_DIR/core/hooks.sh"
 source "$BASE_DIR/core/memory.sh"
 source "$BASE_DIR/core/hydration.sh"
 source "$BASE_DIR/core/runtime.sh"
+source "$BASE_DIR/core/skill_registry.sh"
+source "$BASE_DIR/core/skill_detector.sh"
+source "$BASE_DIR/core/capability_router.sh"
+source "$BASE_DIR/core/agent_registry.sh"
+source "$BASE_DIR/core/agent_router.sh"
+source "$BASE_DIR/core/agent_context.sh"
 source "$BASE_DIR/core/paths.sh"
 source "$BASE_DIR/core/sync.sh"
 source "$BASE_DIR/core/policies.sh"
@@ -56,7 +62,15 @@ PROMPT="${*:-}"
 
 HYDRATED_PROMPT=""
 
-INTENT_MODE="$(detect_intent "$PROMPT")"
+SKILL_MODE="$(detect_skill "$PROMPT")"
+
+INTENT_MODE="$(
+    route_capability "$SKILL_MODE"
+)"
+
+AGENT_MODE="$(
+    resolve_agent "$SKILL_MODE"
+)"
 
 ########################################
 # HEADER
@@ -72,6 +86,8 @@ echo "[ai] network : $NETWORK_MODE"
 echo "[ai] tmux    : $TMUX_MODE"
 echo "[ai] policy  : $POLICY_MODE"
 echo "[ai] intent  : $INTENT_MODE"
+echo "[ai] skill   : $SKILL_MODE"
+echo "[ai] agent   : $AGENT_MODE"
 echo
 
 ########################################
@@ -97,11 +113,7 @@ fi
 ########################################
 
 PROVIDER="$(
-    select_provider \
-        "$PROJECT_TYPE" \
-        "$RUNTIME_MODE" \
-        "$POLICY_MODE" \
-        "$INTENT_MODE"
+    route_agent_provider "$AGENT_MODE"
 )"
 
 echo "[ai] provider : $PROVIDER"

@@ -3,6 +3,7 @@
 source "$HOME/dotfiles/scripts/ai/providers/claude.sh"
 source "$HOME/dotfiles/scripts/ai/providers/gemini.sh"
 source "$HOME/dotfiles/scripts/ai/providers/opencode.sh"
+source "$HOME/dotfiles/scripts/ai/providers/gentle.sh"
 
 run_provider() {
 
@@ -43,6 +44,16 @@ run_provider() {
         claude)
 
             run_claude "$prompt"
+
+            ;;
+
+        ########################################
+        # GENTLE-AI
+        ########################################
+
+        gentle)
+
+            run_gentle "$@"
 
             ;;
 
