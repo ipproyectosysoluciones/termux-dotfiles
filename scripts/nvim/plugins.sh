@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 echo "================================="
-echo "Installing ZSH plugins..."
+echo "Installing ZSH shell plugins..."
 echo "================================="
 
 source "$(dirname "$0")/../utils/logger.sh"
