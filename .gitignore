@@ -19,4 +19,5 @@ shellcheck-report.txt
 
 .ai/
 .local/share/ai/
+.local/bin/
 
