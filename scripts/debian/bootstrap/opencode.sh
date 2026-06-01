@@ -36,6 +36,40 @@ else
 fi
 
 ########################################
+# DEV USER ZSH PLUGINS
+########################################
+
+ZSH_PLUGINS="/home/dev/.zsh-plugins"
+
+if [ ! -d "$ZSH_PLUGINS" ]; then
+
+    echo "[debian] Installing zsh plugins..."
+
+    apt-get install -y git zoxide >/dev/null 2>&1
+
+    mkdir -p "$ZSH_PLUGINS"
+
+    git clone --depth 1 https://github.com/romkatv/powerlevel10k.git "$ZSH_PLUGINS/powerlevel10k" 2>/dev/null
+    git clone --depth 1 https://github.com/romkatv/zsh-defer.git "$ZSH_PLUGINS/zsh-defer" 2>/dev/null
+    git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_PLUGINS/zsh-autosuggestions" 2>/dev/null
+    git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_PLUGINS/zsh-syntax-highlighting" 2>/dev/null
+    git clone --depth 1 https://github.com/Aloxaf/fzf-tab.git "$ZSH_PLUGINS/fzf-tab" 2>/dev/null
+    git clone --depth 1 https://github.com/zsh-users/zsh-completions.git "$ZSH_PLUGINS/zsh-completions" 2>/dev/null
+
+    chown -R dev:dev "$ZSH_PLUGINS"
+
+    # Copy p10k config from Termux (via bind mount)
+    if [ -f "/termux/.p10k.zsh" ]; then
+        cp "/termux/.p10k.zsh" "/home/dev/.p10k.zsh"
+        chown dev:dev "/home/dev/.p10k.zsh"
+        echo "[debian]   p10k config copied"
+    fi
+
+    echo "[debian] zsh plugins installed ($ZSH_PLUGINS)"
+
+fi
+
+########################################
 # DEV USER ZSHENV
 ########################################
 
