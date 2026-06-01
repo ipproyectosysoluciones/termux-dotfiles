@@ -35,3 +35,19 @@ else
     exit 1
 fi
 
+########################################
+# DEV USER ZSHENV
+########################################
+
+DEV_ZSENV="/home/dev/.zshenv"
+
+if [ -f "$DEV_ZSENV" ] && ! grep -q '.opencode/bin' "$DEV_ZSENV" 2>/dev/null; then
+
+    echo "" >> "$DEV_ZSENV"
+    echo "# opencode" >> "$DEV_ZSENV"
+    echo 'export PATH="$HOME/.opencode/bin:$PATH"' >> "$DEV_ZSENV"
+
+    echo "[debian] OpenCode PATH added to $DEV_ZSENV"
+
+fi
+
