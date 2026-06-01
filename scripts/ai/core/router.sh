@@ -7,10 +7,9 @@ source "$HOME/dotfiles/scripts/ai/providers/gentle.sh"
 
 run_provider() {
 
-    local provider="${1:-}"
-    shift
+    local provider="$1"
 
-    local prompt="${*:-}"
+    shift || true
 
     case "$provider" in
 
@@ -19,11 +18,7 @@ run_provider() {
         ########################################
 
         opencode)
-
-            run_opencode \
-                run \
-                --prompt "$prompt"
-
+            run_opencode run "$@"
             ;;
 
         ########################################
@@ -31,10 +26,7 @@ run_provider() {
         ########################################
 
         gemini)
-
-            run_gemini \
-                --prompt "$prompt"
-
+            run_gemini "$@"
             ;;
 
         ########################################
@@ -42,9 +34,7 @@ run_provider() {
         ########################################
 
         claude)
-
-            run_claude "$prompt"
-
+            run_claude "$@"
             ;;
 
         ########################################
@@ -52,9 +42,7 @@ run_provider() {
         ########################################
 
         gentle)
-
             run_gentle "$@"
-
             ;;
 
         ########################################
@@ -62,7 +50,6 @@ run_provider() {
         ########################################
 
         *)
-
             echo "[ai] unknown provider: $provider"
             return 1
             ;;
