@@ -14,7 +14,7 @@ curl -fsSL https://opencode.ai/install | bash
 # PATH
 ########################################
 
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.opencode/bin:$PATH"
 
 ########################################
 # VALIDATION
@@ -62,25 +62,44 @@ if [ -d "$DOTFILES_ZSH" ] && [ ! -f "$CONFIG_DIR/.zshrc" ]; then
 
     mkdir -p "$CONFIG_DIR"
 
-    # Symlink each module so .zshrc can source ~/.config/zsh/*.zsh
+    # Copy each module (not symlink) so it works without bind mount
     for module in exports history plugins aliases functions ssh tmux p10k; do
         if [ -f "$DOTFILES_ZSH/${module}.zsh" ]; then
-            ln -sf "$DOTFILES_ZSH/${module}.zsh" "$CONFIG_DIR/${module}.zsh"
-            echo "[debian]   linked $module.zsh"
+            cp "$DOTFILES_ZSH/${module}.zsh" "$CONFIG_DIR/${module}.zsh"
+            echo "[debian]   copied $module.zsh"
         fi
     done
 
-    # Create .zshrc that mirrors Termux structure
+    # Create .zshrc that mirrors Termux structure with graceful fallbacks
     cat > "$CONFIG_DIR/.zshrc" << 'ZSHRC'
-source ~/.config/zsh/exports.zsh
-source ~/.config/zsh/history.zsh
-source ~/.config/zsh/plugins.zsh
-source ~/.config/zsh/aliases.zsh
-source ~/.config/zsh/functions.zsh
-source ~/.config/zsh/ssh.zsh
-source ~/.config/zsh/tmux.zsh
-source ~/.config/zsh/p10k.zsh
+# Load modules with graceful fallback
+for module in exports history aliases functions; do
+    [ -f "$HOME/.config/zsh/${module}.zsh" ] && source "$HOME/.config/zsh/${module}.zsh"
+done
+
+# Plugins (warn if missing, don't break)
+if [ -f "$HOME/.config/zsh/plugins.zsh" ]; then
+    source "$HOME/.config/zsh/plugins.zsh" 2>/dev/null || echo "[zsh] some plugins unavailable in Debian" >&2
+fi
+
+# SSH agent (optional)
+[ -f "$HOME/.config/zsh/ssh.zsh" ] && source "$HOME/.config/zsh/ssh.zsh" 2>/dev/null
+
+# tmux (only in interactive terminals)
+[ -f "$HOME/.config/zsh/tmux.zsh" ] && source "$HOME/.config/zsh/tmux.zsh" 2>/dev/null
+
+# Powerlevel10k prompt (optional)
+if [ -f "$HOME/.config/zsh/p10k.zsh" ] && [ -f "$HOME/.zsh-plugins/powerlevel10k/powerlevel10k.zsh-theme" ]; then
+    source "$HOME/.config/zsh/p10k.zsh"
+else
+    # Basic prompt when p10k unavailable
+    autoload -Uz promptinit && promptinit && prompt adam1
+fi
 ZSHRC
+
+    # Fix ownership (bootstrap runs as root)
+    chown -R dev:dev "$CONFIG_DIR"
+    chown dev:dev "$(dirname "$CONFIG_DIR")"
 
     echo "[debian] zsh config initialized from Termux dotfiles"
     echo "[debian] ZDOTDIR=$CONFIG_DIR/.zshrc"
