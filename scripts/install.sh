@@ -14,3 +14,9 @@ bash "$BASE_DIR/nvim/plugins.sh"
 bash "$BASE_DIR/tmux/tmux_plugins.sh"
 
 log "Installation completed."
+
+# Run update to ensure latest versions
+log "Running environment update..."
+bash "$BASE_DIR/core/update.sh"
+
+log "Update completed."
