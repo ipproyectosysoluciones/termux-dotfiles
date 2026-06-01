@@ -149,7 +149,7 @@ Restaurar symlinks
 
 Script
 
-bash scripts/setup-symlinks.sh
+bash scripts/core/symlinks.sh
 
 
 ---
@@ -204,7 +204,7 @@ zsh-completions
 
 Instalar plugins automáticamente
 
-bash scripts/install-plugins.sh
+bash scripts/nvim/plugins.sh
 
 
 ---
@@ -369,7 +369,7 @@ ls -l ~/.config
 
 Recrear
 
-bash scripts/setup-symlinks.sh
+bash scripts/core/symlinks.sh
 
 
 ---

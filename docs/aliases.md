@@ -144,6 +144,8 @@ Purpose:
 
 ## gc
 
+**Type:** ZSH function (zsh/functions.zsh)
+
 Usage:
 
 ```bash
@@ -159,6 +161,7 @@ git commit -m "commit message"
 Purpose:
 
 - Faster commits
+- Git commit shorthand
 
 ---
 
