@@ -43,12 +43,12 @@ fi
 
 log "Running bootstrap/base.sh..."
 
-proot-distro login debian --shared-tmp -- \
+proot-distro login debian --shared-tmp --bind "$HOME:/termux" -- \
     bash < "$BASE_DIR/bootstrap/base.sh"
 
 log "Running bootstrap/ai.sh..."
 
-proot-distro login debian --shared-tmp -- \
+proot-distro login debian --shared-tmp --bind "$HOME:/termux" -- \
     bash < "$BASE_DIR/bootstrap/ai.sh"
 
 log "Debian runtime installation completed"
