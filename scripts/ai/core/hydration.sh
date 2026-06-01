@@ -6,6 +6,10 @@
 
 build_context() {
 
+echo "[hydration] prompt=$1"
+echo "[hydration] MEMORY_CONTEXT=${MEMORY_CONTEXT:-empty}"
+echo "[hydration] AI_PROJECT=${AI_PROJECT:-empty}"
+
     local prompt="${1:-}"
 
     local memory=""
@@ -54,5 +58,8 @@ $memory
 User request:
 $prompt
 EOF
+
+echo "[hydration] completed"
+
 }
 

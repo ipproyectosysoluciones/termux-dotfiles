@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-SYNC_ROOT="/data/data/com.termux/files/home/.ai-sync"
+SYNC_ROOT="$HOME/.ai-sync"
 
 DEBIAN_WORKSPACE_ROOT="/home/dev/workspaces"
 
@@ -40,11 +40,12 @@ mirror_project() {
 
     mkdir -p "$target"
 
-    rsync -a \
-        --delete \
-        "$source/" \
+    rm -rf "$target"/* 2>/dev/null || true
+
+    cp -R \
+        "$source/." \
         "$target/" \
-        >/dev/null 2>&1
+        >/dev/null 2>&1 || true
 }
 
 ########################################
