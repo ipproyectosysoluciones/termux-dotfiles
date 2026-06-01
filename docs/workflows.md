@@ -294,21 +294,21 @@ Flujo de recuperación rápida
 
 Reinstalar symlinks
 
-~/dotfiles/scripts/setup-symlinks.sh
+~/dotfiles/scripts/core/symlinks.sh
 
 
 ---
 
 Reinstalar plugins
 
-~/dotfiles/scripts/install-plugins.sh
+~/dotfiles/scripts/nvim/plugins.sh
 
 
 ---
 
 Reinstalar paquetes
 
-~/dotfiles/scripts/bootstrap-packages.sh
+~/dotfiles/scripts/core/packages.sh
 
 
 ---
