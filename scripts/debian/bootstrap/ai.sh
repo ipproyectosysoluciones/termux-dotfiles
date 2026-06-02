@@ -31,6 +31,17 @@ if ! command -v opencode >/dev/null 2>&1; then
 fi
 
 ########################################
+# MISTRAL
+########################################
+
+# Mistral CLI - requires MISTRAL_API_KEY in .env
+# Skipped if API key not configured
+
+if [[ -n "${MISTRAL_API_KEY:-}" ]]; then
+    echo "[debian] Mistral API key found"
+fi
+
+########################################
 # VERIFY
 ########################################
 

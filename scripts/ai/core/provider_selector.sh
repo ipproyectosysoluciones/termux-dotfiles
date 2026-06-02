@@ -62,6 +62,21 @@ select_provider() {
     fi
 
     ########################################
+    # MISTRAL
+    ########################################
+
+    if [[ "$intent" == "mistral" ]]; then
+
+        if provider_available mistral; then
+            echo "mistral"
+            return
+        fi
+
+        echo "opencode"
+        return
+    fi
+
+    ########################################
     # DEFAULT
     ########################################
 
