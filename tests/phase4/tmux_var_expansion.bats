@@ -34,3 +34,18 @@ setup() {
     run grep -Fc '\$HYDRATED_PROMPT' "$PROJECT_ROOT/scripts/ai/ai.sh"
     [ "$status" -eq 1 ]
 }
+
+@test "ai-runtime.sh computes BASE_DIR correctly (one level up from runtime/)" {
+    # ai-runtime.sh is at scripts/ai/runtime/ai-runtime.sh.
+    # BASE_DIR should resolve to scripts/ai/ (parent of runtime/),
+    # not scripts/ (parent of ai/) — ../.. from runtime/ goes too far.
+    run grep -Fc 'SCRIPT_DIR/../..' "$PROJECT_ROOT/scripts/ai/runtime/ai-runtime.sh"
+    [ "$status" -eq 1 ]
+}
+
+@test "ai-runtime.sh uses correct ../.. structure" {
+    # Verify the actual BASE_DIR computation uses the right depth
+    run grep -F 'BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"' \
+        "$PROJECT_ROOT/scripts/ai/runtime/ai-runtime.sh"
+    [ "$status" -eq 0 ]
+}
