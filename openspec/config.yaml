@@ -8,9 +8,10 @@ context: >
 
 strict_tdd: true
 testing:
-  runner: null
+  runner: bats
+  test_command: bats --recursive tests/
   layers:
-    unit: false
+    unit: true
     integration: false
     e2e: false
   coverage: false
@@ -24,6 +25,6 @@ phases:
   spec: { review_required: true }
   design: { review_required: true }
   tasks: { review_required: true }
-  apply: { auto_test: false }
-  verify: { require_tests: false }
+  apply: { auto_test: true }
+  verify: { require_tests: true }
   archive: { confirm: true }
