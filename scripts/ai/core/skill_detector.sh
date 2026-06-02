@@ -46,7 +46,7 @@ detect_skill() {
     # NVIM
     ########################################
 
-    if [[ "$prompt" =~ nvim|neovim|treesitter|lsp ]]; then
+    if [[ "$prompt" =~ nvim|neovim|treesitter|lsp|editor ]]; then
         echo "editor-engineering"
         return
     fi
