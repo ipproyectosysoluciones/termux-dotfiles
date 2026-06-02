@@ -1,34 +1,40 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-SKILL_REGISTRY_FILE="$HOME/.atl/skill-registry.md"
-
 load_skill_registry() {
 
-    if [[ ! -f "$SKILL_REGISTRY_FILE" ]]; then
+    local registry_file="${SKILL_REGISTRY_FILE:-$HOME/.atl/skill-registry.md}"
+
+    if [[ ! -f "$registry_file" ]]; then
         return 1
     fi
 
-    cat "$SKILL_REGISTRY_FILE"
+    cat "$registry_file"
 }
 
 skill_exists() {
 
     local skill="${1:-}"
+    local registry_file="${SKILL_REGISTRY_FILE:-$HOME/.atl/skill-registry.md}"
 
     if [[ -z "$skill" ]]; then
         return 1
     fi
 
-    grep -qi "$skill" "$SKILL_REGISTRY_FILE"
+    if [[ ! -f "$registry_file" ]]; then
+        return 1
+    fi
+
+    grep -qi "$skill" "$registry_file"
 }
 
 list_skills() {
 
-    if [[ ! -f "$SKILL_REGISTRY_FILE" ]]; then
-        return
+    local registry_file="${SKILL_REGISTRY_FILE:-$HOME/.atl/skill-registry.md}"
+
+    if [[ ! -f "$registry_file" ]]; then
+        return 1
     fi
 
-    grep '^## ' "$SKILL_REGISTRY_FILE" \
+    grep '^## ' "$registry_file" \
         | sed 's/^## //'
 }
-
