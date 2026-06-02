@@ -12,7 +12,8 @@ fi
 # BASE
 ########################################
 
-BASE_DIR="$HOME/dotfiles/scripts/ai"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 source "$BASE_DIR/runtime/runtime.env"
 
@@ -30,15 +31,6 @@ ulimit -n 1024
 source "$BASE_DIR/core/router.sh"
 source "$BASE_DIR/core/memory.sh"
 source "$BASE_DIR/core/sync.sh"
-
-########################################
-# PROVIDERS
-########################################
-
-source "$BASE_DIR/providers/opencode.sh"
-source "$BASE_DIR/providers/gemini.sh"
-source "$BASE_DIR/providers/claude.sh"
-source "$BASE_DIR/providers/gentle.sh"
 
 ########################################
 # INPUT

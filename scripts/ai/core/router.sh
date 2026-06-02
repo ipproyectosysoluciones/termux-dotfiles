@@ -1,9 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-source "$HOME/dotfiles/scripts/ai/providers/claude.sh"
-source "$HOME/dotfiles/scripts/ai/providers/gemini.sh"
-source "$HOME/dotfiles/scripts/ai/providers/opencode.sh"
-source "$HOME/dotfiles/scripts/ai/providers/gentle.sh"
+# Dynamic BASE_DIR detection for portability
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+source "$BASE_DIR/providers/claude.sh"
+source "$BASE_DIR/providers/gemini.sh"
+source "$BASE_DIR/providers/opencode.sh"
+source "$BASE_DIR/providers/gentle.sh"
+source "$BASE_DIR/providers/mistral.sh"
 
 run_provider() {
 
@@ -43,6 +48,14 @@ run_provider() {
 
         gentle)
             run_gentle "$@"
+            ;;
+
+        ########################################
+        # MISTRAL
+        ########################################
+
+        mistral)
+            run_mistral "$@"
             ;;
 
         ########################################
