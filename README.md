@@ -6,7 +6,7 @@ Mobile-first developer workstation powered by:
 - tmux
 - NeoVim
 - zsh
-- AI runtime orchestration
+- AI runtime orchestration (Gemini, Claude, Mistral, OpenCode, Gentle)
 
 Designed for portable full-stack development and AI-assisted workflows.
 
@@ -46,18 +46,27 @@ Designed for portable full-stack development and AI-assisted workflows.
 
 ## AI Workspace
 
-Integrated runtime launcher for:
+Multi-provider AI orchestration with intent-based routing and automatic fallback.
 
-- NeoVim
-- OpenCode
-- Gentle AI
-- Engram
+**Providers:**
+- Gemini (primary) — research, architecture
+- OpenCode — coding, devops (first fallback)
+- Claude — intent-routed coding agent
+- Mistral — secondary provider via intent routing
+- Gentle — control plane operations (final fallback)
 
-Powered by:
+**Launchers:**
+- `ai` — main tmux launcher menu
+- `aip` — popup overlay launcher
+- `PREFIX + m` — tmux keybinding
 
-- tmux
-- gum
-- popup overlays
+**Architecture:**
+- `scripts/ai/core/` — 29 orchestration modules (routing, agents, memory, runtime)
+- `scripts/ai/providers/` — 5 provider implementations
+- `scripts/ai/runtime/` — runtime executor with tmux session management
+- `scripts/ai/templates/` — workspace templates (default, mobile, node, remote)
+
+Powered by tmux + gum with dynamic path detection for portable installation.
 
 ---
 
@@ -65,16 +74,31 @@ Powered by:
 
 ```text
 dotfiles/
-├── docs/
-├── nvim/
+├── docs/                    # Documentation
+│   ├── ai-workspace.md      # AI workspace architecture
+│   ├── provider-architecture.md  # Provider routing & fallback
+│   ├── orchestration.md     # Agent/subagent framework
+│   ├── recovery.md          # System recovery guide
+│   └── ...                  # Additional docs
+├── nvim/                    # NeoVim configuration
+├── openspec/                # SDD artifacts (spec-driven development)
+│   ├── config.yaml
+│   ├── specs/
+│   └── changes/
 ├── scripts/
-│   ├── ai/
-│   ├── core/
-│   ├── nvim/
-│   ├── tmux/
-│   └── utils/
-├── tmux/
-└── zsh/
+│   ├── ai/                  # AI workspace framework
+│   │   ├── ai.sh            # Entry point
+│   │   ├── core/            # 29 orchestration modules
+│   │   ├── providers/       # 5 provider implementations
+│   │   ├── runtime/         # Runtime executor
+│   │   └── templates/       # Workspace templates
+│   ├── debian/              # Debian bootstrap
+│   ├── nvim/                # NeoVim helpers
+│   ├── tmux/                # tmux configuration
+│   └── utils/               # Shared utilities
+├── tests/                   # Bats test suite
+├── tmux/                    # tmux configuration
+└── zsh/                     # Zsh configuration
 ```
 
 ---
@@ -84,7 +108,7 @@ dotfiles/
 Clone repository:
 
 ```bash
-git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git
 ```
 
 ---
@@ -126,11 +150,16 @@ PREFIX + m
 Additional documentation:
 
 | Document | Description |
-|---|---|
-| `docs/architecture.md` | global architecture |
-| `docs/ai-workspace.md` | AI runtime workflows |
+|---|---|---|
+| `docs/architecture.md` | Global architecture |
+| `docs/ai-workspace.md` | AI workspace launcher & runtime |
+| `docs/provider-architecture.md` | Provider routing & fallback chain |
+| `docs/orchestration.md` | Agent/subagent orchestration framework |
 | `docs/tmux-workflows.md` | tmux orchestration |
-| `docs/shell-runtime.md` | shell runtime |
+| `docs/shell-runtime.md` | Shell runtime |
+| `docs/recovery.md` | System recovery guide |
+| `docs/installation.md` | Installation guide |
+
 
 ---
 
@@ -163,11 +192,16 @@ Secondary environments:
 
 The workstation currently includes:
 
-- modular shell runtime
-- tmux popup launcher
-- AI workspace orchestration
-- modular NeoVim architecture
-- reusable automation scripts
+- modular shell runtime with zsh
+- tmux popup launcher with gum
+- AI workspace orchestration with 5 providers (Gemini, Claude, Mistral, OpenCode, Gentle)
+- Intent-based provider routing with automatic fallback chain
+- Agent/subagent orchestration framework
+- Modular NeoVim architecture with LSP, Treesitter, DAP
+- Dynamic path detection for portable installation
+- Bats test suite (18/19 passing)
+- SDD (Spec-Driven Development) workflow
+- Reusable automation scripts
 
 ---
 
@@ -175,12 +209,11 @@ The workstation currently includes:
 
 Potential future additions:
 
-- workspace profiles
-- session metadata
+- workspace profiles (templates exist, profiles pending)
+- session metadata & persistence
 - runtime previews
-- AI provider switching
-- workspace templates
-- runtime persistence
+- XDG base directory migration
+- Enhanced subagent capabilities
 
 ---
 
