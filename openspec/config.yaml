@@ -1,0 +1,29 @@
+project: termux-dotfiles
+stack: bash/zsh/tmux/neovim
+context: >
+  Portable AI Developer Workstation for mobile-first development on Termux/Android.
+  Modular architecture with isolated subsystems (shell, tmux, nvim, AI workflows).
+  ~98% Bash scripts with gum-powered tmux popup orchestration.
+  Conventional commits required. Changes flow: Issue -> PR -> Close.
+
+strict_tdd: true
+testing:
+  runner: null
+  layers:
+    unit: false
+    integration: false
+    e2e: false
+  coverage: false
+  quality_tools:
+    linter: false
+    type_checker: false
+    formatter: false
+
+phases:
+  proposal: { min_context: 2, review_required: true }
+  spec: { review_required: true }
+  design: { review_required: true }
+  tasks: { review_required: true }
+  apply: { auto_test: false }
+  verify: { require_tests: false }
+  archive: { confirm: true }
