@@ -16,6 +16,10 @@ export PATH="$HOME/.opencode/bin:$PATH"
 export EDITOR=nvim
 export VISUAL=nvim
 
+# Load local environment variables (API keys, tokens) from .env
+# Create ~/dotfiles/.env with your keys (it's gitignored)
+[[ -f "$HOME/dotfiles/.env" ]] && source "$HOME/dotfiles/.env"
+
 export PROJECTS_DIR="$HOME/Projects"
 
 [[ -d "$PROJECTS_DIR" ]] || mkdir -p "$PROJECTS_DIR"
