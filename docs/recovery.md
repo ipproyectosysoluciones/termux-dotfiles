@@ -73,21 +73,21 @@ Clonar dotfiles
 
 Repositorio
 
-git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git
 
 
 ---
 
 Entrar al repositorio
 
-cd ~/termux-dotfiles
+cd ~/Termux-AI-Astaroth
 
 
 ---
 
 Estructura esperada
 
-termux-dotfiles/
+Termux-AI-Astaroth/
 ├── docs
 ├── scripts
 ├── termux
@@ -285,6 +285,129 @@ exec zsh
 
 ---
 
+# Restaurar AI Workspace
+
+## Directorio AI
+
+Verificar que el directorio AI existe:
+
+```bash
+ls -la ~/Termux-AI-Astaroth/scripts/ai/
+```
+
+
+---
+
+## Requisitos AI
+
+Verificar que python3 y pip estan instalados:
+
+```bash
+python3 --version
+pip3 --version
+```
+
+
+---
+
+## Instalar gentle-ai
+
+Usar el script de bootstrap:
+
+```bash
+bash ~/Termux-AI-Astaroth/scripts/debian/bootstrap/ai.sh
+```
+
+Este script instala:
+- gentle-ai CLI
+- Configuracion de proveedores AI
+- Engram CLI
+- Dependencias de Python
+
+
+---
+
+## Recuperar engram
+
+Verificar que engram funciona:
+
+```bash
+engram --version
+```
+
+Si no esta instalado, reinstallar:
+
+```bash
+npm install -g @gentleman-programming/engram-cli
+```
+
+Recuperar contexto de sesiones anteriores:
+
+```bash
+engram mem_context
+```
+
+
+---
+
+## Verificar doctor.sh
+
+Despues de recuperar el entorno, ejecutar validacion:
+
+```bash
+bash ~/Termux-AI-Astaroth/scripts/debian/doctor.sh
+```
+
+
+---
+
+# Validacion con doctor.sh
+
+## Ejecutar doctor
+
+Despues de cualquier recuperacion, ejecutar validacion completa:
+
+```bash
+bash ~/Termux-AI-Astaroth/scripts/debian/doctor.sh
+```
+
+
+---
+
+## Verificaciones esperadas
+
+El script doctor.sh verifica:
+
+| Verificacion | Pass | Fail |
+|--------------|------|------|
+| Paquetes base instalados | ✅ | ❌ |
+| Git configurado | ✅ | ❌ |
+| Zsh funciona | ✅ | ❌ |
+| tmux funciona | ✅ | ❌ |
+| Neovim instalado | ✅ | ❌ |
+| Symlinks activos | ✅ | ❌ |
+| Plugins TPM instalados | ✅ | ❌ |
+| AI tools instalados | ✅ | ❌ |
+| Engram CLI disponible | ✅ | ❌ |
+| Proveedores AI configurados | ✅ | ❌ |
+
+Si alguna verificacion falla, el script indica el comando para corregirlo.
+
+
+---
+
+## Solucionar fallos
+
+Si doctor.sh detecta fallos:
+
+```bash
+# Seguir las instrucciones del script
+# Cada fallo incluye el comando de reparacion
+```
+
+
+---
+
 Problema: warning Powerlevel10k
 
 Síntoma
@@ -456,9 +579,9 @@ pkg update && pkg upgrade -y
 
 pkg install git -y
 
-git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git
 
-cd termux-dotfiles
+cd Termux-AI-Astaroth
 
 bash scripts/install.sh
 
