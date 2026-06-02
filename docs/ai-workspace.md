@@ -36,17 +36,74 @@ Main objectives:
 
 ```text
 scripts/ai/
-├── menu.sh
-├── popup.sh
-├── workspace.sh
-├── sessions.sh
-├── utils.sh
-├── ui.sh
-├── nvim.sh
-├── opencode.sh
-├── gentle.sh
-└── engram.sh
+├── ai.sh                    # main entry point
+├── menu.sh                  # launcher menu
+├── popup.sh                 # popup launcher
+├── workspace.sh             # workspace launcher (templates)
+├── sessions.sh              # session manager
+├── utils.sh                 # shared utilities
+├── ui.sh                    # UI layer (gum)
+├── nvim.sh                  # NeoVim launcher
+├── opencode.sh              # OpenCode launcher
+├── gentle.sh                # Gentle AI launcher
+├── engram.sh                # Engram launcher
+├── core/                    # orchestration layer (29 modules)
+│   ├── agent_context.sh    # agent context management
+│   ├── agent_registry.sh   # agent resolution from skills
+│   ├── agent_router.sh     # agent → provider routing
+│   ├── capability_router.sh # skill-to-intent routing
+│   ├── context.sh          # prompt context
+│   ├── doctor.sh           # diagnostics
+│   ├── executor.sh         # prompt execution
+│   ├── hooks.sh            # lifecycle hooks
+│   ├── hydration.sh        # state hydration
+│   ├── intelligence.sh     # resume / last-session
+│   ├── layout.sh           # tmux layout selection + apply
+│   ├── memory.sh           # memory persistence
+│   ├── metadata.sh         # workspace metadata
+│   ├── orchestrator.sh     # orchestration coordinator
+│   ├── paths.sh            # path utilities (Termux/Debian)
+│   ├── policies.sh         # execution policies
+│   ├── project.sh          # project detection
+│   ├── provider_selector.sh # intent → provider mapping
+│   ├── registry.sh         # skill registry
+│   ├── routing.sh          # prompt routing
+│   ├── runtime.sh          # runtime detection (mobile/remote/local)
+│   ├── runtime_session.sh  # runtime session management
+│   ├── session.sh          # session utilities
+│   ├── skill_detector.sh   # skill detection from prompts
+│   ├── skill_registry.sh   # available skills
+│   ├── state.sh            # state management
+│   ├── subagent_registry.sh # subagent registry
+│   ├── subagent_runtime.sh # subagent spawning
+│   └── workspace.sh        # workspace session management
+├── providers/               # AI provider implementations (5)
+│   ├── claude.sh           # Anthropic Claude
+│   ├── gentle.sh           # Gentle AI
+│   ├── gemini.sh           # Google Gemini
+│   ├── mistral.sh          # Mistral AI
+│   └── opencode.sh         # OpenCode
+├── runtime/
+│   └── ai-runtime.sh       # unified runtime entry point
+└── templates/              # workspace layouts (4)
+    ├── default.sh           # editor + claude + gemini
+    ├── mobile.sh           # mobile-optimized layout
+    ├── node.sh             # Node.js project layout
+    └── remote.sh           # remote-optimized layout
 ```
+
+## Core Orchestration Layer
+
+The `core/` directory contains the agent/subagent framework:
+
+- **orchestrator.sh** — Coordinates multi-agent sessions
+- **agent_registry.sh** — Resolves agents from skills
+- **subagent_registry.sh** — Registry for subagent definitions
+- **subagent_runtime.sh** — Spawns and manages subagents
+- **agent_router.sh** — Routes agent intents to providers
+- **capability_router.sh** — Maps skills to intents (research, devops, coding, lightweight)
+
+Data flow: `prompt → routing → capability_router → agent_registry → agent_router → orchestrator → subagent_registry → subagent_runtime`
 
 ---
 
@@ -107,12 +164,12 @@ Each AI runtime uses its own tmux session.
 
 Examples:
 
-| Runtime | Session |
-|---|---|
-| NeoVim | `nvim` |
-| OpenCode | `opencode` |
-| Gentle AI | `gentle` |
-| Engram | `engram` |
+| Runtime   | Session    |
+| --------- | ---------- |
+| NeoVim    | `nvim`     |
+| OpenCode  | `opencode` |
+| Gentle AI | `gentle`   |
+| Engram    | `engram`   |
 
 ---
 
@@ -242,4 +299,3 @@ The AI workspace prioritizes:
 - runtime isolation
 - mobile usability
 - low maintenance overhead
-

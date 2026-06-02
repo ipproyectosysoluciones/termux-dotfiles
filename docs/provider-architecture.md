@@ -28,11 +28,19 @@ Each provider script MUST implement:
 | Provider | Script | Status |
 |----------|--------|--------|
 | Gemini | `scripts/ai/providers/gemini.sh` | Active (primary) |
-| OpenCode | (internal) | Active (first fallback) |
-| Gentle | `scripts/ai/providers/gentle.sh` | Active (final fallback) |
+| OpenCode | `scripts/ai/providers/opencode.sh` | Active (first fallback) |
+| Claude | `scripts/ai/providers/claude.sh` | Active (intent-routed) |
+| Mistral | `scripts/ai/providers/mistral.sh` | Active (secondary) |
+| Gentle | `scripts/ai/providers/gentle.sh` | Active (control plane) |
 
 ### Fallback Chain
+When the primary provider (Gemini) is unavailable:
+```
 gemini → opencode → gentle
+```
+- `QUOTA_EXHAUSTED` → fallback to **opencode**
+- Generic failure → fallback to **gentle**
+- Providers like Claude and Mistral are selected directly by intent routing, not through the fallback chain.
 
 ### Adding a New Provider
 1. Create `scripts/ai/providers/<name>.sh` following the interface
