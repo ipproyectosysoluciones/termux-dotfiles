@@ -49,7 +49,7 @@ No usar Google Play.
 
 # Actualizar sistema
 
-```bash id="v6a9t2"
+````bash id="v6a9t2"
 pkg update && pkg upgrade -y
 
 
@@ -293,8 +293,7 @@ Verificar que el directorio AI existe:
 
 ```bash
 ls -la ~/Termux-AI-Astaroth/scripts/ai/
-```
-
+````
 
 ---
 
@@ -307,7 +306,6 @@ python3 --version
 pip3 --version
 ```
 
-
 ---
 
 ## Instalar gentle-ai
@@ -319,11 +317,11 @@ bash ~/Termux-AI-Astaroth/scripts/debian/bootstrap/ai.sh
 ```
 
 Este script instala:
+
 - gentle-ai CLI
 - Configuracion de proveedores AI
 - Engram CLI
 - Dependencias de Python
-
 
 ---
 
@@ -347,7 +345,6 @@ Recuperar contexto de sesiones anteriores:
 engram mem_context
 ```
 
-
 ---
 
 ## Verificar doctor.sh
@@ -357,7 +354,6 @@ Despues de recuperar el entorno, ejecutar validacion:
 ```bash
 bash ~/Termux-AI-Astaroth/scripts/debian/doctor.sh
 ```
-
 
 ---
 
@@ -371,28 +367,26 @@ Despues de cualquier recuperacion, ejecutar validacion completa:
 bash ~/Termux-AI-Astaroth/scripts/debian/doctor.sh
 ```
 
-
 ---
 
 ## Verificaciones esperadas
 
 El script doctor.sh verifica:
 
-| Verificacion | Pass | Fail |
-|--------------|------|------|
-| Paquetes base instalados | ✅ | ❌ |
-| Git configurado | ✅ | ❌ |
-| Zsh funciona | ✅ | ❌ |
-| tmux funciona | ✅ | ❌ |
-| Neovim instalado | ✅ | ❌ |
-| Symlinks activos | ✅ | ❌ |
-| Plugins TPM instalados | ✅ | ❌ |
-| AI tools instalados | ✅ | ❌ |
-| Engram CLI disponible | ✅ | ❌ |
-| Proveedores AI configurados | ✅ | ❌ |
+| Verificacion                | Pass | Fail |
+| --------------------------- | ---- | ---- |
+| Paquetes base instalados    | ✅   | ❌   |
+| Git configurado             | ✅   | ❌   |
+| Zsh funciona                | ✅   | ❌   |
+| tmux funciona               | ✅   | ❌   |
+| Neovim instalado            | ✅   | ❌   |
+| Symlinks activos            | ✅   | ❌   |
+| Plugins TPM instalados      | ✅   | ❌   |
+| AI tools instalados         | ✅   | ❌   |
+| Engram CLI disponible       | ✅   | ❌   |
+| Proveedores AI configurados | ✅   | ❌   |
 
 Si alguna verificacion falla, el script indica el comando para corregirlo.
-
 
 ---
 
@@ -405,7 +399,6 @@ Si doctor.sh detecta fallos:
 # Cada fallo incluye el comando de reparacion
 ```
 
-
 ---
 
 Problema: warning Powerlevel10k
@@ -413,7 +406,6 @@ Problema: warning Powerlevel10k
 Síntoma
 
 Console output during zsh initialization detected
-
 
 ---
 
@@ -423,7 +415,6 @@ Agregar al inicio de ~/.zshrc:
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
-
 ---
 
 Problema: compdef no encontrado
@@ -431,7 +422,6 @@ Problema: compdef no encontrado
 Síntoma
 
 compdef: function not found
-
 
 ---
 
@@ -444,7 +434,6 @@ compinit
 
 Debe ejecutarse antes de plugins.
 
-
 ---
 
 Problema: tmux plugins no cargan
@@ -452,7 +441,6 @@ Problema: tmux plugins no cargan
 Verificar
 
 tmux show-options -g | grep @plugin
-
 
 ---
 
@@ -462,7 +450,6 @@ Debe existir:
 
 run '~/.tmux/plugins/tpm/tpm'
 
-
 ---
 
 Problema: ssh-agent pide password constantemente
@@ -471,13 +458,11 @@ Verificar claves cargadas
 
 ssh-add -l
 
-
 ---
 
 Cargar clave manualmente
 
 ssh-add ~/.ssh/id_ed25519
-
 
 ---
 
@@ -487,13 +472,11 @@ Detectar
 
 ls -l ~/.config
 
-
 ---
 
 Recrear
 
 bash scripts/core/symlinks.sh
-
 
 ---
 
@@ -503,13 +486,11 @@ Revisar prefix
 
 tmux list-keys | grep prefix
 
-
 ---
 
 Prefix configurado
 
 CTRL + A
-
 
 ---
 
@@ -527,8 +508,6 @@ plugins tmux dañados
 
 Android limitando procesos
 
-
-
 ---
 
 Optimización Android
@@ -539,7 +518,6 @@ Ruta general:
 
 Ajustes → Apps → Termux → Batería → Sin restricciones
 
-
 ---
 
 Backup manual
@@ -548,7 +526,6 @@ Crear backup configs
 
 mkdir -p ~/dotfiles_backup
 
-
 ---
 
 Copiar configuraciones
@@ -556,7 +533,6 @@ Copiar configuraciones
 cp -r ~/.config/zsh ~/dotfiles_backup/
 cp -r ~/.config/tmux ~/dotfiles_backup/
 cp -r ~/.config/termux ~/dotfiles_backup/
-
 
 ---
 
@@ -568,7 +544,6 @@ git add .
 git commit -m "backup configs"
 git push
 
-
 ---
 
 Recuperación total rápida
@@ -579,12 +554,11 @@ pkg update && pkg upgrade -y
 
 pkg install git -y
 
-git clone https://github.com/bladimir/Termux-AI-Astaroth.git
+git clone <https://github.com/ipproyectosysoluciones/termux-dotfiles.git>
 
 cd Termux-AI-Astaroth
 
 bash scripts/install.sh
-
 
 ---
 
@@ -594,13 +568,11 @@ Zsh
 
 echo $SHELL
 
-
 ---
 
 tmux
 
 tmux ls
-
 
 ---
 
@@ -608,20 +580,17 @@ GitHub CLI
 
 gh auth status
 
-
 ---
 
 SSH
 
 ssh-add -l
 
-
 ---
 
 Symlinks
 
 readlink ~/.config/zsh
-
 
 ---
 
@@ -636,4 +605,3 @@ Termux
 dotfiles
 
 scripts automatizados
-

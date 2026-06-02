@@ -8,7 +8,7 @@ Neovim is configured as the primary text editor, with a modular configuration st
 
 ## Directory Structure
 
-```
+```tree
 nvim/
 ├── init.lua              # Main configuration entry
 ├── lua/
@@ -30,17 +30,18 @@ Location: `nvim/lua/config/plugins.lua`
 
 ### Core Plugins
 
-| Plugin | Purpose |
-|--------|---------|
-| `folke/lazy.nvim` | Plugin manager |
-| `nvim-lualine/lualine.nvim` | Status line |
-| `nvim-tree/nvim-tree.lua` | File explorer |
-| `hrsh7th/nvim-cmp` | Autocomplete |
-| `neovim/nvim-lspconfig` | Language Server Protocol |
+| Plugin                      | Purpose                  |
+| --------------------------- | ------------------------ |
+| `folke/lazy.nvim`           | Plugin manager           |
+| `nvim-lualine/lualine.nvim` | Status line              |
+| `nvim-tree/nvim-tree.lua`   | File explorer            |
+| `hrsh7th/nvim-cmp`          | Autocomplete             |
+| `neovim/nvim-lspconfig`     | Language Server Protocol |
 
 ### Plugin Installation
 
 Run the plugin installation script:
+
 ```bash
 bash scripts/nvim/plugins.sh
 ```
@@ -56,6 +57,7 @@ Main entry point that loads all configuration modules.
 ### lua/config/options.lua
 
 Sets Neovim options like:
+
 - `number` (line numbers)
 - `relativenumber` (relative line numbers)
 - `expandtab` (spaces instead of tabs)
@@ -66,6 +68,7 @@ Sets Neovim options like:
 ### lua/config/keymaps.lua
 
 Defines keybindings including:
+
 - `jk` or `kj` → `<Esc>` (exit insert mode)
 - `H`/`L` → beginning/end of line
 - `<Leader>e` → toggle NvimTree
@@ -80,6 +83,7 @@ Configures lazy.nvim with plugin specifications and lazy-loading settings.
 ### Automated
 
 Run the main install script:
+
 ```bash
 bash scripts/install.sh
 ```
@@ -98,20 +102,21 @@ nvim
 
 ## Keybindings
 
-| Key | Mode | Action |
-|-----|------|--------|
+| Key         | Mode   | Action              |
+| ----------- | ------ | ------------------- |
 | `jk` / `kj` | Insert | Exit to normal mode |
-| `H` | Normal | Go to line start |
-| `L` | Normal | Go to line end |
-| `<Space>e` | Normal | Toggle NvimTree |
-| `gcc` | Normal | Toggle line comment |
-| `gc` | Visual | Block comment |
+| `H`         | Normal | Go to line start    |
+| `L`         | Normal | Go to line end      |
+| `<Space>e`  | Normal | Toggle NvimTree     |
+| `gcc`       | Normal | Toggle line comment |
+| `gc`        | Visual | Block comment       |
 
 ## Troubleshooting
 
 ### Plugins not loading
 
 Check that plugins.sh ran successfully and `~/.zsh-plugins` exists:
+
 ```bash
 ls ~/.zsh-plugins
 ```
@@ -119,6 +124,7 @@ ls ~/.zsh-plugins
 ### Lazy.nvim errors
 
 Remove lock file and reload:
+
 ```bash
 rm nvim/lazy-lock.json
 nvim +Lazy sync
