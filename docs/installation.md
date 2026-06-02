@@ -85,7 +85,7 @@ termux-setup-storage
 Clone dotfiles repository:
 
 ```bash
-git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git ~/dotfiles
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/Termux-AI-Astaroth
 ```
 
 Enter repository:
@@ -257,6 +257,58 @@ tmux source-file ~/.tmux.conf
 
 ```bash
 termux-reload-settings
+```
+
+---
+
+# AI Tools
+
+## Install AI Provider Tools
+
+This repository includes AI integration tools for development assistance.
+
+### Using the AI Bootstrap Script
+
+To install AI tools and provider configurations:
+
+```bash
+bash ~/Termux-AI-Astaroth/scripts/debian/bootstrap/ai.sh
+```
+
+This script installs:
+- gentle-ai CLI for task assistance
+- Engram CLI for memory and context management
+- AI provider configurations (Google Gemini, OpenCode, Mistral)
+- Python dependencies for AI tooling
+
+### Verify AI Tools Installation
+
+After running the bootstrap script:
+
+```bash
+gentle-ai --version
+engram --version
+```
+
+### Available AI Providers
+
+The system supports multiple AI providers with automatic fallback:
+
+| Provider | Environment Variable | Purpose |
+|----------|---------------------|---------|
+| Gemini | GEMINI_API_KEY | Research and architecture tasks |
+| OpenCode | OPENCODE_API_KEY | Coding assistance |
+| Mistral | MISTRAL_API_KEY | General purpose AI |
+| Gentle (fallback) | None required | Local fallback |
+
+### Configuration
+
+AI provider keys should be stored in a `.env` file in the project root:
+
+```text
+GEMINI_API_KEY=your_gemini_key_here
+OPENCODE_API_KEY=your_opencode_key_here
+MISTRAL_API_KEY=your_mistral_key_here
 ```
 
 ---
