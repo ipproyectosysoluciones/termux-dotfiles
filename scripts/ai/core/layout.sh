@@ -1,6 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-source "$HOME/dotfiles/scripts/ai/core/runtime.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+source "$BASE_DIR/core/runtime.sh"
 
 select_layout() {
 
@@ -52,7 +55,7 @@ apply_layout() {
 
     local template
 
-    template="$HOME/dotfiles/scripts/ai/templates/${layout}.sh"
+    template="$BASE_DIR/templates/${layout}.sh"
 
     ########################################
     # TMUX STABILIZATION

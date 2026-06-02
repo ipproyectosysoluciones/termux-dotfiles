@@ -1,6 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-source "$HOME/dotfiles/scripts/ai/core/state.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+source "$BASE_DIR/core/state.sh"
 
 resume_last_session() {
 

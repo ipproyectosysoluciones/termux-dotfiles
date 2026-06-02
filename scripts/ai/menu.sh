@@ -1,6 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-source "$HOME/dotfiles/scripts/ai/utils.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$SCRIPT_DIR/utils.sh"
 
 clear
 
@@ -18,22 +20,22 @@ CHOICE=$(gum choose \
 
 case "$CHOICE" in
   "NeoVim")
-    ~/dotfiles/scripts/ai/nvim.sh
+    "$SCRIPT_DIR/nvim.sh"
     ;;
   "OpenCode")
-    ~/dotfiles/scripts/ai/opencode.sh
+    "$SCRIPT_DIR/opencode.sh"
     ;;
   "Gentle AI")
-    ~/dotfiles/scripts/ai/gentle.sh
+    "$SCRIPT_DIR/gentle.sh"
     ;;
   "Engram")
-    ~/dotfiles/scripts/ai/engram.sh
+    "$SCRIPT_DIR/engram.sh"
     ;;
   "Full Workspace")
-    ~/dotfiles/scripts/ai/workspace.sh
+    "$SCRIPT_DIR/workspace.sh"
     ;;
   "Sessions")
-    ~/dotfiles/scripts/ai/sessions.sh
+    "$SCRIPT_DIR/sessions.sh"
     ;;
   "Exit")
     exit 0

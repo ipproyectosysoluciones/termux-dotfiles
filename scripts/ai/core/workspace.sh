@@ -1,6 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-WORKSPACE_DB="$HOME/.ai/workspaces"
+if [[ -n "${XDG_STATE_HOME:-}" ]]; then
+    WORKSPACE_DB="$XDG_STATE_HOME/ai/workspaces"
+else
+    WORKSPACE_DB="$HOME/.ai/workspaces"
+fi
 
 mkdir -p "$WORKSPACE_DB"
 

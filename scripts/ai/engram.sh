@@ -1,6 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-source "$HOME/dotfiles/scripts/ai/utils.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$SCRIPT_DIR/utils.sh"
 
 SESSION="engram"
 

@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-BASE_DIR="$HOME/dotfiles/scripts/ai"
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 ########################################
 # CORE
@@ -212,11 +212,11 @@ if [[ "$ORCHESTRATION_MODE" == "true" ]]; then
 
 	tmux split-window -v \
     		"bash -lc '
-        		source \"$BASE_DIR/runtime/runtime.env\"
+        		source \"\$BASE_DIR/runtime/runtime.env\"
 
-        		$HOME/dotfiles/scripts/ai/runtime/ai-runtime.sh \
-            			\"$PROVIDER\" \
-            			\"$HYDRATED_PROMPT\"
+        		\"\$BASE_DIR/runtime/ai-runtime.sh\" \
+            			\"\$PROVIDER\" \
+            			\"\$HYDRATED_PROMPT\"
     		'"
 
     ########################################
@@ -230,7 +230,7 @@ if [[ "$ORCHESTRATION_MODE" == "true" ]]; then
         tmux new-session \
             -d \
             -s "$SESSION_NAME" \
-            "$HOME/dotfiles/scripts/ai/runtime/ai-runtime.sh \"$PROVIDER\" \"$HYDRATED_PROMPT\""
+            "\"$BASE_DIR/runtime/ai-runtime.sh\" \"\$PROVIDER\" \"\$HYDRATED_PROMPT\""
 
         attach_runtime_session "$SESSION_NAME"
 
@@ -263,12 +263,12 @@ if [[ "$TMUX_MODE" == "nested" ]]; then
     tmux new-window \
         -n "ai-$AGENT_MODE" \
         "bash -lc '
-            source \"$BASE_DIR/runtime/runtime.env\"
+            source \"\$BASE_DIR/runtime/runtime.env\"
 
-            export AI_PROMPT_FILE=\"$AI_PROMPT_FILE\"
+            export AI_PROMPT_FILE=\"\$AI_PROMPT_FILE\"
 
-            \"$HOME/dotfiles/scripts/ai/runtime/ai-runtime.sh\" \
-                \"$PROVIDER\"
+            \"\$BASE_DIR/runtime/ai-runtime.sh\" \
+                \"\$PROVIDER\"
 
             exec zsh
         '"
@@ -286,7 +286,7 @@ SESSION_NAME="$PROJECT_NAME"
 tmux new-session \
     -d \
     -s "$SESSION_NAME" \
-    "$HOME/dotfiles/scripts/ai/runtime/ai-runtime.sh \"$PROVIDER\" \"$HYDRATED_PROMPT\""
+    "\"$BASE_DIR/runtime/ai-runtime.sh\" \"\$PROVIDER\" \"\$HYDRATED_PROMPT\""
 
 attach_runtime_session "$SESSION_NAME"
 
