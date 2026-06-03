@@ -23,49 +23,66 @@ run_gemini() {
     set +e
 
     output="$(
-        gemini \
+        echo "$prompt" | timeout 120 gemini \
             --yolo \
             --prompt "$prompt" \
             2>&1
     )"
 
     local status=$?
-
     set -e
 
-    echo "$output"
-
     ########################################
-    # QUOTA EXHAUSTED
+    # Nested tmux output redirect
     ########################################
 
-    if echo "$output" | grep -qi "QUOTA_EXHAUSTED"; then
-
-        echo
-        echo "[ai] gemini quota exhausted"
-        echo "[ai] falling back to opencode"
-        echo
-
-        run_opencode run "$prompt"
-
-        return 0
+    if [[ -n "$TMUX" ]]; then
+        echo "[debug] gemini response captured"
     fi
 
     ########################################
-    # GENERIC FAILURE
+    # FAILURE BRANCH: timeout / quota / error
     ########################################
 
     if [[ $status -ne 0 ]]; then
 
+        echo "$output"
+
+        local reason
+        # Prioritize: timeout > quota > generic
+        if [[ $status -eq 124 ]]; then
+            reason="gemini timed out"
+        elif echo "$output" | grep -qiE "QUOTA_EXHAUSTED|cannot process"; then
+            reason="gemini quota exhausted"
+        else
+            reason="gemini failed (exit $status)"
+        fi
+
         echo
-        echo "[ai] gemini failed"
-        echo "[ai] falling back to gentle"
+        echo "[ai] $reason"
+        echo "[ai] falling back to opencode"
         echo
 
-        run_gentle "$prompt"
+        run_opencode run "$prompt"
+        local fb_status=$?
+
+        if [[ $fb_status -ne 0 ]]; then
+            echo
+            echo "[ai] opencode also failed"
+            echo "[ai] falling back to gentle (orchestrator)"
+            echo
+
+            run_gentle "$prompt"
+            return $?
+        fi
 
         return 0
     fi
 
+    ########################################
+    # SUCCESS: gemini responded normally
+    ########################################
+
+    echo "$output"
     return 0
 }

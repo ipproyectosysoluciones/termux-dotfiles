@@ -251,6 +251,23 @@ if [[ "$TMUX_MODE" == "nested" ]]; then
     sleep 2
 
     ########################################
+    # GEMINI INLINE (requires real TTY)
+    ########################################
+
+    if [[ "$PROVIDER" == "gemini" ]]; then
+
+        echo "[debug] $PROVIDER needs a real TTY (setRawMode)"
+        echo "[debug] running inline in current window"
+        sleep 1
+
+        set +e
+        run_provider "$PROVIDER" "$HYDRATED_PROMPT"
+        set -e
+
+        exit 0
+    fi
+
+    ########################################
     # PROMPT FILE
     ########################################
 
@@ -260,7 +277,9 @@ if [[ "$TMUX_MODE" == "nested" ]]; then
     printf "%s" "$HYDRATED_PROMPT" > "$PROMPT_FILE"
     export AI_PROMPT_FILE="$PROMPT_FILE"
 
-	tmux new-window \
+    echo "export AI_PROMPT_FILE=\"$PROMPT_FILE\"" >> "$RUNTIME_ENV_FILE"
+
+    tmux new-window \
         -n "ai-$AGENT_MODE" \
         "bash -lc '
             source \"$BASE_DIR/runtime/runtime.env\"
