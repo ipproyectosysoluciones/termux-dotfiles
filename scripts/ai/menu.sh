@@ -3,6 +3,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$SCRIPT_DIR/utils.sh"
+source "$SCRIPT_DIR/ui.sh"
 
 # Detect available menu tool: prefer gum, fallback to bash select
 detect_menu_tool() {
