@@ -186,9 +186,9 @@ source "$(resolve_core project)"
 @test "git_branch returns current branch in git repo" {
     # Given
     local test_dir="$TEST_TMPDIR/git-branch-test"
-    mkdir -p "$test_dir/.git"
+    mkdir -p "$test_dir"
     cd "$test_dir"
-    git init -q
+    git init -q --initial-branch=main
     git config user.email "test@test.com"
     git config user.name "Test"
     git commit -q --allow-empty -m "initial"
