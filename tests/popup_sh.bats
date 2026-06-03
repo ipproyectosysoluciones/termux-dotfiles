@@ -2,6 +2,9 @@
 
 load test_helper
 
+# Override PROJECT_ROOT: tests are at tests/ level (one level deep), not tests/subdir/
+PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
+
 @test "popup.sh exits 1 when tmux not running (TMUX unset)" {
     local temp_dir="$BATS_TEST_TMPDIR/test_no_tmux"
     mkdir -p "$temp_dir"

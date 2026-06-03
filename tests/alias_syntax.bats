@@ -2,6 +2,9 @@
 
 load test_helper
 
+# Override PROJECT_ROOT: tests are at tests/ level (one level deep), not tests/subdir/
+PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
+
 @test "aliases.zsh contains ai-menu alias" {
     local aliases_file="$(resolve_script zsh/aliases.zsh)"
     run grep -E "^alias ai-menu=" "$aliases_file"
@@ -23,7 +26,6 @@ load test_helper
 @test "aliases.zsh passes basic alias syntax check" {
     local aliases_file="$(resolve_script zsh/aliases.zsh)"
     local bash_bin="$(command -v bash)"
-    # Skip if bash not found (edge case)
     if [ -z "$bash_bin" ]; then
         skip "bash not found in PATH"
     fi
