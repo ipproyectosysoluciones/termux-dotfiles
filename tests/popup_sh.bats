@@ -83,8 +83,11 @@ POPUPEOF
 }
 
 @test "popup.sh passes syntax check with bash -n" {
-    # Use absolute path since resolve_script has wrong path calculation
-    local popup_script="/media/bladimir/Datos1/Datos/proyectos/work/Termux-AI-Astaroth/scripts/ai/popup.sh"
-    run /usr/bin/bash -n "$popup_script"
+    local popup_script="$(resolve_script scripts/ai/popup.sh)"
+    local bash_bin="$(command -v bash)"
+    if [ -z "$bash_bin" ]; then
+        skip "bash not found in PATH"
+    fi
+    run "$bash_bin" -n "$popup_script"
     [ "$status" -eq 0 ]
 }

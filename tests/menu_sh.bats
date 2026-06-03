@@ -25,10 +25,11 @@ SCRIPTEOF
 
 @test "detect_menu_tool returns select when gum is unavailable" {
     local temp_script="$BATS_TEST_TMPDIR/detect_tool_select.sh"
+    # Build a minimal PATH without gum's location
+    local sanitized_path="/usr/bin:/bin"
 
     cat > "$temp_script" << 'SCRIPTEOF'
 #!/usr/bin/env bash
-# gum is not defined - command -v gum will fail
 detect_menu_tool() {
   if command -v gum > /dev/null 2>&1; then
     echo "gum"
@@ -40,13 +41,14 @@ detect_menu_tool
 SCRIPTEOF
     chmod +x "$temp_script"
 
-    run "$temp_script"
+    run env PATH="$sanitized_path" "$temp_script"
     [ "$output" = "select" ]
 }
 
 @test "menu.sh case routing uses select when gum unavailable" {
     local temp_dir="$BATS_TEST_TMPDIR/test_select"
     mkdir -p "$temp_dir"
+    local sanitized_path="/usr/bin:/bin"
 
     cat > "$temp_dir/menu.sh" << 'MENUEOF'
 #!/usr/bin/env bash
@@ -72,7 +74,7 @@ esac
 MENUEOF
     chmod +x "$temp_dir/menu.sh"
 
-    run "$temp_dir/menu.sh"
+    run env PATH="$sanitized_path" "$temp_dir/menu.sh"
     [ "$output" = "Using select" ]
 }
 
@@ -121,6 +123,7 @@ MENUEOF
 @test "menu.sh shows informative message in select fallback" {
     local temp_dir="$BATS_TEST_TMPDIR/test_fallback"
     mkdir -p "$temp_dir"
+    local sanitized_path="/usr/bin:/bin"
 
     cat > "$temp_dir/menu.sh" << 'MENUEOF'
 #!/usr/bin/env bash
@@ -147,7 +150,7 @@ esac
 MENUEOF
     chmod +x "$temp_dir/menu.sh"
 
-    run "$temp_dir/menu.sh"
+    run env PATH="$sanitized_path" "$temp_dir/menu.sh"
     [ "$status" -eq 0 ]
     [ "${lines[0]}" = "gum is recommended for best experience" ]
 }
