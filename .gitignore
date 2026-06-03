@@ -17,7 +17,22 @@ tmux/plugins
 
 shellcheck-report.txt
 
+# AI sync artifacts
+$HOME/
 .ai/
 .local/share/ai/
 .local/bin/
+
+# Other IDE configs
+.claude/
+.windsurf/
+
+# Test outputs
+tests/.atl/
+tests/report.xml
+tests/test_output.txt
+report.xml
+
+# SDD archived cycles (generated artifacts)
+openspec/changes/archive/
 
