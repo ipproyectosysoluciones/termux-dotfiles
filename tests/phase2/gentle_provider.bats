@@ -151,3 +151,44 @@ setup() {
     [[ $status -eq 1 ]]
     [[ "$output" == "refresh failed" ]]
 }
+
+########################################
+# RUN GENTLE (PROVIDER INTERFACE)
+########################################
+
+@test "run_gentle - returns control-plane message when gentle-ai available" {
+    # Given: gentle-ai binary exists
+    local mock_dir="$TEST_TMPDIR/mock_bin"
+    mkdir -p "$mock_dir"
+    cat > "$mock_dir/gentle-ai" <<MOCK_GENTLEAI
+#!/usr/bin/env bash
+echo "gentle-ai control plane"
+exit 0
+MOCK_GENTLEAI
+    chmod +x "$mock_dir/gentle-ai"
+    local old_path="$PATH"
+    export PATH="$mock_dir:$PATH"
+
+    run run_gentle "test prompt"
+    export PATH="$old_path"
+
+    # Then: should return 1 and show control-plane message
+    [[ $status -eq 1 ]]
+    [[ "$output" == *"control-plane tool"* ]]
+    [[ "$output" == *"does not accept prompts"* ]]
+}
+
+@test "run_gentle - missing gentle-ai binary returns error" {
+    # Given: no gentle-ai in PATH
+    local mock_dir="$TEST_TMPDIR/empty_bin"
+    mkdir -p "$mock_dir"
+    local old_path="$PATH"
+    export PATH="$mock_dir"
+
+    run run_gentle "test prompt"
+    export PATH="$old_path"
+
+    # Then: should return 1
+    [[ $status -eq 1 ]]
+    [[ "$output" == *"[ai] gentle-ai unavailable"* ]]
+}

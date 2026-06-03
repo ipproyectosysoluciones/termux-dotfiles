@@ -43,18 +43,19 @@ MOCK_OPENCODE
     chmod +x "$mock_dir/opencode"
 }
 
-# Helper to create mock gentle binary for fallback testing
+# Helper to create mock gentle-ai binary for fallback testing
+# NOTE: must be named gentle-ai because run_gentle checks for that binary name
 create_mock_gentle() {
     local mock_response="${1:-"gentle response"}"
     local mock_dir="$TEST_TMPDIR/mock_bin"
     mkdir -p "$mock_dir"
 
-    cat > "$mock_dir/gentle" <<MOCK_GENTLE
+    cat > "$mock_dir/gentle-ai" <<MOCK_GENTLE
 #!/usr/bin/env bash
-echo "[mock-gentle] $mock_response"
+echo "[mock-gentle-ai] $mock_response"
 exit 0
 MOCK_GENTLE
-    chmod +x "$mock_dir/gentle"
+    chmod +x "$mock_dir/gentle-ai"
 }
 
 setup() {
@@ -104,28 +105,30 @@ teardown() {
 }
 
 @test "run_gemini - generic failure triggers fallback to gentle" {
-    # Skip: run_gentle doesn't exist in gentle.sh - this exposes a bug in the original code
-    # The fallback chain gemini.sh calls run_gentle but only gentle_sync/gentle_upgrade/gentle_refresh_skills exist
-    skip "run_gentle function missing from gentle.sh - known bug in implementation"
+    # Given: mock gemini returns error
+    create_mock_gemini "ERROR" 1
+    export PATH="$TEST_TMPDIR/mock_bin:$PATH"
+
+    # When: calling run_gemini with failing gemini
+    run run_gemini "test prompt"
+
+    # Then: should fallback to gentle gracefully
+    [[ $status -eq 0 ]]
+    [[ "$output" == *"falling back to gentle"* ]]
 }
 
 @test "run_gemini - missing API key (GEMINI_API_KEY not set) - graceful handling" {
-    # Given: no gemini binary available
-    # PATH already excludes real gemini
+    # Given: mock gemini returns error (simulating missing API key)
     unset GEMINI_API_KEY
+    create_mock_gemini "error: API key not configured" 1
 
-    # When: calling run_gemini with no gemini available
-    # This should trigger the non-zero status path and fallback to gentle
-    create_mock_gentle "gentle fallback"
-    export PATH="$TEST_TMPDIR/mock_bin:$PATH"
+    # When: calling run_gemini with failing gemini
+    # The fallback chain: gemini fails -> falls back to gentle
+    run run_gemini "test prompt"
 
-    local output
-    output="$(run_gemini "test prompt" 2>&1)"
-    local status=$?
-
-    # Then: should handle gracefully (either via fallback or by returning error)
-    # Since we're mocking gentle, the test verifies the fallback chain works
+    # Then: should handle gracefully via fallback
     [[ $status -eq 0 ]]
+    [[ "$output" == *"falling back to gentle"* ]]
 }
 
 @test "run_gemini - empty prompt handled gracefully" {
