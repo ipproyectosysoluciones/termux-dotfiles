@@ -554,7 +554,7 @@ pkg update && pkg upgrade -y
 
 pkg install git -y
 
-git clone <https://github.com/ipproyectosysoluciones/termux-dotfiles.git>
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git
 
 cd Termux-AI-Astaroth
 

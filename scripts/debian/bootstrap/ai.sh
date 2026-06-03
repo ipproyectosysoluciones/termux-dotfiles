@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-ROOT="$HOME/dotfiles/scripts/debian"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "[debian] Installing AI tooling..."
 
