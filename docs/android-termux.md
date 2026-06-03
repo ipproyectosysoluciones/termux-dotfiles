@@ -356,6 +356,24 @@ termux-reload-settings
 
 ---
 
+# AI Workspace Menu
+
+## Launching the Menu
+
+Type `ai-menu` in any terminal to open the interactive menu.
+
+Or use `ai` to launch the main orchestrator.
+
+## Popup Mode
+
+If tmux is running, use `Prefix + A` to open an overlay popup with the menu.
+
+## Fallback Mode
+
+If gum is not installed, the menu automatically falls back to bash `select`, which works in any terminal.
+
+---
+
 Rendimiento
 
 Recomendaciones

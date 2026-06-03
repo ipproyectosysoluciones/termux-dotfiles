@@ -281,6 +281,27 @@ This script installs:
 - AI provider configurations (Google Gemini, OpenCode, Mistral)
 - Python dependencies for AI tooling
 
+### Launch the AI Workspace
+
+After running the bootstrap script, launch the AI workspace using the `ai-menu` command:
+
+```bash
+ai-menu
+```
+
+This opens the interactive launcher with options for NeoVim, OpenCode, Gentle AI, Engram, Full Workspace, and Sessions.
+
+For tmux popup mode (requires tmux running):
+
+```bash
+ai-menu
+# Then use Prefix + A in tmux, or type 'aip' directly
+```
+
+Keyboard shortcut in tmux: `Prefix + A`
+
+---
+
 ### Verify AI Tools Installation
 
 After running the bootstrap script:

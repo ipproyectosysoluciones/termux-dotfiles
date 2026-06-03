@@ -1,3 +1,44 @@
+# Getting Started
+
+## Quick Start
+
+Launch the interactive menu:
+
+```bash
+ai-menu
+```
+
+Or use the main orchestrator:
+
+```bash
+ai
+```
+
+Use `Prefix + A` in tmux for popup mode:
+
+```text
+PREFIX + A
+```
+
+## Prerequisites
+
+- **gum** installed (for the styled menu)
+- **tmux** running (for popup mode)
+
+If gum is unavailable, the menu automatically falls back to bash `select`.
+
+## Menu Options
+
+- **NeoVim** — Open Neovim with AI assistance
+- **OpenCode** — OpenCode agent session
+- **Gentle AI** — Gentle AI assistant
+- **Engram** — Engram memory and context
+- **Full Workspace** — Multiple coordinated runtimes
+- **Sessions** — Manage existing tmux sessions
+- **Exit** — Close the menu
+
+---
+
 # AI Workspace
 
 ## Overview
