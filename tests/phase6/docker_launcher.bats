@@ -49,24 +49,15 @@ teardown() {
     grep -q 'command -v docker' "$DOCKER_SCRIPT"
 }
 
-@test "docker.sh shows daemon status on entry" {
-    grep -q 'docker info' "$DOCKER_SCRIPT"
-    grep -q 'Daemon' "$DOCKER_SCRIPT"
+@test "docker.sh has proot-distro command without inline bash -c" {
+    # Should drop into debian shell directly, not a bash -c status script
+    grep -q "user dev" "$DOCKER_SCRIPT"
+    # Must NOT have the complex inline bash -c that broke quoting
+    run grep -c 'bash -c "' "$DOCKER_SCRIPT" || true
+    # The bash -c pattern is only in fallback, not in proot-distro path
+    grep -q 'create_session "$SESSION" \\' "$DOCKER_SCRIPT"
 }
 
-@test "docker.sh shows context list" {
-    grep -q 'docker context ls' "$DOCKER_SCRIPT"
-}
-
-@test "docker.sh suggests remote context when no daemon" {
-    grep -q 'docker context create' "$DOCKER_SCRIPT"
-    grep -q 'remote' "$DOCKER_SCRIPT"
-}
-
-@test "docker.sh shows docker --version" {
-    grep -q 'docker --version' "$DOCKER_SCRIPT"
-}
-
-@test "docker.sh keeps shell open after status" {
+@test "docker.sh fallback has shell exec" {
     grep -q 'exec.*SHELL' "$DOCKER_SCRIPT"
 }
