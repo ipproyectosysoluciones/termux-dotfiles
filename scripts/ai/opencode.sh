@@ -4,10 +4,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$SCRIPT_DIR/utils.sh"
 
+if ! command -v opencode > /dev/null 2>&1; then
+    echo "opencode is not installed."
+    echo "Install: pip install opencode or see docs/installation.md"
+    exit 1
+fi
+
 SESSION="opencode"
 
 create_session "$SESSION" \
-"cd ~/Projects && echo 'OpenCode runtime'"
+"cd ~/Projects && opencode"
 
 attach_or_switch "$SESSION"
 

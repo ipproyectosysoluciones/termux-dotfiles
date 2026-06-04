@@ -4,10 +4,19 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$SCRIPT_DIR/utils.sh"
 
+if ! command -v gentle-ai > /dev/null 2>&1; then
+    echo "gentle-ai is not installed."
+    echo "gentle-ai is a control-plane tool for AI orchestration."
+    echo "Install: see https://github.com/agentuity/gentle-ai"
+    echo ""
+    echo "Tip: use gemini or opencode providers for AI queries."
+    exit 1
+fi
+
 SESSION="gentle"
 
 create_session "$SESSION" \
-"cd ~/Projects && echo 'Gentle AI runtime'"
+"gentle-ai"
 
 attach_or_switch "$SESSION"
 
