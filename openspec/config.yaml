@@ -13,7 +13,7 @@ testing:
   layers:
     unit: true
     integration: false
-    e2e: false
+    e2e: true
   coverage: false
   quality_tools:
     linter: false
