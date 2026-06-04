@@ -60,11 +60,17 @@ Multi-provider AI orchestration with intent-based routing and automatic fallback
 - `aip` — popup overlay launcher
 - `PREFIX + m` — tmux keybinding
 
+**Docker:**
+- `ai-menu → Docker` — opens a Debian shell with Docker CLI (vía proot-distro)
+- Daemon no disponible en proot; CLI works for build/pull/push/info
+- Remote context disponible para containers (`docker context create remote`)
+- Bootstrap idempotente en `scripts/debian/bootstrap/docker.sh`
+
 **Architecture:**
 - `scripts/ai/core/` — 29 orchestration modules (routing, agents, memory, runtime)
 - `scripts/ai/providers/` — 5 provider implementations
 - `scripts/ai/runtime/` — runtime executor with tmux session management
-- `scripts/ai/templates/` — workspace templates (default, mobile, node, remote)
+- `scripts/ai/templates/` — workspace templates (default, mobile, node, remote, infra)
 
 Powered by tmux + gum with dynamic path detection for portable installation.
 
@@ -159,6 +165,7 @@ Additional documentation:
 | `docs/shell-runtime.md` | Shell runtime |
 | `docs/recovery.md` | System recovery guide |
 | `docs/installation.md` | Installation guide |
+| `docs/debian-runtime.md` | Debian proot runtime & Docker workflow |
 
 
 ---
@@ -199,7 +206,7 @@ The workstation currently includes:
 - Agent/subagent orchestration framework
 - Modular NeoVim architecture with LSP, Treesitter, DAP
 - Dynamic path detection for portable installation
-- Bats test suite (18/19 passing)
+- Bats test suite (40+ tests covering workspace, docker, bootstrap, launchers)
 - SDD (Spec-Driven Development) workflow
 - Reusable automation scripts
 

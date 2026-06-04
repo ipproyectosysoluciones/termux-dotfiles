@@ -121,8 +121,8 @@ The `docker.sh` launcher provides unified access to Docker via proot-distro Debi
 ### How It Works
 
 1. **Proot-distro first**: Checks if `proot-distro login debian` is available
-2. **Docker inside Debian**: Routes to docker binary installed inside Debian
-3. **Fallback**: If no docker inside Debian, checks for native Termux docker
+2. **Docker inside Debian**: Opens a Debian shell directly with Docker CLI available
+3. **Fallback**: If no docker inside Debian, opens native Termux docker shell
 4. **Error**: If neither exists, displays installation instructions
 
 ### Daemon Limitation
@@ -148,7 +148,7 @@ docker context use remote
 docker ps  # now works remotely
 ```
 
-The launcher shows daemon status and available contexts on entry.
+The launcher opens a Debian shell directly. From inside Debian, run `docker --version`, `docker info`, `docker context ls`, etc.
 
 ### Usage
 
