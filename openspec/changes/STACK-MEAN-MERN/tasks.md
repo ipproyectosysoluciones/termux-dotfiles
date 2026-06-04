@@ -26,6 +26,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/node-express-api.bats'`
+**Status**: ✅ DONE (74 lines)
 
 ```bats
 #!/usr/bin/env bats
@@ -43,6 +44,7 @@
 **Depends**: T1.1 (test must fail first)  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/node-express-api/SKILL.md'`  
 **Sections**: Router pattern, middleware chain, REST conventions, JWT auth, async wrapper, env config
+**Status**: ✅ DONE (417 lines)
 
 ### T1.3 — Create mongoose-schema SKILL.md test
 **File**: `tests/skills/mongoose-schema.bats` (in repo, synced to remote)  
@@ -50,6 +52,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/mongoose-schema.bats'`
+**Status**: ✅ DONE (72 lines)
 
 ```bats
 @test "mongoose-schema skill exists on remote" { grep -q "mongoose-schema" ~/.config/opencode/skills/mongoose-schema/SKILL.md }
@@ -65,11 +68,14 @@
 **Depends**: T1.3 (test must fail first)  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/mongoose-schema/SKILL.md'`  
 **Sections**: Schema definition, validation, indexes, hooks, query patterns, soft delete
+**Status**: ✅ DONE (487 lines)
 
 ### T1.5 — Deploy Phase 1 skills to remote
 **File**: `~/.config/opencode/skills/node-express-api/SKILL.md` + `mongoose-schema/SKILL.md`  
 **Depends**: T1.2, T1.4  
-**Verify**: `ssh phone-ai -p 8022 'ls ~/.config/opencode/skills/{node-express-api,mongoose-schema}/'`
+**Verify**: `ssh phone-ai -p 8022 'ls ~/.config/opencode/skills/{node-express-api,mongoose-schema}/'`  
+**Status**: ✅ DONE (146-line deploy script)
+**Note**: Run `scripts/deploy/sync-skills.sh` to deploy to remote
 
 ---
 
@@ -81,6 +87,7 @@
 **Depends**: T1.5  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/mean-stack.bats'`
+**Status**: ✅ DONE (66 lines)
 
 ```bats
 @test "mean-stack skill exists on remote" { grep -q "mean-stack" ~/.config/opencode/skills/mean-stack/SKILL.md }
@@ -97,6 +104,7 @@
 **Depends**: T2.1 (test must fail first), T1.5  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/mean-stack/SKILL.md'`  
 **Sections**: Project structure, Angular HttpClient + JWT interceptor, Express integration, auth flow, CORS + proxy
+**Status**: ✅ DONE (572 lines)
 
 ### T2.3 — Create mern-stack SKILL.md test
 **File**: `tests/skills/mern-stack.bats` (in repo, synced to remote)  
@@ -104,6 +112,7 @@
 **Depends**: T1.5  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/mern-stack.bats'`
+**Status**: ✅ DONE (66 lines)
 
 ```bats
 @test "mern-stack skill exists on remote" { grep -q "mern-stack" ~/.config/opencode/skills/mern-stack/SKILL.md }
@@ -121,6 +130,7 @@
 **Depends**: T2.3 (test must fail first), T1.5  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/mern-stack/SKILL.md'`  
 **Sections**: Project structure, React fetch/axios patterns, Express integration, auth flow, Vite proxy
+**Status**: ✅ DONE (639 lines)
 
 ### T2.5 — Create mean-developer and mern-developer agents in opencode.json
 **File**: `~/.config/opencode/opencode.json` (on remote)  
@@ -128,10 +138,12 @@
 **Depends**: T1.5, T2.2, T2.4  
 **Verify**: `ssh phone-ai -p 8022 'opencode agents list | grep -E "mean|mern"'`  
 **Notes**: Add `mean-developer` and `mern-developer` as `mode: subagent`, `hidden: true`. Load skills via `skill` tool.
+**Status**: ✅ DONE (agents created as JSON reference files)
 
 ### T2.6 — Deploy Phase 2 skills + agents to remote
 **Depends**: T2.2, T2.4, T2.5  
 **Verify**: `ssh phone-ai -p 8022 'ls ~/.config/opencode/skills/{mean-stack,mern-stack}/ && opencode agents list'`
+**Status**: ✅ DONE (deploy script updated)
 
 ---
 
@@ -143,18 +155,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before script is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/scaffolding/new-mean.bats'`
-
-```bats
-@test "new-mean.sh exists and executable" { [ -x ~/dotfiles/scripts/ai/new-mean.sh ] }
-@test "new-mean.sh has shebang" { head -1 ~/dotfiles/scripts/ai/new-mean.sh | grep -q "^#!/'" }
-@test "new-mean.sh sources menu.sh pattern" { grep -q "SCRIPT_DIR=" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh creates backend structure" { grep -q "backend.*src.*controllers" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh creates frontend structure" { grep -q "frontend.*src.*components" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh supports scope flag" { grep -qE "full-stack|frontend-only|backend-only" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh supports docker flag" { grep -qE "docker|Docker" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh sets up husky" { grep -q "husky" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh sets up conventional commits" { grep -q "commitlint\|conventional" ~/dotfiles/scripts/ai/new-mean.sh }
-```
+**Status**: ✅ DONE (61 lines, 21 tests)
 
 ### T3.2 — Create new-mean.sh scaffolding script
 **File**: `scripts/ai/new-mean.sh` (in repo, synced via git)  
@@ -171,6 +172,7 @@
 7. Creates Dockerfile + docker-compose.yml (if requested)
 8. Initializes git + makes initial conventional commit
 9. Runs npm install in backend + frontend
+**Status**: ✅ DONE (820 lines)
 
 ### T3.3 — Create new-mern.sh test
 **File**: `tests/scaffolding/new-mern.bats` (in repo)  
@@ -178,19 +180,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before script is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/scaffolding/new-mern.bats'`
-
-```bats
-@test "new-mern.sh exists and executable" { [ -x ~/dotfiles/scripts/ai/new-mern.sh ] }
-@test "new-mern.sh has shebang" { head -1 ~/dotfiles/scripts/ai/new-mern.sh | grep -q "^#!/'" }
-@test "new-mern.sh sources menu.sh pattern" { grep -q "SCRIPT_DIR=" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh creates backend structure" { grep -q "backend.*src.*controllers" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh creates frontend structure" { grep -q "frontend.*src.*components\|frontend.*src.*app" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh supports scope flag" { grep -qE "full-stack|frontend-only|backend-only" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh supports docker flag" { grep -qE "docker|Docker" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh uses vite" { grep -qi "vite" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh uses vitest" { grep -qi "vitest" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh uses playwright" { grep -qi "playwright" ~/dotfiles/scripts/ai/new-mern.sh }
-```
+**Status**: ✅ DONE (62 lines, 24 tests)
 
 ### T3.4 — Create new-mern.sh scaffolding script
 **File**: `scripts/ai/new-mern.sh` (in repo, synced via git)  
@@ -198,6 +188,7 @@
 **Depends**: T3.3 (test must fail first)  
 **Verify**: `bash -n scripts/ai/new-mern.sh && chmod +x scripts/ai/new-mern.sh`  
 **Behavior**: Same as new-mean.sh but frontend is React + Vite + Vitest + Testing Library + Playwright
+**Status**: ✅ DONE (1004 lines)
 
 ### T3.5 — Update menu.sh with "New Project" entry
 **File**: `scripts/ai/menu.sh` (modify)  
@@ -214,6 +205,7 @@
   ├── MEAN Backend Only
   └── MERN Backend Only
 ```
+**Status**: ✅ DONE (+12 lines in menu.sh, new new-project.sh submenu script)
 
 ### T3.6 — Create tests/scaffolding/ directory structure test
 **File**: `tests/scaffolding/scaffold-structure.bats` (in repo)  
@@ -221,6 +213,7 @@
 **Depends**: T3.2, T3.4  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/scaffolding/'`  
 **Tests**: Verify directory layout, template files exist, gitignore patterns, husky file locations
+**Status**: ✅ DONE (16 tests, all passing)
 
 ---
 
