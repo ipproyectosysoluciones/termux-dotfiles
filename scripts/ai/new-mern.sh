@@ -114,7 +114,8 @@ ask_project_name() {
     fi
 
     if [ "$INPUT_TOOL" = "gum" ]; then
-        PROJECT_NAME=$(gum input --placeholder "my-mern-project" --value "$PROJECT_NAME" "Enter project name")
+        echo "Enter project name:"
+        PROJECT_NAME=$(gum input --placeholder "my-mern-project" --value "$PROJECT_NAME")
     else
         read -p "Enter project name: " PROJECT_NAME
     fi
