@@ -87,6 +87,7 @@
 **Depends**: T1.5  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/mean-stack.bats'`
+**Status**: ✅ DONE (66 lines)
 
 ```bats
 @test "mean-stack skill exists on remote" { grep -q "mean-stack" ~/.config/opencode/skills/mean-stack/SKILL.md }
@@ -103,6 +104,7 @@
 **Depends**: T2.1 (test must fail first), T1.5  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/mean-stack/SKILL.md'`  
 **Sections**: Project structure, Angular HttpClient + JWT interceptor, Express integration, auth flow, CORS + proxy
+**Status**: ✅ DONE (572 lines)
 
 ### T2.3 — Create mern-stack SKILL.md test
 **File**: `tests/skills/mern-stack.bats` (in repo, synced to remote)  
@@ -110,6 +112,7 @@
 **Depends**: T1.5  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/mern-stack.bats'`
+**Status**: ✅ DONE (66 lines)
 
 ```bats
 @test "mern-stack skill exists on remote" { grep -q "mern-stack" ~/.config/opencode/skills/mern-stack/SKILL.md }
@@ -127,6 +130,7 @@
 **Depends**: T2.3 (test must fail first), T1.5  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/mern-stack/SKILL.md'`  
 **Sections**: Project structure, React fetch/axios patterns, Express integration, auth flow, Vite proxy
+**Status**: ✅ DONE (639 lines)
 
 ### T2.5 — Create mean-developer and mern-developer agents in opencode.json
 **File**: `~/.config/opencode/opencode.json` (on remote)  
@@ -134,10 +138,12 @@
 **Depends**: T1.5, T2.2, T2.4  
 **Verify**: `ssh phone-ai -p 8022 'opencode agents list | grep -E "mean|mern"'`  
 **Notes**: Add `mean-developer` and `mern-developer` as `mode: subagent`, `hidden: true`. Load skills via `skill` tool.
+**Status**: ✅ DONE (agents created as JSON reference files)
 
 ### T2.6 — Deploy Phase 2 skills + agents to remote
 **Depends**: T2.2, T2.4, T2.5  
 **Verify**: `ssh phone-ai -p 8022 'ls ~/.config/opencode/skills/{mean-stack,mern-stack}/ && opencode agents list'`
+**Status**: ✅ DONE (deploy script updated)
 
 ---
 
