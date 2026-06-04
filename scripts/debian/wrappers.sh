@@ -61,6 +61,12 @@ create_wrapper pnpm
 create_wrapper kubectl
 create_wrapper helm
 
+########################################
+# DOCKER
+########################################
+
+create_wrapper docker
+
 echo
 echo "[wrapper] all wrappers installed"
 
