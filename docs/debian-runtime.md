@@ -113,3 +113,37 @@ Run doctor.sh to identify missing packages, then install manually in Debian:
 ```bash
 apt install <package-name>
 ```
+
+## Docker Workflow
+
+The `docker.sh` launcher provides unified access to Docker whether running natively in Termux or inside the proot-distro Debian environment.
+
+### How It Works
+
+1. **Proot-distro first**: Checks if `proot-distro login debian` is available
+2. **Docker inside Debian**: If docker binary exists inside the Debian container, uses it via:
+   ```bash
+   proot-distro login debian --bind $HOME:/termux --user dev -- docker ps
+   ```
+3. **Fallback**: If no docker inside Debian, checks for native Termux docker
+4. **Error**: If neither exists, displays installation instructions
+
+### Usage
+
+```bash
+# From Termux, run:
+docker
+
+# This creates a tmux session "docker" and runs:
+# - proot-distro docker if available, OR
+# - native docker if available, OR
+# - shows installation instructions
+```
+
+### Bind Mount
+
+The `--bind $HOME:/termux` flag mounts your Termux home directory into the Debian environment at `/termux`, allowing the container to access your project files.
+
+### User Mode
+
+Uses `--user dev` to run docker commands as the `dev` user within Debian, avoiding root permissions issues.
