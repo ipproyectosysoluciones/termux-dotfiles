@@ -116,33 +116,50 @@ apt install <package-name>
 
 ## Docker Workflow
 
-The `docker.sh` launcher provides unified access to Docker whether running natively in Termux or inside the proot-distro Debian environment.
+The `docker.sh` launcher provides unified access to Docker via proot-distro Debian.
 
 ### How It Works
 
 1. **Proot-distro first**: Checks if `proot-distro login debian` is available
-2. **Docker inside Debian**: If docker binary exists inside the Debian container, uses it via:
-   ```bash
-   proot-distro login debian --bind $HOME:/termux --user dev -- docker ps
-   ```
+2. **Docker inside Debian**: Routes to docker binary installed inside Debian
 3. **Fallback**: If no docker inside Debian, checks for native Termux docker
 4. **Error**: If neither exists, displays installation instructions
+
+### Daemon Limitation
+
+Docker daemon cannot run inside proot-distro (`cgroup` limitation). The CLI works for all non-daemon operations:
+
+| Operation | Without daemon | With remote context |
+|-----------|---------------|-------------------|
+| `docker build` | ✅ | ✅ |
+| `docker pull` / `push` | ✅ | ✅ |
+| `docker info` | ✅ | ✅ |
+| `docker ps` / `run` / `exec` | ❌ | ✅ |
+| `docker compose` | ⚠️ build only | ✅ |
+
+### Remote Docker Context (for containers)
+
+To run containers, connect to a remote Docker host:
+
+```bash
+docker context create remote \
+  --docker host=tcp://<HOST>:2375
+docker context use remote
+docker ps  # now works remotely
+```
+
+The launcher shows daemon status and available contexts on entry.
 
 ### Usage
 
 ```bash
-# From Termux, run:
+# From AI Workspace menu → Docker, or:
 docker
-
-# This creates a tmux session "docker" and runs:
-# - proot-distro docker if available, OR
-# - native docker if available, OR
-# - shows installation instructions
 ```
 
 ### Bind Mount
 
-The `--bind $HOME:/termux` flag mounts your Termux home directory into the Debian environment at `/termux`, allowing the container to access your project files.
+The `--bind $HOME:/termux` flag mounts your Termux home directory into the Debian environment at `/termux`, allowing access to project files.
 
 ### User Mode
 

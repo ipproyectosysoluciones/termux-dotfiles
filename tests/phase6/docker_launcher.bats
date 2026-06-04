@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 # tests/phase6/docker_launcher.bats
-# Verify enhanced docker.sh launcher with proot-distro routing
+# Verify enhanced docker.sh launcher with daemon status + remote context
 
 setup() {
     SCRIPT_DIR="$(cd "$(dirname "$BATS_TEST_FILENAME")" && pwd)"
@@ -21,13 +21,11 @@ teardown() {
 }
 
 @test "docker.sh checks proot-distro availability" {
-    # Should check if proot-distro login debian works
     grep -q 'proot-distro' "$DOCKER_SCRIPT"
     grep -q 'login debian' "$DOCKER_SCRIPT"
 }
 
 @test "docker.sh binds HOME to /termux in proot command" {
-    # The proot-distro login command should include --bind $HOME:/termux
     grep -q '\$HOME:/termux' "$DOCKER_SCRIPT"
 }
 
@@ -36,12 +34,10 @@ teardown() {
 }
 
 @test "docker.sh checks for docker binary inside debian" {
-    # Should check if docker exists inside the proot container
     grep -q 'command -v docker' "$DOCKER_SCRIPT"
 }
 
 @test "docker.sh creates tmux session for proot-distro" {
-    # Should use create_session with proot-distro command
     grep -q 'create_session' "$DOCKER_SCRIPT"
 }
 
@@ -50,24 +46,27 @@ teardown() {
 }
 
 @test "docker.sh falls back to native docker if available" {
-    # Should have fallback logic for native docker
     grep -q 'command -v docker' "$DOCKER_SCRIPT"
 }
 
-@test "docker.sh has PROOT_DISTRO_BLOCK comment" {
-    grep -q 'PROOT_DISTRO_BLOCK' "$DOCKER_SCRIPT"
+@test "docker.sh shows daemon status on entry" {
+    grep -q 'docker info' "$DOCKER_SCRIPT"
+    grep -q 'Daemon' "$DOCKER_SCRIPT"
 }
 
-@test "docker.sh has DOCKER_CHECK_BLOCK comment" {
-    grep -q 'DOCKER_CHECK_BLOCK' "$DOCKER_SCRIPT"
+@test "docker.sh shows context list" {
+    grep -q 'docker context ls' "$DOCKER_SCRIPT"
 }
 
-@test "docker.sh has TMUX_SESSION_BLOCK comment" {
-    # This block is implied by create_session usage
-    grep -q 'create_session' "$DOCKER_SCRIPT"
-    grep -q 'attach_or_switch' "$DOCKER_SCRIPT"
+@test "docker.sh suggests remote context when no daemon" {
+    grep -q 'docker context create' "$DOCKER_SCRIPT"
+    grep -q 'remote' "$DOCKER_SCRIPT"
 }
 
-@test "docker.sh proot-distro command runs docker ps" {
-    grep -q 'docker ps' "$DOCKER_SCRIPT"
+@test "docker.sh shows docker --version" {
+    grep -q 'docker --version' "$DOCKER_SCRIPT"
+}
+
+@test "docker.sh keeps shell open after status" {
+    grep -q 'exec.*SHELL' "$DOCKER_SCRIPT"
 }
