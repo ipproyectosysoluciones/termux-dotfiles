@@ -136,8 +136,10 @@ main() {
 
     if [[ "$failed" -eq 0 ]]; then
         verify_remote_skills
-        log_info "All Phase 1 skills deployed successfully!"
+        log_info "All Phase 1+2 skills deployed successfully!"
+        log_info "Phase 2 skills: mean-stack, mern-stack"
         log_info "Run tests on remote with: ssh -p $SSH_PORT ${REMOTE_USER}@${REMOTE_HOST} 'bats ~/dotfiles/tests/skills/'"
+        log_info "Deploy agents with: ssh -p $SSH_PORT ${REMOTE_USER}@${REMOTE_HOST} 'cat ~/dotfiles/skills/STACK-MEAN-MERN/agents/*.json | jq -s add >> ~/.config/opencode/opencode.json'"
     else
         log_error "Some skills failed to sync"
         exit 1
