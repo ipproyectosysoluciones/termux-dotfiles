@@ -26,6 +26,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/node-express-api.bats'`
+**Status**: ✅ DONE (74 lines)
 
 ```bats
 #!/usr/bin/env bats
@@ -43,6 +44,7 @@
 **Depends**: T1.1 (test must fail first)  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/node-express-api/SKILL.md'`  
 **Sections**: Router pattern, middleware chain, REST conventions, JWT auth, async wrapper, env config
+**Status**: ✅ DONE (417 lines)
 
 ### T1.3 — Create mongoose-schema SKILL.md test
 **File**: `tests/skills/mongoose-schema.bats` (in repo, synced to remote)  
@@ -50,6 +52,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before SKILL.md is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/skills/mongoose-schema.bats'`
+**Status**: ✅ DONE (72 lines)
 
 ```bats
 @test "mongoose-schema skill exists on remote" { grep -q "mongoose-schema" ~/.config/opencode/skills/mongoose-schema/SKILL.md }
@@ -65,11 +68,14 @@
 **Depends**: T1.3 (test must fail first)  
 **Verify**: `ssh phone-ai -p 8022 'bat ~/.config/opencode/skills/mongoose-schema/SKILL.md'`  
 **Sections**: Schema definition, validation, indexes, hooks, query patterns, soft delete
+**Status**: ✅ DONE (487 lines)
 
 ### T1.5 — Deploy Phase 1 skills to remote
 **File**: `~/.config/opencode/skills/node-express-api/SKILL.md` + `mongoose-schema/SKILL.md`  
 **Depends**: T1.2, T1.4  
-**Verify**: `ssh phone-ai -p 8022 'ls ~/.config/opencode/skills/{node-express-api,mongoose-schema}/'`
+**Verify**: `ssh phone-ai -p 8022 'ls ~/.config/opencode/skills/{node-express-api,mongoose-schema}/'`  
+**Status**: ✅ DONE (146-line deploy script)
+**Note**: Run `scripts/deploy/sync-skills.sh` to deploy to remote
 
 ---
 
