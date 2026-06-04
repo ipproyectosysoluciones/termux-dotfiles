@@ -155,18 +155,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before script is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/scaffolding/new-mean.bats'`
-
-```bats
-@test "new-mean.sh exists and executable" { [ -x ~/dotfiles/scripts/ai/new-mean.sh ] }
-@test "new-mean.sh has shebang" { head -1 ~/dotfiles/scripts/ai/new-mean.sh | grep -q "^#!/'" }
-@test "new-mean.sh sources menu.sh pattern" { grep -q "SCRIPT_DIR=" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh creates backend structure" { grep -q "backend.*src.*controllers" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh creates frontend structure" { grep -q "frontend.*src.*components" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh supports scope flag" { grep -qE "full-stack|frontend-only|backend-only" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh supports docker flag" { grep -qE "docker|Docker" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh sets up husky" { grep -q "husky" ~/dotfiles/scripts/ai/new-mean.sh }
-@test "new-mean.sh sets up conventional commits" { grep -q "commitlint\|conventional" ~/dotfiles/scripts/ai/new-mean.sh }
-```
+**Status**: ✅ DONE (61 lines, 21 tests)
 
 ### T3.2 — Create new-mean.sh scaffolding script
 **File**: `scripts/ai/new-mean.sh` (in repo, synced via git)  
@@ -183,6 +172,7 @@
 7. Creates Dockerfile + docker-compose.yml (if requested)
 8. Initializes git + makes initial conventional commit
 9. Runs npm install in backend + frontend
+**Status**: ✅ DONE (820 lines)
 
 ### T3.3 — Create new-mern.sh test
 **File**: `tests/scaffolding/new-mern.bats` (in repo)  
@@ -190,19 +180,7 @@
 **Depends**: None  
 **strict_tdd**: Test MUST exist and fail before script is created  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/scaffolding/new-mern.bats'`
-
-```bats
-@test "new-mern.sh exists and executable" { [ -x ~/dotfiles/scripts/ai/new-mern.sh ] }
-@test "new-mern.sh has shebang" { head -1 ~/dotfiles/scripts/ai/new-mern.sh | grep -q "^#!/'" }
-@test "new-mern.sh sources menu.sh pattern" { grep -q "SCRIPT_DIR=" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh creates backend structure" { grep -q "backend.*src.*controllers" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh creates frontend structure" { grep -q "frontend.*src.*components\|frontend.*src.*app" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh supports scope flag" { grep -qE "full-stack|frontend-only|backend-only" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh supports docker flag" { grep -qE "docker|Docker" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh uses vite" { grep -qi "vite" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh uses vitest" { grep -qi "vitest" ~/dotfiles/scripts/ai/new-mern.sh }
-@test "new-mern.sh uses playwright" { grep -qi "playwright" ~/dotfiles/scripts/ai/new-mern.sh }
-```
+**Status**: ✅ DONE (62 lines, 24 tests)
 
 ### T3.4 — Create new-mern.sh scaffolding script
 **File**: `scripts/ai/new-mern.sh` (in repo, synced via git)  
@@ -210,6 +188,7 @@
 **Depends**: T3.3 (test must fail first)  
 **Verify**: `bash -n scripts/ai/new-mern.sh && chmod +x scripts/ai/new-mern.sh`  
 **Behavior**: Same as new-mean.sh but frontend is React + Vite + Vitest + Testing Library + Playwright
+**Status**: ✅ DONE (1004 lines)
 
 ### T3.5 — Update menu.sh with "New Project" entry
 **File**: `scripts/ai/menu.sh` (modify)  
@@ -226,6 +205,7 @@
   ├── MEAN Backend Only
   └── MERN Backend Only
 ```
+**Status**: ✅ DONE (+12 lines in menu.sh, new new-project.sh submenu script)
 
 ### T3.6 — Create tests/scaffolding/ directory structure test
 **File**: `tests/scaffolding/scaffold-structure.bats` (in repo)  
@@ -233,6 +213,7 @@
 **Depends**: T3.2, T3.4  
 **Verify**: `ssh phone-ai -p 8022 'bats ~/dotfiles/tests/scaffolding/'`  
 **Tests**: Verify directory layout, template files exist, gitignore patterns, husky file locations
+**Status**: ✅ DONE (16 tests, all passing)
 
 ---
 
