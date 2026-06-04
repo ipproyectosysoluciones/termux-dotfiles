@@ -26,7 +26,7 @@ case "$MENU_TOOL" in
       "NeoVim" \
       "OpenCode" \
       "Gentle AI" \
-      "Engram" \
+      "Docker" \
       "Full Workspace" \
       "Sessions" \
       "Exit"
@@ -34,7 +34,7 @@ case "$MENU_TOOL" in
     ;;
   "select")
     echo "Note: gum is recommended for best experience" >&2
-    select CHOICE in NeoVim OpenCode "Gentle AI" Engram "Full Workspace" Sessions Exit; do
+    select CHOICE in NeoVim OpenCode "Gentle AI" Docker "Full Workspace" Sessions Exit; do
       [ -n "$CHOICE" ] && break
     done
     ;;
@@ -50,8 +50,8 @@ case "$CHOICE" in
   "Gentle AI")
     "$SCRIPT_DIR/gentle.sh"
     ;;
-  "Engram")
-    "$SCRIPT_DIR/engram.sh"
+  "Docker")
+    "$SCRIPT_DIR/docker.sh"
     ;;
   "Full Workspace")
     "$SCRIPT_DIR/workspace.sh"
