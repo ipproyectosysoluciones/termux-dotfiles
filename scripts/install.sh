@@ -1,8 +1,11 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
-BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+# BASE_DIR: scripts directory within the dotfiles installation.
+# Default: $HOME/dotfiles/scripts (used by --check, --dry-run).
+# After clone: recalculated from the cloned location.
+BASE_DIR="${HOME}/dotfiles/scripts"
 
 # Defaults
 TARGET_VERSION=""
@@ -99,6 +102,9 @@ else
 fi
 
 cd "$HOME/dotfiles"
+
+# Recalculate BASE_DIR from the cloned location
+BASE_DIR="$(pwd)/scripts"
 
 bash "$BASE_DIR/core/packages.sh"
 bash "$BASE_DIR/core/symlinks.sh"
