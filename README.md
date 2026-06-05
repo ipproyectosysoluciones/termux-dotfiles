@@ -56,7 +56,7 @@ Multi-provider AI orchestration with intent-based routing and automatic fallback
 - Gentle — control plane operations (final fallback)
 
 **Launchers:**
-- `ai` — main tmux launcher menu
+- `ai` — main interactive menu (`menu.sh`)
 - `aip` — popup overlay launcher
 - `PREFIX + A` — tmux popup keybinding
 
@@ -93,7 +93,7 @@ dotfiles/
 │   └── changes/
 ├── scripts/
 │   ├── ai/                  # AI workspace framework
-│   │   ├── ai.sh            # Entry point
+│   │   ├── ai.sh            # AI orchestration engine
 │   │   ├── core/            # 29 orchestration modules
 │   │   ├── providers/       # 5 provider implementations
 │   │   ├── runtime/         # Runtime executor

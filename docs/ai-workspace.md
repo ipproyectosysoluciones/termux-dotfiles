@@ -8,11 +8,13 @@ Launch the interactive menu:
 ai-menu
 ```
 
-Or use the main orchestrator:
+Or use the main launcher:
 
 ```bash
 ai
 ```
+
+`ai` opens the interactive menu (`menu.sh`). The full AI orchestration engine is at `scripts/ai/ai.sh`.
 
 Use `Prefix + A` in tmux for popup mode:
 
@@ -77,7 +79,7 @@ Main objectives:
 
 ```text
 scripts/ai/
-├── ai.sh                    # main entry point
+├── ai.sh                    # AI orchestration engine
 ├── menu.sh                  # launcher menu
 ├── popup.sh                 # popup launcher
 ├── workspace.sh             # workspace launcher (templates)

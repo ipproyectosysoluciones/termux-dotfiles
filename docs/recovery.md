@@ -73,27 +73,33 @@ Clonar dotfiles
 
 Repositorio
 
-git clone https://github.com/bladimir/Termux-AI-Astaroth.git
+```bash
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/dotfiles
+```
 
 
 ---
 
 Entrar al repositorio
 
-cd ~/Termux-AI-Astaroth
+```bash
+cd ~/dotfiles
+```
 
 
 ---
 
 Estructura esperada
 
-Termux-AI-Astaroth/
+```
+dotfiles/
 ├── docs
 ├── scripts
 ├── termux
 ├── tmux
 ├── zsh
 └── nvim
+```
 
 
 ---
@@ -292,7 +298,7 @@ exec zsh
 Verificar que el directorio AI existe:
 
 ```bash
-ls -la ~/Termux-AI-Astaroth/scripts/ai/
+ls -la ~/dotfiles/scripts/ai/
 ````
 
 ---
@@ -313,7 +319,7 @@ pip3 --version
 Usar el script de bootstrap:
 
 ```bash
-bash ~/Termux-AI-Astaroth/scripts/debian/bootstrap/ai.sh
+bash ~/dotfiles/scripts/debian/bootstrap/ai.sh
 ```
 
 Este script instala:
@@ -352,7 +358,7 @@ engram mem_context
 Despues de recuperar el entorno, ejecutar validacion:
 
 ```bash
-bash ~/Termux-AI-Astaroth/scripts/debian/doctor.sh
+bash ~/dotfiles/scripts/debian/doctor.sh
 ```
 
 ---
@@ -364,7 +370,7 @@ bash ~/Termux-AI-Astaroth/scripts/debian/doctor.sh
 Despues de cualquier recuperacion, ejecutar validacion completa:
 
 ```bash
-bash ~/Termux-AI-Astaroth/scripts/debian/doctor.sh
+bash ~/dotfiles/scripts/debian/doctor.sh
 ```
 
 ---
@@ -554,9 +560,9 @@ pkg update && pkg upgrade -y
 
 pkg install git -y
 
-git clone https://github.com/bladimir/Termux-AI-Astaroth.git
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/dotfiles
 
-cd Termux-AI-Astaroth
+cd ~/dotfiles
 
 bash scripts/install.sh
 
