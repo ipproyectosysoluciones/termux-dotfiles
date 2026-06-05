@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Read version
         id: version
@@ -26,15 +28,15 @@ jobs:
           sed -i "s/__VERSION__/${{ steps.version.outputs.VERSION }}/g" \
             /tmp/debbuild/DEBIAN/control
           # Build .deb from the debbuild directory
-          # dpkg-deb --build creates /tmp/debbuild.deb
           dpkg-deb --build /tmp/debbuild
           # Rename with version info
           mv /tmp/debbuild.deb \
             /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
 
       - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
+        run: |
+          gh release upload "${{ github.ref_name }}" \
+            /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb \
+            --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
