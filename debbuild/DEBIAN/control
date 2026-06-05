@@ -1,0 +1,9 @@
+Package: termux-dotfiles
+Version: __VERSION__
+Section: utilities
+Priority: optional
+Architecture: all
+Depends: termux-api, ncurses, openssh, git, curl, zsh, tmux, neovim
+Maintainer: ipproyectossoluciones@gmail.com
+Description: Termux dotfiles — zsh, tmux, Neovim config for Termux
+Homepage: https://github.com/ipproyectosysoluciones/termux-dotfiles

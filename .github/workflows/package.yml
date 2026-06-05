@@ -1,0 +1,42 @@
+name: Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Prepare debbuild
+        run: |
+          # Copy debbuild staging tree
+          cp -r debbuild /tmp/debbuild
+          # Substitute __VERSION__ in control
+          sed -i "s/__VERSION__/${{ steps.version.outputs.VERSION }}/g" \
+            /tmp/debbuild/DEBIAN/control
+
+      - name: Build .deb
+        run: |
+          cd /tmp/debbuild
+          # Build using dpkg-deb
+          dpkg-deb --build data 2>/dev/null || dpkg-deb --build data
+          # Rename to include version
+          mv data.deb termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: /tmp/debbuild/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

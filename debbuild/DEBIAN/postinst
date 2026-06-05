@@ -1,0 +1,36 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -e
+
+DOTFILES_DIR="/data/data/com.termux/files/usr/share/termux-dotfiles"
+BACKUP_SUFFIX=".termux-dotfiles-backup"
+
+backup() {
+    local target="$1"
+    if [[ -e "$target" ]] && [[ ! -L "$target" ]]; then
+        mv "$target" "${target}${BACKUP_SUFFIX}"
+    fi
+}
+
+link() {
+    local source="$1"
+    local target="$2"
+    if [[ -L "$target" ]]; then
+        # Already linked by this package — skip
+        exit 0
+    fi
+    backup "$target"
+    mkdir -p "$(dirname "$target")"
+    ln -sf "$source" "$target"
+}
+
+# Shell integration
+mkdir -p "$HOME/.config/zsh" "$HOME/.config/tmux" "$HOME/.config/termux" "$HOME/.config/nvim"
+mkdir -p "$HOME/.termux"
+
+link "$DOTFILES_DIR/zsh"        "$HOME/.config/zsh"
+link "$DOTFILES_DIR/tmux"       "$HOME/.config/tmux"
+link "$DOTFILES_DIR/termux"     "$HOME/.config/termux"
+link "$HOME/.config/tmux/tmux.conf"  "$HOME/.tmux.conf"
+link "$HOME/.config/termux/termux.properties" "$HOME/.termux/termux.properties"
+link "$HOME/.config/zsh/zshrc"  "$HOME/.zshrc"
+link "$DOTFILES_DIR/nvim"       "$HOME/.config/nvim"
