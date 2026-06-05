@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
-PROJECT_ROOT="/media/bladimir/Datos1/Datos/proyectos/work/Termux-AI-Astaroth"
-SCRIPT_DIR="$PROJECT_ROOT/scripts"
+SCRIPT_DIR="$(cd "$(dirname "$BATS_TEST_DIRNAME")/scripts" && pwd)"
 
 @test "release.sh shows usage when no command provided" {
     run "$SCRIPT_DIR/release.sh"

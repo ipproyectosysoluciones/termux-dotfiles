@@ -4,6 +4,7 @@ echo "================================="
 echo "Installing ZSH shell plugins..."
 echo "================================="
 
+# shellcheck disable=SC1091
 source "$(dirname "$0")/../utils/logger.sh"
 
 PLUGINS_DIR="$HOME/.zsh-plugins"

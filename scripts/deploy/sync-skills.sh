@@ -146,7 +146,8 @@ verify_remote_skills() {
     log_info "Verifying skills on remote..."
 
     for skill_dir in "${LOCAL_SKILLS_DIR}"/*; do
-        local skill_name="$(basename "$skill_dir")"
+        local skill_name
+        skill_name="$(basename "$skill_dir")"
         local remote_path="${REMOTE_BASE_DIR}/${skill_name}"
 
         if ssh -p "$SSH_PORT" "${REMOTE_USER}@${REMOTE_HOST}" "test -f ${remote_path}/SKILL.md"; then
@@ -165,7 +166,8 @@ verify_local_skills() {
     log_info "Verifying skills locally..."
 
     for skill_dir in "${LOCAL_SKILLS_DIR}"/*; do
-        local skill_name="$(basename "$skill_dir")"
+        local skill_name
+        skill_name="$(basename "$skill_dir")"
         local dest_path="$HOME/.config/opencode/skills/${skill_name}/SKILL.md"
 
         if [[ -f "$dest_path" ]]; then
@@ -263,7 +265,8 @@ main() {
 
         for skill_dir in "${LOCAL_SKILLS_DIR}"/*/; do
             if [ -d "$skill_dir" ] && [ "$(basename "$skill_dir")" != "agents" ]; then
-                local skill_name="$(basename "$skill_dir")"
+                local skill_name
+                skill_name="$(basename "$skill_dir")"
                 if sync_skill_local "$skill_name"; then
                     ((synced++))
                 else
@@ -320,7 +323,8 @@ main() {
 
         for skill_dir in "${LOCAL_SKILLS_DIR}"/*/; do
             if [ -d "$skill_dir" ] && [ "$(basename "$skill_dir")" != "agents" ]; then
-                local skill_name="$(basename "$skill_dir")"
+                local skill_name
+                skill_name="$(basename "$skill_dir")"
                 if sync_skill_remote "$skill_name"; then
                     ((synced++))
                 else
