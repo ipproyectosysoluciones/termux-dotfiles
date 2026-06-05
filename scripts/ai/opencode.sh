@@ -12,8 +12,4 @@ fi
 
 SESSION="opencode"
 
-create_session "$SESSION" \
-"cd ~/Projects && opencode"
-
-attach_or_switch "$SESSION"
-
+launch_in_window "$SESSION" "cd ~/Projects && opencode" "opencode"

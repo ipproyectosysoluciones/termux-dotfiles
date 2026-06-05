@@ -15,8 +15,4 @@ fi
 
 SESSION="gentle"
 
-create_session "$SESSION" \
-"gentle-ai"
-
-attach_or_switch "$SESSION"
-
+launch_in_window "$SESSION" "gentle-ai" "gentle"

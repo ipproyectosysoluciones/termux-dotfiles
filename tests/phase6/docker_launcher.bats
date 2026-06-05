@@ -38,11 +38,11 @@ teardown() {
 }
 
 @test "docker.sh creates tmux session for proot-distro" {
-    grep -q 'create_session' "$DOCKER_SCRIPT"
+    grep -q 'launch_in_window' "$DOCKER_SCRIPT"
 }
 
-@test "docker.sh uses attach_or_switch pattern" {
-    grep -q 'attach_or_switch' "$DOCKER_SCRIPT"
+@test "docker.sh uses launch_in_window pattern" {
+    grep -q 'launch_in_window' "$DOCKER_SCRIPT"
 }
 
 @test "docker.sh falls back to native docker if available" {
@@ -55,7 +55,7 @@ teardown() {
     # Must NOT have the complex inline bash -c that broke quoting
     run grep -c 'bash -c "' "$DOCKER_SCRIPT" || true
     # The bash -c pattern is only in fallback, not in proot-distro path
-    grep -q 'create_session "$SESSION" \\' "$DOCKER_SCRIPT"
+    grep -q 'launch_in_window "$SESSION" \\' "$DOCKER_SCRIPT"
 }
 
 @test "docker.sh fallback has shell exec" {

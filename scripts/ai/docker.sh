@@ -9,19 +9,16 @@ SESSION="docker"
 # Check docker inside proot-distro debian
 if command -v proot-distro > /dev/null 2>&1; then
     if proot-distro login debian --bind "$HOME:/termux" --user dev -- command -v docker > /dev/null 2>&1; then
-        create_session "$SESSION" \
-            "proot-distro login debian --bind $HOME:/termux --user dev"
-
-        attach_or_switch "$SESSION"
+        launch_in_window "$SESSION" \
+            "proot-distro login debian --bind $HOME:/termux --user dev" \
+            "docker"
         exit 0
     fi
 fi
 
 # Fallback: native docker
 if command -v docker > /dev/null 2>&1; then
-    create_session "$SESSION" "echo 'Docker CLI available' && exec \$SHELL"
-
-    attach_or_switch "$SESSION"
+    launch_in_window "$SESSION" "echo 'Docker CLI available' && exec \$SHELL" "docker"
     exit 0
 fi
 

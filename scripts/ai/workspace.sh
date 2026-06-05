@@ -7,7 +7,4 @@ source "$SCRIPT_DIR/utils.sh"
 SESSION="workspace"
 WORKSPACE_DIR="${WORKSPACE_DIR:-$HOME/Projects}"
 
-create_session "$SESSION" \
-"cd $WORKSPACE_DIR && pwd && ls -la"
-
-attach_or_switch "$SESSION"
+launch_in_window "$SESSION" "cd $WORKSPACE_DIR && pwd && ls -la" "workspace"

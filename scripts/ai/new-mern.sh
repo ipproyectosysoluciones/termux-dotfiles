@@ -209,25 +209,25 @@ validate_scope() {
 create_directories() {
     log_info "Creating directory structure..."
 
-    mkdir -p "$PROJECT_NAME/backend/src/controllers"
-    mkdir -p "$PROJECT_NAME/backend/src/models"
-    mkdir -p "$PROJECT_NAME/backend/src/routes"
-    mkdir -p "$PROJECT_NAME/backend/src/middleware"
-    mkdir -p "$PROJECT_NAME/backend/src/config"
-    mkdir -p "$PROJECT_NAME/backend/tests/unit"
-    mkdir -p "$PROJECT_NAME/backend/tests/integration"
+    mkdir -p "$PROJECT_DIR/backend/src/controllers"
+    mkdir -p "$PROJECT_DIR/backend/src/models"
+    mkdir -p "$PROJECT_DIR/backend/src/routes"
+    mkdir -p "$PROJECT_DIR/backend/src/middleware"
+    mkdir -p "$PROJECT_DIR/backend/src/config"
+    mkdir -p "$PROJECT_DIR/backend/tests/unit"
+    mkdir -p "$PROJECT_DIR/backend/tests/integration"
 
     if [ "$SCOPE" != "backend-only" ]; then
-        mkdir -p "$PROJECT_NAME/frontend/src/app"
-        mkdir -p "$PROJECT_NAME/frontend/src/components"
-        mkdir -p "$PROJECT_NAME/frontend/src/services"
-        mkdir -p "$PROJECT_NAME/frontend/src/hooks"
-        mkdir -p "$PROJECT_NAME/frontend/src/types"
-        mkdir -p "$PROJECT_NAME/frontend/tests/unit"
-        mkdir -p "$PROJECT_NAME/frontend/tests/e2e"
+        mkdir -p "$PROJECT_DIR/frontend/src/app"
+        mkdir -p "$PROJECT_DIR/frontend/src/components"
+        mkdir -p "$PROJECT_DIR/frontend/src/services"
+        mkdir -p "$PROJECT_DIR/frontend/src/hooks"
+        mkdir -p "$PROJECT_DIR/frontend/src/types"
+        mkdir -p "$PROJECT_DIR/frontend/tests/unit"
+        mkdir -p "$PROJECT_DIR/frontend/tests/e2e"
     fi
 
-    mkdir -p "$PROJECT_NAME/.husky"
+    mkdir -p "$PROJECT_DIR/.husky"
 
     log_success "Directory structure created"
 }
@@ -239,7 +239,7 @@ create_directories() {
 create_backend_package_json() {
     log_info "Creating backend/package.json..."
 
-    cat > "$PROJECT_NAME/backend/package.json" << 'EOF'
+    cat > "$PROJECT_DIR/backend/package.json" << 'EOF'
 {
   "name": "PROJECT_NAME-backend",
   "version": "1.0.0",
@@ -289,7 +289,7 @@ create_backend_package_json() {
 EOF
 
     # Replace PROJECT_NAME placeholder
-    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_NAME/backend/package.json"
+    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_DIR/backend/package.json"
 }
 
 # =============================================================================
@@ -299,7 +299,7 @@ EOF
 create_backend_tsconfig() {
     log_info "Creating backend/tsconfig.json..."
 
-    cat > "$PROJECT_NAME/backend/tsconfig.json" << 'EOF'
+    cat > "$PROJECT_DIR/backend/tsconfig.json" << 'EOF'
 {
   "compilerOptions": {
     "target": "ES2022",
@@ -330,7 +330,7 @@ EOF
 create_backend_jest_config() {
     log_info "Creating backend/jest.config.ts..."
 
-    cat > "$PROJECT_NAME/backend/jest.config.ts" << 'EOF'
+    cat > "$PROJECT_DIR/backend/jest.config.ts" << 'EOF'
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -355,7 +355,7 @@ EOF
 create_backend_index() {
     log_info "Creating backend/src/index.ts..."
 
-    cat > "$PROJECT_NAME/backend/src/index.ts" << 'EOF'
+    cat > "$PROJECT_DIR/backend/src/index.ts" << 'EOF'
 import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
@@ -399,14 +399,14 @@ EOF
 create_backend_env_example() {
     log_info "Creating backend/.env.example..."
 
-    cat > "$PROJECT_NAME/backend/.env.example" << 'EOF'
+    cat > "$PROJECT_DIR/backend/.env.example" << 'EOF'
 PORT=3000
 NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/PROJECT_NAME
 JWT_SECRET=your-secret-key-here
 EOF
 
-    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_NAME/backend/.env.example"
+    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_DIR/backend/.env.example"
 }
 
 # =============================================================================
@@ -420,7 +420,7 @@ create_frontend_package_json() {
 
     log_info "Creating frontend/package.json..."
 
-    cat > "$PROJECT_NAME/frontend/package.json" << 'EOF'
+    cat > "$PROJECT_DIR/frontend/package.json" << 'EOF'
 {
   "name": "PROJECT_NAME-frontend",
   "version": "1.0.0",
@@ -468,7 +468,7 @@ create_frontend_package_json() {
 }
 EOF
 
-    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_NAME/frontend/package.json"
+    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_DIR/frontend/package.json"
 }
 
 # =============================================================================
@@ -482,7 +482,7 @@ create_frontend_vite_config() {
 
     log_info "Creating frontend/vite.config.ts..."
 
-    cat > "$PROJECT_NAME/frontend/vite.config.ts" << 'EOF'
+    cat > "$PROJECT_DIR/frontend/vite.config.ts" << 'EOF'
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -518,7 +518,7 @@ create_frontend_proxy_config() {
 
     log_info "Creating frontend/proxy.conf.json..."
 
-    cat > "$PROJECT_NAME/frontend/proxy.conf.json" << 'EOF'
+    cat > "$PROJECT_DIR/frontend/proxy.conf.json" << 'EOF'
 {
   "/api": {
     "target": "http://localhost:3000",
@@ -540,7 +540,7 @@ create_frontend_tsconfig() {
 
     log_info "Creating frontend/tsconfig.json..."
 
-    cat > "$PROJECT_NAME/frontend/tsconfig.json" << 'EOF'
+    cat > "$PROJECT_DIR/frontend/tsconfig.json" << 'EOF'
 {
   "compilerOptions": {
     "target": "ES2020",
@@ -576,7 +576,7 @@ create_frontend_index_html() {
 
     log_info "Creating frontend/index.html..."
 
-    cat > "$PROJECT_NAME/frontend/index.html" << 'EOF'
+    cat > "$PROJECT_DIR/frontend/index.html" << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -604,9 +604,9 @@ create_frontend_main() {
 
     log_info "Creating frontend/src/main.tsx..."
 
-    mkdir -p "$PROJECT_NAME/frontend/src"
+    mkdir -p "$PROJECT_DIR/frontend/src"
 
-    cat > "$PROJECT_NAME/frontend/src/main.tsx" << 'EOF'
+    cat > "$PROJECT_DIR/frontend/src/main.tsx" << 'EOF'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -630,7 +630,7 @@ create_frontend_app() {
 
     log_info "Creating frontend/src/App.tsx..."
 
-    cat > "$PROJECT_NAME/frontend/src/App.tsx" << 'EOF'
+    cat > "$PROJECT_DIR/frontend/src/App.tsx" << 'EOF'
 function App() {
   return (
     <div className="App">
@@ -656,7 +656,7 @@ setup_husky() {
     log_info "Setting up Husky git hooks..."
 
     # Create pre-commit hook
-    cat > "$PROJECT_NAME/.husky/pre-commit" << 'EOF'
+    cat > "$PROJECT_DIR/.husky/pre-commit" << 'EOF'
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -664,7 +664,7 @@ npx lint-staged
 EOF
 
     # Create commit-msg hook
-    cat > "$PROJECT_NAME/.husky/commit-msg" << 'EOF'
+    cat > "$PROJECT_DIR/.husky/commit-msg" << 'EOF'
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -672,16 +672,16 @@ npx --no -- commitlint --edit $1
 EOF
 
     # Create pre-push hook
-    cat > "$PROJECT_NAME/.husky/pre-push" << 'EOF'
+    cat > "$PROJECT_DIR/.husky/pre-push" << 'EOF'
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm test
 EOF
 
-    chmod +x "$PROJECT_NAME/.husky/pre-commit"
-    chmod +x "$PROJECT_NAME/.husky/commit-msg"
-    chmod +x "$PROJECT_NAME/.husky/pre-push"
+    chmod +x "$PROJECT_DIR/.husky/pre-commit"
+    chmod +x "$PROJECT_DIR/.husky/commit-msg"
+    chmod +x "$PROJECT_DIR/.husky/pre-push"
 
     log_success "Husky hooks configured"
 }
@@ -693,7 +693,7 @@ EOF
 setup_commitlint() {
     log_info "Setting up commitlint..."
 
-    cat > "$PROJECT_NAME/commitlint.config.cjs" << 'EOF'
+    cat > "$PROJECT_DIR/commitlint.config.cjs" << 'EOF'
 module.exports = {
   extends: ['@commitlint/config-conventional']
 };
@@ -713,7 +713,7 @@ create_dockerfile() {
 
     log_info "Creating Dockerfile..."
 
-    cat > "$PROJECT_NAME/backend/Dockerfile" << 'EOF'
+    cat > "$PROJECT_DIR/backend/Dockerfile" << 'EOF'
 FROM node:20-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -736,7 +736,7 @@ create_docker_compose() {
 
     log_info "Creating docker-compose.yml..."
 
-    cat > "$PROJECT_NAME/docker-compose.yml" << 'EOF'
+    cat > "$PROJECT_DIR/docker-compose.yml" << 'EOF'
 version: '3.8'
 services:
   backend:
@@ -756,7 +756,7 @@ volumes:
   mongo_data:
 EOF
 
-    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_NAME/docker-compose.yml"
+    sed -i "s/PROJECT_NAME/$PROJECT_NAME/g" "$PROJECT_DIR/docker-compose.yml"
 }
 
 # =============================================================================
@@ -766,7 +766,7 @@ EOF
 create_gitignore() {
     log_info "Creating .gitignore..."
 
-    cat > "$PROJECT_NAME/.gitignore" << 'EOF'
+    cat > "$PROJECT_DIR/.gitignore" << 'EOF'
 # Dependencies
 node_modules/
 .pnp
@@ -817,7 +817,7 @@ EOF
 create_readme() {
     log_info "Creating README.md..."
 
-    cat > "$PROJECT_NAME/README.md" << EOF
+    cat > "$PROJECT_DIR/README.md" << EOF
 # $PROJECT_NAME
 
 MERN Stack project created with new-mern.sh scaffolder.
@@ -834,7 +834,7 @@ MERN Stack project created with new-mern.sh scaffolder.
 ### Backend
 
 \`\`\`bash
-cd $PROJECT_NAME/backend
+cd $PROJECT_DIR/backend
 npm install
 npm run dev
 \`\`\`
@@ -842,7 +842,7 @@ npm run dev
 ### Frontend
 
 \`\`\`bash
-cd $PROJECT_NAME/frontend
+cd $PROJECT_DIR/frontend
 npm install
 npm run dev
 \`\`\`
@@ -902,7 +902,7 @@ EOF
 init_git() {
     log_info "Initializing git repository..."
 
-    cd "$PROJECT_NAME"
+    cd "$PROJECT_DIR"
     git init
     git add .
     git commit -m "feat: initial project scaffold
@@ -923,12 +923,12 @@ init_git() {
 
 install_dependencies() {
     log_info "Installing backend dependencies..."
-    cd "$PROJECT_NAME/backend"
+    cd "$PROJECT_DIR/backend"
     npm install
 
     if [ "$SCOPE" != "backend-only" ]; then
         log_info "Installing frontend dependencies..."
-        cd "$PROJECT_NAME/frontend"
+        cd "$PROJECT_DIR/frontend"
         npm install
     fi
 
@@ -953,8 +953,14 @@ main() {
     ask_docker
     validate_scope
 
+    # Resolve project directory
+    PROJECTS_DIR="${PROJECTS_DIR:-$HOME/Projects}"
+    PROJECT_DIR="$PROJECTS_DIR/$PROJECT_NAME"
+    mkdir -p "$PROJECT_DIR"
+
     echo ""
-    log_info "Creating $PROJECT_NAME with scope: $SCOPE, docker: $WITH_DOCKER"
+    log_info "Creating $PROJECT_NAME in $PROJECT_DIR"
+    log_info "Scope: $SCOPE, docker: $WITH_DOCKER"
     echo ""
 
     create_directories
@@ -992,7 +998,7 @@ main() {
     echo "  Next Steps"
     echo "=============================================="
     echo ""
-    echo "1. cd $PROJECT_NAME"
+    echo "1. cd $PROJECT_DIR"
     echo "2. Review and customize the generated files"
     echo "3. Update backend/.env with your MongoDB URI"
     echo "4. For frontend, install deps: cd frontend && npm install"

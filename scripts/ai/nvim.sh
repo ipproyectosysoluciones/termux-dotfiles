@@ -6,7 +6,4 @@ source "$SCRIPT_DIR/utils.sh"
 
 SESSION="nvim"
 
-create_session "$SESSION" "cd ~/Projects && nvim"
-
-attach_or_switch "$SESSION"
-
+launch_in_window "$SESSION" "cd ~/Projects && nvim" "nvim"
