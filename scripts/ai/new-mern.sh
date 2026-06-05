@@ -1012,5 +1012,20 @@ main "$@"
 
 # Auto-cd to project directory if inside tmux
 if [ -n "$TMUX" ] && [ -n "$PROJECT_DIR" ] && [ -d "$PROJECT_DIR" ]; then
-    tmux new-window -n "$PROJECT_NAME" -c "$PROJECT_DIR"
+    tmux new-window -n "$PROJECT_NAME" -c "$PROJECT_DIR" \
+        "echo '=============================================='; \
+         echo '  Welcome to $PROJECT_NAME!'; \
+         echo '=============================================='; \
+         echo; \
+         echo 'Quick start:'; \
+         echo '  cd backend && npm install && npm run dev'; \
+         echo; \
+         echo 'Frontend (React):'; \
+         echo '  cd frontend && npm install && npm run dev'; \
+         echo; \
+         echo 'Backend API:'; \
+         echo '  http://localhost:3000/api'; \
+         echo; \
+         echo 'Happy coding!'; \
+         exec zsh"
 fi
