@@ -70,10 +70,10 @@ log_error() {
 # =============================================================================
 
 parse_args() {
-    PROJECT_NAME=""
-    SCOPE="full-stack"
-    WITH_DOCKER="false"
-    AUTO_MODE="false"
+    PROJECT_NAME="${PROJECT_NAME:-}"
+    SCOPE="${SCOPE:-full-stack}"
+    WITH_DOCKER="${WITH_DOCKER:-false}"
+    AUTO_MODE="${AUTO_MODE:-false}"
 
     while [[ $# -gt 0 ]]; do
         case $1 in
