@@ -16,8 +16,8 @@ class TermuxDotfiles < Formula
   def install
     # Stage all repo content under libexec prefix
     prefix.install Dir["*"]
-    # Make setup script executable and place in bin/
-    (bin/"termux-dotfiles-setup").chmod 0755
+    # Install setup script to bin/ (sets 0755 automatically)
+    bin.install "scripts/termux-dotfiles-setup"
   end
 
   def post_install
