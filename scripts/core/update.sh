@@ -33,3 +33,21 @@ git -C "$HOME/dotfiles" pull
 
 log "Update completed."
 
+# Version check
+check_version() {
+  local version_file="$HOME/dotfiles/VERSION"
+  if [[ -f "$version_file" ]]; then
+    local local_version
+    local_version=$(cat "$version_file" | tr -d ' \t\n\r')
+    local remote_version
+    remote_version=$(git -C "$HOME/dotfiles" ls-remote --tags origin 2>/dev/null | grep -o 'v[0-9.]*' | sort -V | tail -1 | tr -d 'v')
+    if [[ -n "$remote_version" ]] && [[ "$remote_version" != "$local_version" ]]; then
+      log "Update available: v$remote_version (current: v$local_version)"
+      log "Run 'cd ~/dotfiles && git pull' to update"
+    fi
+  fi
+}
+
+# Call at end of update
+check_version
+
