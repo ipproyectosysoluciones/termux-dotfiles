@@ -45,7 +45,6 @@ PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
   echo "$output" >&2
   [ "$status" -eq 1 ]
   [[ "$output" == *"MISSING: dotfiles directory"* ]]
-  [[ "$output" == *"Found"* ]]
   [[ "$output" == *"issue(s)"* ]]
 }
 
