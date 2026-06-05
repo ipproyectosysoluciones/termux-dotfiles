@@ -1,0 +1,111 @@
+name: Brew Formula Update
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read version from VERSION file
+        id: version
+        run: |
+          VERSION=$(cat VERSION)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Found version: $VERSION"
+
+      - name: Download release tarball
+        run: |
+          curl -sL "https://github.com/ipproyectosysoluciones/termux-dotfiles/archive/refs/tags/v${{ steps.version.outputs.VERSION }}.tar.gz" \
+            -o /tmp/termux-dotfiles.tar.gz
+
+      - name: Compute SHA256
+        id: sha
+        run: |
+          SHA256=$(sha256sum /tmp/termux-dotfiles.tar.gz | cut -d' ' -f1)
+          echo "SHA256=$SHA256" >> $GITHUB_OUTPUT
+          echo "Computed SHA256: $SHA256"
+
+      - name: Update formula with new version and SHA256
+        run: |
+          # Use sed to replace placeholders in the formula
+          SED=sed
+          if [[ "$OSTYPE" == "darwin"* ]]; then SED=gsed; fi
+
+          # Install gsed on macOS if needed
+          if [[ "$OSTYPE" == "darwin"* ]] && ! command -v gsed &> /dev/null; then
+            brew install gnu-sed
+          fi
+
+          $SED -i \
+            -e "s|VERSION_PLACEHOLDER|${{ steps.version.outputs.VERSION }}|g" \
+            -e "s|SHA256_PLACEHOLDER|${{ steps.sha.outputs.SHA256 }}|g" \
+            Formula/termux-dotfiles.rb
+
+          echo "Updated formula:"
+          cat Formula/termux-dotfiles.rb
+
+      - name: Create branch for formula update
+        run: |
+          BRANCH="formula-update/v${{ steps.version.outputs.VERSION }}"
+          git checkout -b "$BRANCH"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/termux-dotfiles.rb
+          git commit -m "chore(formula): update to v${{ steps.version.outputs.VERSION }}"
+
+      - name: Push branch
+        run: |
+          BRANCH="formula-update/v${{ steps.version.outputs.VERSION }}"
+          git push -u origin "$BRANCH"
+
+      - name: Create PR to dev branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="formula-update/v${{ steps.version.outputs.VERSION }}"
+          PR_URL=$(gh pr create \
+            --title "chore(formula): update to v${{ steps.version.outputs.VERSION }}" \
+            --body "Auto-generated formula update for v${{ steps.version.outputs.VERSION }}
+
+This PR updates the Homebrew formula with the new version and SHA256 checksum computed from the release tarball.
+
+Updated:
+- version: ${{ steps.version.outputs.VERSION }}
+- sha256: ${{ steps.sha.outputs.SHA256 }}
+
+Please review and merge." \
+            --base dev \
+            --head "$BRANCH" \
+            --repo ipproyectosysoluciones/termux-dotfiles 2>&1)
+          echo "Created PR: $PR_URL"
+
+      - name: Auto-merge PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="formula-update/v${{ steps.version.outputs.VERSION }}"
+          PR_NUMBER=$(gh pr list \
+            --head "$BRANCH" \
+            --repo ipproyectosysoluciones/termux-dotfiles \
+            --json number \
+            --jq '.[0].number')
+
+          if [[ -n "$PR_NUMBER" ]]; then
+            echo "Merging PR #$PR_NUMBER"
+            gh pr merge "$PR_NUMBER" \
+              --admin \
+              --merge \
+              --repo ipproyectosysoluciones/termux-dotfiles
+          else
+            echo "PR not found, skipping auto-merge"
+          fi

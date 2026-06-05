@@ -172,6 +172,28 @@ pkg remove termux-dotfiles
 rm -rf ~/dotfiles
 ```
 
+## Homebrew Tap (Debian proot)
+
+For users running Debian inside Termux proot (Android 11+):
+
+```bash
+brew tap ipproyectosysoluciones/termux-dotfiles
+brew install termux-dotfiles
+termux-dotfiles-setup
+```
+
+After installation, run `termux-dotfiles-setup` to create the symlinks in `$HOME/.config/termux-dotfiles/`.
+
+For detailed instructions, see [docs/homebrew.md](docs/homebrew.md).
+
+### Uninstall (Homebrew)
+
+```bash
+brew uninstall termux-dotfiles
+brew untap ipproyectosysoluciones/termux-dotfiles
+rm -rf ~/.config/termux-dotfiles
+```
+
 ---
 
 ## Manual Install
@@ -327,7 +349,7 @@ Additional documentation:
 
 # Version
 
-Current release: **v1.0.0** (see [CHANGELOG.md](CHANGELOG.md) for details)
+Current release: **v1.1.0** (see [CHANGELOG.md](CHANGELOG.md) for details)
 
 ---
 
