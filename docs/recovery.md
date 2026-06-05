@@ -74,7 +74,7 @@ Clonar dotfiles
 Repositorio
 
 ```bash
-git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/dotfiles
+git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git ~/dotfiles
 ```
 
 
@@ -560,7 +560,7 @@ pkg update && pkg upgrade -y
 
 pkg install git -y
 
-git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/dotfiles
+git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git ~/dotfiles
 
 cd ~/dotfiles
 

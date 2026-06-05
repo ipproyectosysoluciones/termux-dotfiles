@@ -16,7 +16,7 @@ jobs:
       - name: Create GitHub Release
         run: |
           TAG="${GITHUB_REF_NAME}"
-          NOTES="# Release ${TAG}\n\nSee CHANGELOG.md for detailed changes."
+          NOTES="# Release ${TAG} \n\n See CHANGELOG.md for detailed changes."
           gh release create "$TAG" \
             --title "$TAG" \
             --notes "$NOTES" \

@@ -33,10 +33,21 @@ jobs:
           mv /tmp/debbuild.deb \
             /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
 
-      - name: Upload to GitHub Release
+      - name: Extract release notes
+        id: notes
         run: |
-          gh release upload "${{ github.ref_name }}" \
-            /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb \
-            --clobber
+          # Strip patch version to match CHANGELOG header format (v1.1.0 -> v1.1)
+          MAJOR_MINOR=$(echo "${{ steps.version.outputs.VERSION }}" | cut -d. -f1,2)
+          TAG="v${MAJOR_MINOR}"
+          SECTION=$(sed -n "/^## \[${TAG}\]/,/^## \[/p" CHANGELOG.md | sed '$d')
+          echo "NOTES<<EOF" >> $GITHUB_OUTPUT
+          echo "$SECTION" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --notes "${{ steps.notes.outputs.NOTES }}" \
+            /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

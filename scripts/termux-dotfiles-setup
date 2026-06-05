@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+# termux-dotfiles-setup
+# Creates symlinks: $HOME/.config/termux-dotfiles/ -> Homebrew Cellar
+#
+# Usage:
+#   termux-dotfiles-setup [--force] [--dry-run] [--help]
+#
+# Options:
+#   --force     Overwrite existing symlinks
+#   --dry-run   Show what would be created without making changes
+#   --help      Show this usage help
+#
+# This script is installed by the Homebrew formula and run manually
+# after `brew install termux-dotfiles`.
+
+set -e
+
+FORCE=false
+DRY_RUN=false
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --force)
+            FORCE=true
+            shift
+            ;;
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --help)
+            echo "Usage: termux-dotfiles-setup [--force] [--dry-run] [--help]"
+            echo ""
+            echo "Options:"
+            echo "  --force     Overwrite existing symlinks"
+            echo "  --dry-run   Show what would be created without making changes"
+            echo "  --help      Show this usage help"
+            echo ""
+            echo "This script creates symlinks in \$HOME/.config/termux-dotfiles/"
+            echo "pointing to the Homebrew Cellar installation."
+            exit 0
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
+# Detect Homebrew prefix
+BREW_PREFIX=$(brew --prefix 2>/dev/null) || BREW_PREFIX="$HOME/.linuxbrew"
+CELLAR="${BREW_PREFIX}/Cellar/termux-dotfiles"
+
+if [[ ! -d "$CELLAR" ]]; then
+    echo "Error: Cellar path not found at $CELLAR" >&2
+    echo "Run: brew install ipproyectosysoluciones/termux-dotfiles/termux-dotfiles" >&2
+    exit 1
+fi
+
+# Find latest version directory
+CELLAR_VERSION=$(ls -td "$CELLAR"/*/ 2>/dev/null | head -1)
+if [[ -z "$CELLAR_VERSION" ]]; then
+    echo "Error: No termux-dotfiles version found in Cellar" >&2
+    exit 1
+fi
+# Strip trailing slash
+CELLAR_VERSION="${CELLAR_VERSION%/}"
+
+TARGET_DIR="$HOME/.config/termux-dotfiles"
+
+if [[ "$DRY_RUN" == "true" ]]; then
+    echo "Dry-run: would create symlinks in $TARGET_DIR"
+    echo "  -> Cellar version: ${CELLAR_VERSION}"
+    echo "  -> Directories: zsh, tmux, nvim, scripts, termux, docs"
+    echo ""
+    echo "Symlinks that would be created:"
+    for dir in zsh tmux nvim scripts termux docs; do
+        if [[ -d "$CELLAR_VERSION/$dir" ]]; then
+            echo "  $TARGET_DIR/$dir -> $CELLAR_VERSION/$dir"
+        fi
+    done
+    echo ""
+    echo "Dry-run complete. No changes made."
+    exit 0
+fi
+
+# Create target directory
+mkdir -p "$TARGET_DIR"
+
+# Symlink each config directory
+CREATED_COUNT=0
+SKIPPED_COUNT=0
+REPLACED_COUNT=0
+
+for dir in zsh tmux nvim scripts termux docs; do
+    if [[ ! -d "$CELLAR_VERSION/$dir" ]]; then
+        continue
+    fi
+
+    LINK="$TARGET_DIR/$dir"
+
+    if [[ -L "$LINK" ]]; then
+        # Symlink already exists
+        if [[ "$FORCE" == "true" ]]; then
+            rm "$LINK"
+            ln -s "$CELLAR_VERSION/$dir" "$LINK"
+            echo "Replaced: $LINK -> $CELLAR_VERSION/$dir"
+            REPLACED_COUNT=$((REPLACED_COUNT + 1))
+        else
+            echo "Skipping (exists): $LINK"
+            SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+        fi
+    elif [[ -e "$LINK" ]]; then
+        # Regular file/directory exists (not a symlink)
+        if [[ "$FORCE" == "true" ]]; then
+            rm -rf "$LINK"
+            ln -s "$CELLAR_VERSION/$dir" "$LINK"
+            echo "Replaced: $LINK -> $CELLAR_VERSION/$dir"
+            REPLACED_COUNT=$((REPLACED_COUNT + 1))
+        else
+            echo "Skipping (not a symlink): $LINK"
+            SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+        fi
+    else
+        # Create new symlink
+        ln -s "$CELLAR_VERSION/$dir" "$LINK"
+        echo "Created: $LINK -> $CELLAR_VERSION/$dir"
+        CREATED_COUNT=$((CREATED_COUNT + 1))
+    fi
+done
+
+echo ""
+echo "Setup complete!"
+echo "  Created: $CREATED_COUNT"
+echo "  Replaced: $REPLACED_COUNT"
+echo "  Skipped: $SKIPPED_COUNT"
+echo ""
+echo "Reload your shell:"
+echo "  $ exec zsh"

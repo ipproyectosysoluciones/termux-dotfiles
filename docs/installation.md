@@ -80,6 +80,56 @@ termux-setup-storage
 
 ---
 
+# Installation Methods
+
+This project supports three installation methods. Choose the one that best fits your environment.
+
+## Comparison Table
+
+| Method | Platform | Installation Command | Update Command | Best For |
+|--------|----------|---------------------|----------------|----------|
+| **curl** | Termux (native) | `curl -fsSL https://raw.githubusercontent.com/ipproyectosysoluciones/termux-dotfiles/main/scripts/install.sh \| bash` | Manual (git pull) | Quick start, testing |
+| **.deb** | Termux (with pkg) | `pkg install termux-dotfiles` | `pkg upgrade` | Package management, updates |
+| **brew tap** | Debian proot (Android 11+) | `brew tap ipproyectosysoluciones/termux-dotfiles && brew install termux-dotfiles` | `brew update && brew upgrade` | Linux/Homebrew environments |
+
+## Method 1: curl (Quick Install)
+
+For Termux native installations:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ipproyectosysoluciones/termux-dotfiles/main/scripts/install.sh | bash
+```
+
+Or with version pinning:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ipproyectosysoluciones/termux-dotfiles/main/scripts/install.sh | bash -s -- --version v1.1.0
+```
+
+## Method 2: .deb Package (Recommended for Termux)
+
+For Termux users who prefer package management:
+
+```bash
+pkg install termux-dotfiles
+```
+
+After installation, the package automatically creates symlinks and configures your environment.
+
+## Method 3: Homebrew Tap (for Debian proot)
+
+For users running Debian inside Termux proot (Android 11+):
+
+```bash
+brew tap ipproyectosysoluciones/termux-dotfiles
+brew install termux-dotfiles
+termux-dotfiles-setup
+```
+
+See [docs/homebrew.md](homebrew.md) for detailed instructions.
+
+---
+
 # Clone Repository
 
 Clone dotfiles repository:
