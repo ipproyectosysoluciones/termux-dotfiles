@@ -12,8 +12,5 @@ fi
 
 SESSION="engram"
 
-create_session "$SESSION" \
-"engram"
-
-attach_or_switch "$SESSION"
+launch_in_window "$SESSION" "engram" "engram"
 
