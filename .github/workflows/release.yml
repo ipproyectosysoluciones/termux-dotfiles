@@ -5,18 +5,21 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          body: |
-            ## Release Notes
-
-            See CHANGELOG.md for detailed changes.
-          generate_release_notes: true
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          NOTES="# Release ${TAG}\n\nSee CHANGELOG.md for detailed changes."
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --notes "$NOTES" \
+            --verify-tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
