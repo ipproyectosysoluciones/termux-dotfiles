@@ -20,7 +20,17 @@ brew tap ipproyectosysoluciones/termux-dotfiles
 brew install termux-dotfiles
 ```
 
-### 3. Ejecutar el script de configuración
+### 3. Vincular el binario (keg-only)
+
+El paquete es `keg-only`, lo que significa que Homebrew no agrega automáticamente `termux-dotfiles-setup` al PATH. Ejecuta:
+
+```bash
+brew link --force termux-dotfiles
+```
+
+Esto crea los symlinks necesarios para que `termux-dotfiles-setup` esté disponible en tu PATH.
+
+### 4. Ejecutar el script de configuración
 
 Después de la instalación, ejecuta el script de configuración para crear los symlinks:
 
@@ -33,7 +43,7 @@ Este comando:
 - Crea el directorio `$HOME/.config/termux-dotfiles/`
 - Crea symlinks para: `zsh`, `tmux`, `nvim`, `scripts`, `termux`, `docs`
 
-### 4. Recargar el shell
+### 5. Recargar el shell
 
 ```bash
 exec zsh
