@@ -44,8 +44,7 @@ PROJECT_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/../.." && pwd)"
   HOME="$temp_dir" run bash "$install_script" --check
   echo "$output" >&2
   [ "$status" -eq 1 ]
-  [[ "$output" == *"Missing: dotfiles directory"* ]]
-  [[ "$output" == *"Found"* ]]
+  [[ "$output" == *"MISSING: dotfiles directory"* ]]
   [[ "$output" == *"issue(s)"* ]]
 }
 
