@@ -1,0 +1,12 @@
+return {
+  { import = "plugins.ui" },
+  { import = "plugins.lsp" },
+  { import = "plugins.completion" },
+  { import = "plugins.formatting" },
+  { import = "plugins.git" },
+  { import = "plugins.testing" },
+  { import = "plugins.terminal" },
+  { import = "plugins.editor" },
+  { import = "plugins.dap" },
+  { import = "plugins.ai" },
+}
