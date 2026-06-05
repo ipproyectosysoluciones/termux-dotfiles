@@ -1,0 +1,24 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  bats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run bats tests
+        run: |
+          if command -v bats &> /dev/null; then
+            bats tests/
+          else
+            # Fallback: install bats via brew or apt
+            sudo apt-get update && sudo apt-get install -y bats
+            bats tests/
+          fi
