@@ -1009,3 +1009,8 @@ main() {
 }
 
 main "$@"
+
+# Auto-cd to project directory if inside tmux
+if [ -n "$TMUX" ] && [ -n "$PROJECT_DIR" ] && [ -d "$PROJECT_DIR" ]; then
+    tmux new-window -n "$PROJECT_NAME" -c "$PROJECT_DIR"
+fi

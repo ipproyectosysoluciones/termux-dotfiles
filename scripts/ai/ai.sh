@@ -145,15 +145,9 @@ export MEMORY_CONTEXT
 
 memory_save "user" "$PROMPT"
 
-echo "[debug] after memory_save"
-sleep 2
-
 HYDRATED_PROMPT="$(
     build_context "$PROMPT"
 )"
-
-echo "[debug] after build_context"
-sleep 2
 
 export AI_PROJECT="$PROJECT_NAME"
 export AI_AGENT="$AGENT_MODE"
@@ -164,9 +158,6 @@ mirror_project \
     "$PROJECT_ROOT" \
     "$PROJECT_NAME"
 
-echo "[debug] after mirror_project"
-sleep 2
-
 ########################################
 # RUNTIME SESSION
 ########################################
@@ -176,9 +167,6 @@ SESSION_NAME="$(
 )"
 
 ensure_runtime_session "$SESSION_NAME"
-
-echo "[debug] reached tmux execution"
-sleep 2
 
 RUNTIME_ENV_FILE="$BASE_DIR/runtime/runtime.env"
 
@@ -202,11 +190,7 @@ if [[ "$ORCHESTRATION_MODE" == "true" ]]; then
 
     if [[ "$TMUX_MODE" == "nested" ]]; then
 
-        echo "[debug] entering nested orchestration"
-        echo "[debug] TMUX_MODE=$TMUX_MODE"
-        sleep 2
-
-	LOG_FILE="$HOME/.ai-logs/${AGENT_MODE}.log"
+        LOG_FILE="$HOME/.ai-logs/${AGENT_MODE}.log"
 
 	mkdir -p "$HOME/.ai-logs"
 
@@ -245,10 +229,6 @@ fi
 ########################################
 
 if [[ "$TMUX_MODE" == "nested" ]]; then
-
-    echo "[debug] entering nested orchestration"
-    echo "[debug] TMUX_MODE=$TMUX_MODE"
-    sleep 2
 
     ########################################
     # PROMPT FILE

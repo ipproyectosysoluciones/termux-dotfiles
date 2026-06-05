@@ -22,7 +22,7 @@ MENU_TOOL=$(detect_menu_tool)
 
 case "$MENU_TOOL" in
   "gum")
-    CHOICE=$(gum choose \
+    CHOICE=$(gum choose --height=8 \
       "NeoVim" \
       "OpenCode" \
       "Gentle AI" \

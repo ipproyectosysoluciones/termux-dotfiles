@@ -30,8 +30,7 @@ alias deb='proot-distro login debian --bind /data/data/com.termux/files/home:/te
 alias sshgithub='ssh-add -t 24h ~/.ssh/id_ed25519_github'
 alias sshmain='ssh-add -t 24h ~/.ssh/id_ed25519'
 
-# alias ai='~/dotfiles/scripts/ai/menu.sh'
-alias ai="$HOME/dotfiles/scripts/ai/ai.sh"
+alias ai="$HOME/dotfiles/scripts/ai/menu.sh"
 alias ai-menu="$HOME/dotfiles/scripts/ai/menu.sh"
 alias aip='~/dotfiles/scripts/ai/popup.sh'
 

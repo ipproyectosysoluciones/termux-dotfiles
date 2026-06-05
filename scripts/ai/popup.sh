@@ -8,8 +8,8 @@ if ! command -v tmux > /dev/null 2>&1 || [ -z "$TMUX" ]; then
 fi
 
 tmux display-popup \
-    -w 70% \
-    -h 70% \
+    -w 75% \
+    -h 80% \
     -E "$SCRIPT_DIR/menu.sh"
 
 
