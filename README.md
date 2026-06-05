@@ -18,7 +18,7 @@
   <strong>CI / Meta</strong><br>
   <img src="https://img.shields.io/badge/Tests-270%20passing-22c55e?style=for-the-badge&logo=github-actions&logoColor=white" alt="Tests 270 passing">
   <img src="https://img.shields.io/badge/Lint-shellcheck%20%7C%20bats-1f2937?style=for-the-badge&logo=github-actions&logoColor=white" alt="Lint CI">
-  <img src="https://img.shields.io/badge/Release-v1.0.0-6366f1?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.0.0">
+  <img src="https://img.shields.io/badge/Release-v1.1.0--dev-6366f1?style=for-the-badge&logo=github&logoColor=white" alt="Release v1.1.0-dev">
   <img src="https://img.shields.io/badge/License-MIT-facc15?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License MIT">
 </p>
 
@@ -147,6 +147,32 @@ dotfiles/
 ```bash
 curl -fsSL https://raw.githubusercontent.com/ipproyectosysoluciones/termux-dotfiles/main/scripts/install.sh | bash
 ```
+
+## Termux Package Install (v1.1+)
+
+For Termux users, install via package manager:
+
+```bash
+pkg install termux-dotfiles
+```
+
+This installs the dotfiles to `$PREFIX/share/termux-dotfiles` and creates symlinks in your `$HOME/.config/` directory.
+
+### Uninstall
+
+**Via package manager:**
+
+```bash
+pkg remove termux-dotfiles
+```
+
+**Via curl installer:**
+
+```bash
+rm -rf ~/dotfiles
+```
+
+---
 
 ## Manual Install
 

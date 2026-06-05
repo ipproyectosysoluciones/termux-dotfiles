@@ -85,7 +85,7 @@ termux-setup-storage
 Clone dotfiles repository:
 
 ```bash
-git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/dotfiles
+git clone https://github.com/ipproyectosysoluciones/termux-dotfiles.git ~/dotfiles
 ```
 
 Enter repository:
