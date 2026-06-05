@@ -58,7 +58,7 @@ Multi-provider AI orchestration with intent-based routing and automatic fallback
 **Launchers:**
 - `ai` — main tmux launcher menu
 - `aip` — popup overlay launcher
-- `PREFIX + m` — tmux keybinding
+- `PREFIX + A` — tmux popup keybinding
 
 **Docker:**
 - `ai-menu → Docker` — opens a Debian shell with Docker CLI (vía proot-distro)
@@ -206,9 +206,12 @@ The workstation currently includes:
 - Agent/subagent orchestration framework
 - Modular NeoVim architecture with LSP, Treesitter, DAP
 - Dynamic path detection for portable installation
-- Bats test suite (40+ tests covering workspace, docker, bootstrap, launchers)
+- Bats test suite (248+ tests covering workspace, docker, bootstrap, launchers, scaffolding)
 - SDD (Spec-Driven Development) workflow
 - Reusable automation scripts
+- PROJECTS_DIR integration — projects created in `~/Projects/` by default
+- Dual-stack scaffolding (`new-mean.sh` / `new-mern.sh`) via `ai-menu → New Project`
+- `sync-skills.sh --local` for direct deployment on remote devices
 
 ---
 

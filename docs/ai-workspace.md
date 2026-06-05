@@ -220,7 +220,9 @@ Each launcher follows this flow:
 
 1. verify session existence
 2. create session if missing
-3. attach or switch-client
+3. attach or new-window (inside tmux) / switch-client (standalone)
+
+When a launcher is invoked inside tmux (from the menu), it opens a **new tmux window** so the menu stays visible. When invoked standalone, it creates and attaches to a new session.
 
 This prevents duplicated sessions and nested tmux problems.
 
@@ -237,8 +239,9 @@ scripts/ai/utils.sh
 Main helpers:
 
 - `session_exists`
-- `create_session`
-- `attach_or_switch`
+- `create_session` (legacy)
+- `attach_or_switch` (legacy)
+- `launch_in_window` — preferred: opens new-window inside tmux, new-session + attach standalone
 
 ---
 

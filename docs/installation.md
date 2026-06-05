@@ -85,7 +85,7 @@ termux-setup-storage
 Clone dotfiles repository:
 
 ```bash
-git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/Termux-AI-Astaroth
+git clone https://github.com/bladimir/Termux-AI-Astaroth.git ~/dotfiles
 ```
 
 Enter repository:
@@ -272,7 +272,7 @@ This repository includes AI integration tools for development assistance.
 To install AI tools and provider configurations:
 
 ```bash
-bash ~/Termux-AI-Astaroth/scripts/debian/bootstrap/ai.sh
+bash ~/dotfiles/scripts/debian/bootstrap/ai.sh
 ```
 
 This script installs:
