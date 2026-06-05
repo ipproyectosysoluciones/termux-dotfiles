@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-package:
@@ -18,25 +18,23 @@ jobs:
         id: version
         run: echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
 
-      - name: Prepare debbuild
+      - name: Build .deb
         run: |
           # Copy debbuild staging tree
           cp -r debbuild /tmp/debbuild
           # Substitute __VERSION__ in control
           sed -i "s/__VERSION__/${{ steps.version.outputs.VERSION }}/g" \
             /tmp/debbuild/DEBIAN/control
-
-      - name: Build .deb
-        run: |
-          cd /tmp/debbuild
-          # Build using dpkg-deb
-          dpkg-deb --build data 2>/dev/null || dpkg-deb --build data
-          # Rename to include version
-          mv data.deb termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
+          # Build .deb from the debbuild directory
+          # dpkg-deb --build creates /tmp/debbuild.deb
+          dpkg-deb --build /tmp/debbuild
+          # Rename with version info
+          mv /tmp/debbuild.deb \
+            /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: /tmp/debbuild/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
+          files: /tmp/termux-dotfiles_${{ steps.version.outputs.VERSION }}_all.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
