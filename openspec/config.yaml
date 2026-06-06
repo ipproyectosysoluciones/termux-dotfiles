@@ -4,7 +4,10 @@ context: >
   Portable AI Developer Workstation for mobile-first development on Termux/Android.
   Modular architecture with isolated subsystems (shell, tmux, nvim, AI workflows).
   ~98% Bash scripts with gum-powered tmux popup orchestration.
-  Conventional commits required. Changes flow: Issue -> PR -> Close.
+  MIT License. Versioned releases from main (stable branch).
+  Distribution via cURL installer (primary), Termux packaging (v1.1), Homebrew (v1.2).
+  Repair/recovery mechanism via scripts/repair.sh.
+  Conventional commits required. Changes flow: dev -> main -> tag -> release.
 
 strict_tdd: true
 testing:
@@ -16,7 +19,7 @@ testing:
     e2e: true
   coverage: false
   quality_tools:
-    linter: false
+    linter: shellcheck
     type_checker: false
     formatter: false
 
