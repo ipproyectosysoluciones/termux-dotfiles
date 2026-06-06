@@ -14,10 +14,10 @@ class TermuxDotfiles < Formula
   depends_on "git" => :run
 
   def install
-    # Stage all repo content under libexec prefix
+    # prefix.install MOVES files (FileUtils.mv), so the source file is gone
+    # after the move. Install the script from prefix/ where it now lives.
     prefix.install Dir["*"]
-    # Install setup script to bin/ (sets 0755 automatically)
-    bin.install "scripts/termux-dotfiles-setup"
+    bin.install prefix/"scripts/termux-dotfiles-setup"
   end
 
   def post_install
