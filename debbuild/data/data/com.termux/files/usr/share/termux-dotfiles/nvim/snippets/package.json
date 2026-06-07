@@ -1,0 +1,29 @@
+{
+  "name": "mean-mern-snippets",
+  "displayName": "MEAN / MERN Stack Snippets",
+  "description": "Per-stack VSCode-format snippet packs for MEAN/MERN development (React, Angular, Express, Mongoose). Loaded via LuaSnip's from_vscode loader in nvim/lua/plugins/snippets/init.lua.",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "typescriptreact",
+        "path": "./react/react.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./angular/angular.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./express/express.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./mongoose/mongoose.json"
+      }
+    ]
+  }
+}

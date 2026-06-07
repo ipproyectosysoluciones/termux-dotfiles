@@ -10,4 +10,5 @@ return {
   { import = "plugins.dap" },
   { import = "plugins.ai" },
   { import = "plugins.db" },
+  { import = "plugins.snippets" },
 }

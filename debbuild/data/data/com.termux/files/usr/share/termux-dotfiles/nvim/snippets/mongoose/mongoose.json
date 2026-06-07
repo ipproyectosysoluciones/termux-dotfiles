@@ -1,0 +1,30 @@
+{
+  "Mongoose Schema": {
+    "prefix": "ms",
+    "body": [
+      "import { Schema, model, Document } from 'mongoose';",
+      "",
+      "export interface I${1:ModelName} extends Document {",
+      "  $2",
+      "}",
+      "",
+      "const ${1:ModelName}Schema = new Schema<I${1:ModelName}>({",
+      "  $3",
+      "}, {",
+      "  timestamps: true,",
+      "});",
+      "",
+      "export const ${1:ModelName} = model<I${1:ModelName}>('${1:ModelName}', ${1:ModelName}Schema);"
+    ],
+    "description": "Mongoose Schema with TypeScript interface and timestamps"
+  },
+  "Mongoose Subdocument": {
+    "prefix": "msd",
+    "body": [
+      "const ${1:SubDocName}Schema = new Schema({",
+      "  $2",
+      "}, { _id: false });"
+    ],
+    "description": "Mongoose subdocument schema (no _id)"
+  }
+}
