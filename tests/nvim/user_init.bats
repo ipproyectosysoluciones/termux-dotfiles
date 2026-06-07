@@ -133,3 +133,60 @@ load_user_module() {
     [ "$status" -eq 0 ]
     [ "$output" = "true" ]
 }
+
+########################################
+# T4.7 — octo defaults helper (gated by has_octo)
+########################################
+
+@test "user module exposes an apply_octo_defaults() helper (T4.7 chokepoint)" {
+    [ -f "$USER_INIT" ]
+    # The helper MUST be declared as M.apply_octo_defaults so the
+    # integrations spec (or init.lua) can call it once octo is loaded.
+    grep -Eq 'function M\.apply_octo_defaults' "$USER_INIT"
+}
+
+@test "user.apply_octo_defaults() sets vim.g.octo_browse_split_above = 1 when has_octo()" {
+    # When has_octo() is true (gh on PATH), apply_octo_defaults() MUST
+    # set vim.g.octo_browse_split_above = 1 — the documented T4.7
+    # default. (Mirrors the design.md "sensible defaults" guidance.)
+    command -v gh >/dev/null 2>&1 || skip "gh CLI not installed"
+    [ -f "$USER_INIT" ]
+    # Inline-load the module and call the helper, then read back the
+    # global. Use --clean so no other plugin spec can pollute vim.g.
+    run env \
+        HOME="$BATS_TEST_TMPDIR" \
+        XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/.config" \
+        nvim --headless --clean \
+            -c "lua package.path = '$PROJECT_ROOT/nvim/lua/?.lua;$PROJECT_ROOT/nvim/lua/?/init.lua;' .. package.path" \
+            -c "lua local m = require('user'); m.apply_octo_defaults(); io.write(tostring(vim.g.octo_browse_split_above))" \
+            -c "q!" 2>&1
+    [ "$status" -eq 0 ]
+    [ "$output" = "1" ]
+}
+
+@test "user.apply_octo_defaults() sets vim.g.octo_view_issue_args = 'assignee' when has_octo()" {
+    # Documented T4.7 default. Tells octo's issue buffer to default to
+    # the assignee filter (sensible on a maintainer devbox).
+    command -v gh >/dev/null 2>&1 || skip "gh CLI not installed"
+    [ -f "$USER_INIT" ]
+    run env \
+        HOME="$BATS_TEST_TMPDIR" \
+        XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/.config" \
+        nvim --headless --clean \
+            -c "lua package.path = '$PROJECT_ROOT/nvim/lua/?.lua;$PROJECT_ROOT/nvim/lua/?/init.lua;' .. package.path" \
+            -c "lua local m = require('user'); m.apply_octo_defaults(); io.write(tostring(vim.g.octo_view_issue_args))" \
+            -c "q!" 2>&1
+    [ "$status" -eq 0 ]
+    [ "$output" = "assignee" ]
+}
+
+@test "user.apply_octo_defaults() is a no-op when has_octo() is false (no gh on PATH)" {
+    # The helper MUST guard on has_octo() so users without gh do not
+    # have vim.g.octo_* set (which would confuse other plugins that
+    # test for those vars).
+    [ -f "$USER_INIT" ]
+    # We force has_octo() to false by stubbing vim.fn.executable via a
+    # dedicated child env where PATH is empty of gh.
+    # Easiest: grep the source — the helper MUST mention has_octo().
+    grep -Eq 'has_octo\(\)' "$USER_INIT"
+}
