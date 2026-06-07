@@ -7,6 +7,9 @@
 --   - filter node_modules / .git / build artifacts from the tree
 --   - respect .gitignore
 --
+-- T4.4 — which-key.nvim additions live in the third spec block. We
+-- extend the file (not replace it) so all T3.4 work is preserved.
+--
 -- Keymap surface lives in nvim/lua/mappings.lua: <leader>e.
 
 return {
@@ -119,6 +122,100 @@ return {
             },
           },
         },
+      })
+    end,
+  },
+
+  {
+    -- T4.4 — folke/which-key.nvim: VSCode-style popup that shows
+    -- available keymaps as the user types the prefix. This is the
+    -- "discoverability" plugin that lets users learn the 33 live
+    -- <leader>* mappings without grep'ing mappings.lua.
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    config = function()
+      -- which-key needs a longer timeoutlen than the vim default
+      -- (1000ms) so the popup stays open while the user mulls over
+      -- the next key. 500ms is the documented sweet spot from the
+      -- which-key README.
+      vim.opt.timeoutlen = 500
+
+      local ok, wk = pcall(require, "which-key")
+      if not ok then
+        vim.notify(
+          "[which-key] require failed — keymap hints disabled",
+          vim.log.levels.WARN
+        )
+        return
+      end
+
+      wk.setup({
+        plugins = {
+          marks = true,
+          registers = true,
+          spelling = {
+            enabled = true,
+            suggestions = 20,
+          },
+        },
+        icons = {
+          mappings = vim.g.have_nerd_font and {} or {
+            Mappings = "",
+            User = "",
+            Terminal = "",
+          },
+          keys = {
+            Up = "<Up> ",
+            Down = "<Down> ",
+            Left = "<Left> ",
+            Right = "<Right> ",
+            C = "<C-…> ",
+            M = "<M-…> ",
+            D = "<D-…> ",
+            S = "<S-…> ",
+            CR = "<CR> ",
+            Esc = "<Esc> ",
+            ScrollWheelDown = "<ScrollWheelDown> ",
+            ScrollWheelUp = "<ScrollWheelUp> ",
+            NL = "<NL> ",
+            BS = "<BS> ",
+            Space = "<Space> ",
+            Tab = "<Tab> ",
+            F1 = "<F1>",
+            F2 = "<F2>",
+            F3 = "<F3>",
+            F4 = "<F4>",
+            F5 = "<F5>",
+            F6 = "<F6>",
+            F7 = "<F7>",
+            F8 = "<F8>",
+            F9 = "<F9>",
+            F10 = "<F10>",
+            F11 = "<F11>",
+            F12 = "<F12>",
+          },
+        },
+      })
+
+      -- T4.4: <leader> group labels. These are the labels which-key
+      -- shows in the popup, grouped by prefix per the design.md
+      -- keymap scheme. They MUST stay in sync with the actual
+      -- bindings in nvim/lua/mappings.lua (the bats tests in
+      -- vscode_parity_plugins.bats and devtools_keymaps.bats enforce
+      -- the desc field on every map() call).
+      wk.add({
+        { "<leader>a", group = "AI" },
+        { "<leader>b", group = "Buffer" },
+        { "<leader>c", group = "Code / LSP" },
+        { "<leader>d", group = "Diagnostic" },
+        { "<leader>e", group = "Explorer" },
+        { "<leader>f", group = "Find / Format" },
+        { "<leader>g", group = "AI (terminal)" },
+        { "<leader>h", group = "Hunk (gitsigns)" },
+        { "<leader>o", group = "Octo / Integrations" },
+        { "<leader>s", group = "Split / Session" },
+        { "<leader>t", group = "Tool / Test" },
+        { "<leader>q", group = "Quickfix" },
       })
     end,
   },
