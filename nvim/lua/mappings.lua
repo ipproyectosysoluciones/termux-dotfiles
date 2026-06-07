@@ -107,3 +107,61 @@ map("n", "<leader>tw", ":set wrap!<CR>", { desc = "Toggle wrap" })
 
 -- Toggle números relativos
 map("n", "<leader>tn", ":set relativenumber!<CR>", { desc = "Toggle números relativos" })
+
+-- ============================================
+-- IA y asistentes
+-- ============================================
+
+-- T2.3 — CodeCompanion in-editor (cmd-triggered; lazy-loaded)
+
+map("n", "<leader>aa", "<cmd>CodeCompanionChat<CR>", { desc = "AI: CodeCompanion chat" })
+map("v", "<leader>aa", "<cmd>CodeCompanionChat<CR>", { desc = "AI: CodeCompanion chat (visual)" })
+map("n", "<leader>ai", "<cmd>CodeCompanion<CR>", { desc = "AI: CodeCompanion inline" })
+map("v", "<leader>ai", "<cmd>CodeCompanion<CR>", { desc = "AI: CodeCompanion inline (visual)" })
+map("n", "<leader>at", "<cmd>CodeCompanionChat -t<CR>", { desc = "AI: CodeCompanion toggle chat" })
+map("n", "<leader>am", "<cmd>CodeCompanionActions<CR>", { desc = "AI: CodeCompanion actions" })
+map("n", "<leader>as", "<cmd>CodeCompanionChat -s<CR>", { desc = "AI: CodeCompanion switch adapter" })
+
+-- T2.4 / T2.5 — Terminal-spawn CLI splits reusing scripts/ai/providers/*.sh
+--
+-- Each binding opens a horizontal split and runs the named provider
+-- script via vim.fn.termopen. Env vars follow the design.md contract:
+--   AI_WORKSPACE = cwd
+--   AI_PROJECT   = AI_PROJECT or "default"
+--   AI_AGENT     = AI_AGENT   or "generic-agent"
+--   AI_SKILL     = AI_SKILL   or "generic-skill"
+--
+-- Mistral lives at <leader>gm (NOT <leader>am — that is CodeCompanion's
+-- actions). The T1.2 collision is resolved here per design.md.
+
+local DOTFILES = vim.env.DOTFILES or vim.fn.expand("~/dotfiles")
+
+local function ai_split(provider, script_rel)
+  return function()
+    local script = DOTFILES .. "/scripts/ai/providers/" .. script_rel
+    vim.cmd("split")
+    local job = vim.fn.termopen({
+      "bash",
+      vim.fn.fnamemodify(script, ":p"),
+    }, {
+      env = vim.tbl_extend("force", vim.fn.environ(), {
+        AI_WORKSPACE = vim.fn.getcwd(),
+        AI_PROJECT = vim.env.AI_PROJECT or "default",
+        AI_AGENT = vim.env.AI_AGENT or "generic-agent",
+        AI_SKILL = vim.env.AI_SKILL or "generic-skill",
+      }),
+    })
+    if job == 0 then
+      vim.notify(
+        "[ai] " .. provider .. " CLI missing — split opened but shell returned 0",
+        vim.log.levels.WARN
+      )
+    end
+  end
+end
+
+map("n", "<leader>ag", ai_split("gemini", "gemini.sh"), { desc = "AI: gemini CLI split" })
+map("n", "<leader>ac", ai_split("claude", "claude.sh"), { desc = "AI: claude CLI split" })
+map("n", "<leader>ao", ai_split("opencode", "opencode.sh"), { desc = "AI: opencode CLI split" })
+map("n", "<leader>gm", ai_split("mistral", "mistral.sh"), { desc = "AI: mistral CLI split" })
+map("n", "<leader>gg", ai_split("gentle", "gentle.sh"), { desc = "AI: gentle CLI split" })
