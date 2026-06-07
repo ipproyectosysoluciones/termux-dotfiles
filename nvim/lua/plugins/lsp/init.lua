@@ -34,6 +34,31 @@ return {
   },
 
   {
+    -- T4.5 — folke/lazydev.nvim: extends lua_ls with full
+    -- autocomplete for the lazy.nvim runtime (require("lazy.core.*"),
+    -- Lazy spec tables, plugin manager APIs). Without this, the
+    -- `lua_ls` server gives "undefined global" errors on every
+    -- plugin spec, which drowns out real lint signals. Lazydev
+    -- works by:
+    --   1. registering a custom :lua LSP path mapping so lua_ls
+    --      treats `lazy.core.*` etc. as resolvable;
+    --   2. exposing a `Lib` global that completes to
+    --      `require("lazy.core.util")` so plugin specs can use
+    --      the documented helper.
+    "folke/lazydev.nvim",
+    ft = { "lua" },
+    opts = {
+      library = {
+        -- Load path mappings for the lazy.nvim runtime + the project's
+        -- own plugin specs. The `nvim/lua/plugins` path is the single
+        -- source of truth for our plugin surface.
+        { path = "lazy.nvim", modules = { "lazy" } },
+        { path = "nvim/lua/plugins", modules = {} },
+      },
+    },
+  },
+
+  {
     "neovim/nvim-lspconfig",
 
     config = function()
@@ -75,6 +100,12 @@ return {
           capabilities = capabilities,
         })
       end
+
+      -- T4.5 — bind `Lib` to `require("lazy.core.util")` in the
+      -- global scope so plugin specs can do `Lib.lazy_eq(...)` etc.
+      -- with full completion. lazydev.nvim's :lua LSP path mapping
+      -- makes this resolve at edit time.
+      _G.Lib = require("lazy.core.util")
 
       vim.keymap.set("n", "gd", vim.lsp.buf.definition)
       vim.keymap.set("n", "K", vim.lsp.buf.hover)
