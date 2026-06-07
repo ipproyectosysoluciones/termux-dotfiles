@@ -179,3 +179,29 @@ map("n", "<leader>gg", ai_split("gentle", "gentle.sh"), { desc = "AI: gentle CLI
 
 -- T3.5: vim-dadbod — database UI (Mongo, Postgres, MySQL, SQLite, etc.)
 map("n", "<leader>db", "<cmd>DBUIToggle<CR>", { desc = "Database UI (vim-dadbod)" })
+
+-- ============================================
+-- Integraciones de servicios (Phase 4)
+-- ============================================
+
+-- T4.1: octo.nvim — GitHub PR / issue / review surface.
+-- Lazy-loaded on `:Octo`, gated by require("user").has_octo().
+-- If gh is not on PATH, octo.nvim is disabled and the keymaps
+-- would E492 — guard each binding with a runtime has_octo() check
+-- that prints a friendly notify instead of an error.
+local function octo_guard(subcmd)
+  return function()
+    if not require("user").has_octo() then
+      vim.notify(
+        "[octo] gh CLI not on PATH — install gh or set PATH",
+        vim.log.levels.WARN
+      )
+      return
+    end
+    vim.cmd("Octo " .. subcmd)
+  end
+end
+
+map("n", "<leader>op", octo_guard("pr list"), { desc = "Octo: PR list" })
+map("n", "<leader>oi", octo_guard("issue list"), { desc = "Octo: issue list" })
+map("n", "<leader>or", octo_guard("review start"), { desc = "Octo: review start" })

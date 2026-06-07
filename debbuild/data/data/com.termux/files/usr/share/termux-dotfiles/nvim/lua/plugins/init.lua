@@ -11,4 +11,5 @@ return {
   { import = "plugins.ai" },
   { import = "plugins.db" },
   { import = "plugins.snippets" },
+  { import = "plugins.integrations" },
 }
