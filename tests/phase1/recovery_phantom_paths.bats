@@ -11,7 +11,7 @@ setup() {
     local script_paths=(
         "scripts/install.sh"
         "scripts/core/symlinks.sh"
-        "scripts/nvim/plugins.sh"
+        "scripts/nvim/zsh-plugins.sh"
     )
 
     for script_path in "${script_paths[@]}"; do

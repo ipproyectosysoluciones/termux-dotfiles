@@ -301,7 +301,7 @@ Reinstalar symlinks
 
 Reinstalar plugins
 
-~/dotfiles/scripts/nvim/plugins.sh
+~/dotfiles/scripts/nvim/zsh-plugins.sh
 
 
 ---

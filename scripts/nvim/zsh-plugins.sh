@@ -1,5 +1,15 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+# zsh-plugins.sh — installs ZSH shell plugins (powerlevel10k, autosuggestions,
+# syntax-highlighting, fzf-tab, defer, completions) into ~/.zsh-plugins.
+#
+# NOTE: This script is named `zsh-plugins.sh` (not `plugins.sh`) because it
+# installs ZSH plugins, NOT Neovim plugins. Neovim plugins are managed
+# entirely by lazy.nvim — see nvim/lua/plugins/* and :Lazy sync inside Neovim.
+# Previously this file lived at `scripts/nvim/plugins.sh`; the rename was
+# applied in PR #1 of the Neovim-review-update SDD change so the path
+# matches the actual behavior.
+
 echo "================================="
 echo "Installing ZSH shell plugins..."
 echo "================================="

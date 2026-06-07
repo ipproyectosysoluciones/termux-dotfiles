@@ -51,7 +51,7 @@ done
 # Dry-run mode
 if [[ "$DRY_RUN" == "true" ]]; then
   echo "Would install: dotfiles to $HOME/dotfiles"
-  echo "Would run: core/packages.sh, core/symlinks.sh, nvim/plugins.sh, tmux/tmux_plugins.sh"
+  echo "Would run: core/packages.sh, core/symlinks.sh, nvim/zsh-plugins.sh, tmux/tmux_plugins.sh"
   echo "Would run: core/update.sh"
   echo "Dry-run complete. No changes made."
   exit 0
@@ -102,7 +102,7 @@ cd "$HOME/dotfiles"
 
 bash "$BASE_DIR/core/packages.sh"
 bash "$BASE_DIR/core/symlinks.sh"
-bash "$BASE_DIR/nvim/plugins.sh"
+bash "$BASE_DIR/nvim/zsh-plugins.sh"
 bash "$BASE_DIR/tmux/tmux_plugins.sh"
 
 log "Installation completed."

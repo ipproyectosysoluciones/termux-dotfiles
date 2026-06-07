@@ -43,7 +43,7 @@ Location: `nvim/lua/config/plugins.lua`
 Run the plugin installation script:
 
 ```bash
-bash scripts/nvim/plugins.sh
+bash scripts/nvim/zsh-plugins.sh
 ```
 
 This script installs plugins to `~/.zsh-plugins` directory and links them to Neovim's plugin directory.
@@ -88,13 +88,13 @@ Run the main install script:
 bash scripts/install.sh
 ```
 
-This calls `scripts/nvim/plugins.sh` which installs all configured plugins.
+This calls `scripts/nvim/zsh-plugins.sh` which installs all configured plugins.
 
 ### Manual
 
 ```bash
 # Clone plugins
-bash scripts/nvim/plugins.sh
+bash scripts/nvim/zsh-plugins.sh
 
 # Open Neovim (plugins auto-install via lazy)
 nvim
