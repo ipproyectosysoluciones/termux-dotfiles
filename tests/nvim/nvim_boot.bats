@@ -56,11 +56,17 @@ setup() {
 }
 
 ########################################
-# Test 2 — no CodeCompanion keymap is bound
+# Test 2 — CodeCompanion keymaps ARE bound (T2.3 acceptance)
+#
+# PR #1's T1.2 (cleanup) had this test as a NEGATIVE assertion: after
+# removing the dead keymaps, NO <leader>a* should map to CodeCompanion.
+# After PR #2's T2.3, the same keymaps are INTENTIONALLY bound to live
+# :CodeCompanion* commands. The full positive coverage lives in
+# tests/nvim/ai_keymaps.bats (T6.3 stub); this test asserts the boot
+# path does not regress by showing at least one CodeCompanion binding.
 ########################################
 
-@test "CodeCompanion keymaps (<leader>aa/ai/at/am/as) are NOT bound" {
-    # Query every mode+key that currently maps to a CodeCompanion command.
+@test "CodeCompanion keymaps (<leader>aa/ai/at/am/as) are bound (T2.3 acceptance)" {
     run env -i \
         PATH="$PATH" \
         HOME="$BATS_TEST_TMPDIR" \
@@ -81,8 +87,8 @@ setup() {
             -c "vmap <leader>ai" \
             -c "q!" 2>&1
 
-    if [[ "$output" =~ CodeCompanion ]]; then
-        echo "Dead CodeCompanion keymap still bound:"
+    if [[ ! "$output" =~ CodeCompanion ]]; then
+        echo "Expected at least one CodeCompanion keymap after T2.3; got:"
         echo "$output"
         return 1
     fi
