@@ -1,0 +1,34 @@
+{
+  "Express Router": {
+    "prefix": "ert",
+    "body": [
+      "import { Router, Request, Response } from 'express';",
+      "",
+      "const router = Router();",
+      "",
+      "router.get('/', async (req: Request, res: Response) => {",
+      "  try {",
+      "    $0",
+      "    res.json({ ok: true });",
+      "  } catch (err) {",
+      "    res.status(500).json({ error: (err as Error).message });",
+      "  }",
+      "});",
+      "",
+      "export default router;"
+    ],
+    "description": "Express Router with typed Request/Response"
+  },
+  "Express Middleware": {
+    "prefix": "emw",
+    "body": [
+      "import { Request, Response, NextFunction } from 'express';",
+      "",
+      "export const ${1:middlewareName} = (req: Request, res: Response, next: NextFunction) => {",
+      "  $0",
+      "  next();",
+      "};"
+    ],
+    "description": "Express middleware (typed)"
+  }
+}

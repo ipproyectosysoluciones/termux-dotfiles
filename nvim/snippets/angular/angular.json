@@ -1,0 +1,33 @@
+{
+  "Angular Standalone Component": {
+    "prefix": "asc",
+    "body": [
+      "import { Component, signal } from '@angular/core';",
+      "",
+      "@Component({",
+      "  selector: 'app-${1:component-name}',",
+      "  standalone: true,",
+      "  templateUrl: './${1:component-name}.component.html',",
+      "  styleUrl: './${1:component-name}.component.css'",
+      "})",
+      "export class ${2:ComponentName}Component {",
+      "  $0",
+      "}"
+    ],
+    "description": "Angular standalone component (Angular 17+)"
+  },
+  "Angular Service": {
+    "prefix": "asvc",
+    "body": [
+      "import { Injectable } from '@angular/core';",
+      "",
+      "@Injectable({",
+      "  providedIn: 'root'",
+      "})",
+      "export class ${1:ServiceName}Service {",
+      "  $0",
+      "}"
+    ],
+    "description": "Angular Injectable service (root-provided)"
+  }
+}
