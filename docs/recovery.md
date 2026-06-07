@@ -210,7 +210,7 @@ zsh-completions
 
 Instalar plugins automáticamente
 
-bash scripts/nvim/plugins.sh
+bash scripts/nvim/zsh-plugins.sh
 
 
 ---
