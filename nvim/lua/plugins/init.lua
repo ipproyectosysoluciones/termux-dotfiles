@@ -9,4 +9,5 @@ return {
   { import = "plugins.editor" },
   { import = "plugins.dap" },
   { import = "plugins.ai" },
+  { import = "plugins.db" },
 }

@@ -172,3 +172,10 @@ map("n", "<leader>ac", ai_split("claude", "claude.sh"), { desc = "AI: claude CLI
 map("n", "<leader>ao", ai_split("opencode", "opencode.sh"), { desc = "AI: opencode CLI split" })
 map("n", "<leader>gm", ai_split("mistral", "mistral.sh"), { desc = "AI: mistral CLI split" })
 map("n", "<leader>gg", ai_split("gentle", "gentle.sh"), { desc = "AI: gentle CLI split" })
+
+-- ============================================
+-- Devtools MEAN/MERN (Phase 3)
+-- ============================================
+
+-- T3.5: vim-dadbod — database UI (Mongo, Postgres, MySQL, SQLite, etc.)
+map("n", "<leader>db", "<cmd>DBUIToggle<CR>", { desc = "Database UI (vim-dadbod)" })
