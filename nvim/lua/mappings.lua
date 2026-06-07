@@ -80,7 +80,14 @@ map("n", "[d", vim.diagnostic.goto_prev, { desc = "Diagnóstico anterior" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Diagnóstico siguiente" })
 
 -- Mostrar diagnósticos en floating window
-map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Mostrar diagnóstico" })
+-- T3.4: <leader>e moved to NvimTreeToggle (file tree is invoked 5-10x
+-- more often than the diagnostic float). Diagnostic float moves to
+-- <leader>de (fits the existing <leader>d* diagnostic prefix group).
+map("n", "<leader>de", vim.diagnostic.open_float, { desc = "Mostrar diagnóstico" })
+map("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file tree (nvim-tree)" })
+
+-- T3.3: toggleterm — bottom split with $SHELL access
+map("n", "<leader>tt", "<cmd>ToggleTerm<CR>", { desc = "Toggle terminal" })
 
 -- Mostrar línea de diagnósticos
 map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Lista de diagnósticos" })
