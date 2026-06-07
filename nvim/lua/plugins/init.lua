@@ -12,4 +12,5 @@ return {
   { import = "plugins.db" },
   { import = "plugins.snippets" },
   { import = "plugins.integrations" },
+  { import = "plugins.session" },
 }
