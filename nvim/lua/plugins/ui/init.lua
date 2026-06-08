@@ -104,7 +104,6 @@ return {
         actions = {
           open_file = {
             quit_on_open = false,
-            preview = false,
             resize_window = true,
             window_picker = {
               enable = true,

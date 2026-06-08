@@ -138,3 +138,4 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     -- vim.cmd([[%s/\s\+$//e]])
   end,
 })
+vim.opt.sessionoptions:append("localoptions")
