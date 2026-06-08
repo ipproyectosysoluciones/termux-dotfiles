@@ -34,7 +34,9 @@ return {
     event = "VeryLazy",
     dependencies = "nvim-treesitter/nvim-treesitter",
     config = function()
-      require("nvim-treesitter.configs").setup {
+      -- FIX: nvim-treesitter renamed configs.lua → config.lua in recent versions.
+      -- See: https://github.com/nvim-treesitter/nvim-treesitter/issues/XXXX
+      require("nvim-treesitter.config").setup {
         textobjects = {
           select = {
             enable = true,

@@ -49,7 +49,11 @@ return {
     },
 
     config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      -- FIX: nvim-treesitter renamed configs.lua → config.lua in recent versions.
+      -- The module path changed from nvim-treesitter.configs to nvim-treesitter.config.
+      -- See: https://github.com/nvim-treesitter/nvim-treesitter/issues/XXXX
+      -- Symptom: "module 'nvim-treesitter.configs' not found" on Neovim startup.
+      require("nvim-treesitter.config").setup(opts)
     end,
   },
 }
