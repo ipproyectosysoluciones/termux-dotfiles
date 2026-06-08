@@ -68,8 +68,26 @@ o.sidescrolloff = 8 -- Columnas de margen al hacer scroll lateral
 o.splitright = true -- Abrir splits verticales a la derecha
 o.splitbelow = true -- Abrir splits horizontales abajo
 
--- Portapapeles
-o.clipboard = "unnamedplus" -- Usar el portapapeles del sistema
+-- ============================================
+-- Portapapeles — Termux:API health-check
+-- ============================================
+
+-- T1.4: Usar portapapeles del sistema si termux-clipboard-set existe,
+-- otherwise fallback a unnamed (interno). Notificar una sola vez.
+if vim.fn.executable("termux-clipboard-set") == 1 then
+  o.clipboard = "unnamedplus"
+else
+  o.clipboard = "unnamed"
+  vim.api.nvim_create_autocmd("UIEnter", {
+    once = true,
+    callback = function()
+      vim.notify(
+        "[nvim] termux-clipboard-set no encontrado — usando portapapeles interno (unnamed)",
+        vim.log.levels.WARN
+      )
+    end,
+  })
+end
 
 -- Persistencia de undo
 o.undofile = true -- Guardar undo en archivo

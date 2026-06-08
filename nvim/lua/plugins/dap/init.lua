@@ -12,12 +12,24 @@ return {
 
     config = function()
       local dap = require("dap")
+      local data_path = vim.fn.stdpath("data")
 
-      -- Node.js / TypeScript (vía node)
+      -- T3.6: Resolver path del adaptador via Mason registry (con fallback)
+      -- Si mason-registry conoce node-debug2-adapter, usar su path instalado.
+      -- Si no (registry no disponible o paquete no instalado), fallback al path tradicional.
+      local node_debug_path
+      local ok, mason_registry = pcall(require, "mason-registry")
+      if ok and pcall(function() return mason_registry:is_installed("node-debug2-adapter") end) then
+        local pkg = mason_registry.get_package("node-debug2-adapter")
+        node_debug_path = pkg:get_install_path() .. "/out/src/nodeDebug.js"
+      else
+        node_debug_path = data_path .. "/mason/packages/node-debug2-adapter/out/src/nodeDebug.js"
+      end
+
       dap.adapters.node2 = {
         type = "executable",
         command = "node",
-        args = { vim.fn.stdpath("data") .. "/mason/packages/node-debug2-adapter/out/src/nodeDebug.js" },
+        args = { node_debug_path },
       }
 
       dap.configurations.javascript = {
