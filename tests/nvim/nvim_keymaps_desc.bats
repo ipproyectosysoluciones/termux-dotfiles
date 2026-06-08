@@ -3,7 +3,7 @@
 # T4.4 — Which-key desc coverage audit
 # Every `<leader>*` keymap in mappings.lua MUST have a `desc` field in its opts table.
 
-PROJECT_ROOT="/media/bladimir/Datos1/Datos/proyectos/work/Termux-AI-Astaroth"
+PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 MAPPINGS_FILE="$PROJECT_ROOT/nvim/lua/mappings.lua"
 
 @test "all <leader> keymap calls have a desc field" {
