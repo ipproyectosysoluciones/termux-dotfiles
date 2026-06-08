@@ -9,39 +9,28 @@ MAPPINGS_FILE="$PROJECT_ROOT/nvim/lua/mappings.lua"
 @test "all <leader> keymap calls have a desc field" {
   [ -f "$MAPPINGS_FILE" ]
 
-  # Find all map() calls with <leader> and check each has desc.
-  # Uses awk to parse multi-line map blocks without perl.
-  local errors
-  errors=$(awk '
-    /map\s*\(/ {
-      block = $0
-      in_block = 1
-    }
-    in_block {
-      block = block $0
-      open = (open ? open : 0) + gsub(/\{/, "{") - gsub(/\}/, "}")
-      if (open == 0 && block ~ /map\s*\(/) {
-        if (block ~ /<leader>/ && block !~ /desc\s*=/) {
-          # Extract the leader key
-          if (match(block, /<leader>([^"]*)"/, arr)) {
-            failures = failures "MISSING desc: <leader>" arr[1] "\n"
-          } else {
-            failures = failures "MISSING desc: <leader>? (parse error)\n"
-          }
-        }
-        block = ""
-        in_block = 0
-        open = 0
-      }
-    }
-    END {
-      if (failures) {
-        printf "%s", failures
-        exit 1
-      }
-      exit 0
-    }
-  ' "$MAPPINGS_FILE" 2>&1) || {
+  # For each <leader> key, verify there's a desc in the same OR the next 2 lines.
+  local line_num=0
+  local errors=""
+  
+  while IFS= read -r line; do
+    line_num=$((line_num + 1))
+    if echo "$line" | grep -q 'map\s*\(\s*"n"\s*,\s*"<leader>'; then
+      local block="$line"
+      for i in 1 2; do
+        if IFS= read -r next; then
+          line_num=$((line_num + 1))
+          block="$block"$'\n'"$next"
+        fi
+      done
+      if ! echo "$block" | grep -q 'desc\s*='; then
+        local key=$(echo "$line" | grep -o '<leader>[^"]*' | head -1)
+        errors="$errors"$'\n'"MISSING desc: $key at line $((line_num - 1))"
+      fi
+    fi
+  done < "$MAPPINGS_FILE"
+  
+  [ -z "$errors" ] || {
     echo "$errors" >&2
     return 1
   }
