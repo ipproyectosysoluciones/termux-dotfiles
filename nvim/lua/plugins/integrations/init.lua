@@ -30,8 +30,9 @@ return {
       return require("user").has_octo()
     end,
     config = function()
-      -- T4.7 adds require("user").apply_octo_defaults() here.
-      -- Kept empty in T4.1 to keep the T4.1 commit autonomous.
+      -- T4.7: Apply sensible octo.nvim defaults (browse split direction,
+      -- issue view args, comment threading, I am action prompt).
+      require("user").setup_octo_defaults()
     end,
   },
 }
