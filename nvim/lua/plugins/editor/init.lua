@@ -28,4 +28,30 @@ return {
       vim.keymap.set("n", "<leader>fh", builtin.help_tags)
     end,
   },
+  -- T4.6: nvim-treesitter-textobjects (VSCode-style select textobjects)
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    event = "VeryLazy",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require("nvim-treesitter.configs").setup {
+        textobjects = {
+          select = {
+            enable = true,
+            keymaps = {
+              -- Normal mode: af/if/ac/ic/aa/ia/ab/ib (VSCode-style)
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+              ["aa"] = "@parameter.outer",
+              ["ia"] = "@parameter.inner",
+              ["ab"] = "@block.outer",
+              ["ib"] = "@block.inner",
+            },
+          },
+        },
+      }
+    end,
+  },
 }
