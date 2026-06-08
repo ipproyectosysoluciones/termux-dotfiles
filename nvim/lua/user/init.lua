@@ -36,7 +36,7 @@ end
 
 -- T4.7: Octo.nvim sensible defaults (called from plugins/integrations/init.lua
 -- when the plugin loads, gated by has_octo())
-function M.setup_octo_defaults()
+function M.apply_octo_defaults()
   vim.g.octo_browse_split_above = 1
   vim.g.octo_view_issue_args = "assignee"
   vim.g.octo_comment_thread_view_as_plain = 0
