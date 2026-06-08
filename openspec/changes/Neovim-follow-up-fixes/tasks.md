@@ -172,7 +172,7 @@ nvim --headless +Lazy! sync +q
 
 **Deps**: T4.1–T4.7 complete (they are — verified in verify-report).
 
-**Status**: 🔲 **DEFERRED** — Cannot regenerate lockfile in headless environment without Mason/network. User must run `:Lazy! sync` in Termux after PR #120 merges to resolve real SHAs for: `octo.nvim`, `auto-session`, `lazydev.nvim`, `nvim-treesitter-textobjects`. The lockfile will be updated automatically on first sync.
+**Status**: ✅ **DONE** (resolved via merge commit `30acbd9` — main → dev brought in `fe9786b` lockfile regen) in headless environment without Mason/network. User must run `:Lazy! sync` in Termux after PR #120 merges to resolve real SHAs for: `octo.nvim`, `auto-session`, `lazydev.nvim`, `nvim-treesitter-textobjects`. The lockfile will be updated automatically on first sync.
 
 ---
 
