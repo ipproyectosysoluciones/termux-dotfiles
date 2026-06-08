@@ -121,18 +121,21 @@ print('PR #3 plugins pinned')
     [ "$output" = "PR #3 plugins pinned" ]
 }
 
-@test "PR #4 T4.8 deferral — octo.nvim, auto-session, lazydev.nvim, treesitter-textobjects NOT in lockfile (expected)" {
+@test "PR #4 T4.8 — octo.nvim, auto-session, lazydev.nvim, treesitter-textobjects ARE in lockfile (resolved via :Lazy! sync)" {
     run python3 -c "
 import json
 lock = json.load(open('$LOCKFILE'))
-deferred = ['octo.nvim', 'auto-session', 'lazydev.nvim', 'nvim-treesitter-textobjects']
-missing = [n for n in deferred if n not in lock]
+t4_plugins = ['octo.nvim', 'auto-session', 'lazydev.nvim', 'nvim-treesitter-textobjects']
+missing = [n for n in t4_plugins if n not in lock]
 if missing:
-    print('expected missing (T4.8 deferred): ' + str(missing))
-else:
-    print('unexpected: all PR #4 plugins are in lockfile')
+    print('FAIL: T4.8 plugins still missing from lockfile: ' + str(missing))
     exit(1)
+else:
+    print('OK: all T4.8 plugins are in lockfile')
+    for p in t4_plugins:
+        commit = lock[p].get('commit', '?')
+        print(f'  {p}: {commit[:8]}')
 "
     [ "$status" -eq 0 ]
-    [[ "$output" == "expected missing"* ]]
+    [[ "$output" == "OK: all T4.8 plugins are in lockfile"* ]]
 }

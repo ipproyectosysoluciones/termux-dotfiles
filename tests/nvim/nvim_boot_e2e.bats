@@ -23,10 +23,18 @@ setup() {
 }
 
 @test "nvim version is at least 0.10.0" {
-    run nvim --version | head -1
+    run nvim --version
     [ "$status" -eq 0 ]
     # Version line format: "NVIM v0.12.2" or "NVIM v0.11.0-dev"
-    [[ "$output" == "NVIM v"* ]]
+    # Extract first line and verify version >= 0.10.0
+    local version_line
+    version_line=$(echo "$output" | head -1)
+    [[ "$version_line" == "NVIM v"* ]]
+    # Check major.minor >= 0.10
+    local major minor
+    major=$(echo "$version_line" | sed -E 's/NVIM v([0-9]+)\.([0-9]+).*/\1/')
+    minor=$(echo "$version_line" | sed -E 's/NVIM v([0-9]+)\.([0-9]+).*/\2/')
+    [[ "$major" -gt 0 ]] || [[ "$major" -eq 0 && "$minor" -ge 10 ]]
 }
 
 ########################################
