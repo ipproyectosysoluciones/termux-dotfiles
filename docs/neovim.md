@@ -1,135 +1,169 @@
-# Neovim Configuration
+# Neovim Configuration / Configuración de Neovim
 
-This document describes the Neovim setup within the termux-dotfiles environment.
+## ES
 
-## Overview
+### Visión General
 
-Neovim is configured as the primary text editor, with a modular configuration structure using lazy.nvim for plugin management. The configuration lives in `nvim/` directory and is symlinked to `~/.config/nvim`.
+Esta configuración de Neovim usa **NvChad v2.5** como base, con **lazy.nvim** como gestor de plugins. El objetivo es tener un editor powerful pero rápido, con AI integrado (CodeCompanion.nvim) y tooling MEAN/MERN.
 
-## Directory Structure
+**Prerrequisitos:**
+- Termux + proot-debian (Debian 12)
+- Neovim ≥0.10
+- `gh` CLI (para octo.nvim, opcional)
+- Variables de entorno para AI: `GEMINI_API_KEY`, `ANTHROPIC_API_KEY`, y/o `OPENAI_API_KEY`
 
-```tree
+### Estructura de Directorios
+
+```
 nvim/
-├── init.lua              # Main configuration entry
+├── init.lua                      # Bootstrap: carga NvChad + plugins + mappings
+├── lazy-lock.json                # Pin de commits de plugins (regenerar con :Lazy sync)
 ├── lua/
-│   └── config/           # Configuration modules
-│       ├── keymaps.lua   # Keybindings
-│       ├── options.lua   # Neovim options
-│       └── plugins.lua   # Plugin list
-├── plugin/                # Auto-loaded plugins (lazy.nvim)
-└── .cache/               # Cache directory (gitignored)
+│   ├── config.lazy.lua          # Configuración de lazy.nvim
+│   ├── user/init.lua             # Feature flags: has_ai_keys, has_biome, has_octo
+│   ├── mappings.lua              # Todos los keymaps (origen de verdad para docs)
+│   ├── options.lua               # Opciones de Neovim (NvChad base)
+│   └── plugins/
+│       ├── init.lua              # Importa todos los grupos de plugins
+│       ├── ai/init.lua           # CodeCompanion.nvim (lazy, cmd-triggered)
+│       ├── completion/init.lua   # nvim-cmp + luasnip
+│       ├── db/init.lua           # vim-dadbod + vim-dadbod-ui
+│       ├── editor/init.lua       # telescope + treesitter-textobjects
+│       ├── git/init.lua          # gitsigns.nvim (blame, preview, diff)
+│       ├── integrations/init.lua # octo.nvim (GitHub PR/issue, lazy, gated by has_octo)
+│       ├── lsp/init.lua          # Mason + lspconfig + angularls + lazydev
+│       ├── session/init.lua      # auto-session (restore on VimEnter)
+│       ├── terminal/init.lua     # toggleterm.nvim
+│       ├── testing/init.lua      # neotest + jest + playwright
+│       └── ui/init.lua           # nvim-tree + dashboard + which-key
+└── snippets/                     # Snippet packs (VSCode format)
+    ├── package.json              # Discoverability surface para luasnip
+    ├── react/
+    ├── angular/
+    ├── express/
+    └── mongoose/
 ```
 
-## Plugins
-
-### Lazy.nvim (Plugin Manager)
-
-Lazy.nvim is used for plugin management with lazy loading for performance.
-
-Location: `nvim/lua/config/plugins.lua`
-
-### Core Plugins
-
-| Plugin                      | Purpose                  |
-| --------------------------- | ------------------------ |
-| `folke/lazy.nvim`           | Plugin manager           |
-| `nvim-lualine/lualine.nvim` | Status line              |
-| `nvim-tree/nvim-tree.lua`   | File explorer            |
-| `hrsh7th/nvim-cmp`          | Autocomplete             |
-| `neovim/nvim-lspconfig`     | Language Server Protocol |
-
-### Plugin Installation
-
-Run the plugin installation script:
+### Instalación Rápida
 
 ```bash
-bash scripts/nvim/zsh-plugins.sh
-```
+# 1. Instalar plugins
+nvim --headless +'Lazy! sync' +q
 
-This script installs plugins to `~/.zsh-plugins` directory and links them to Neovim's plugin directory.
+# 2. Instalar LSP servers (requiere red)
+nvim --headless +'MasonInstallAll' +q
 
-## Configuration Files
-
-### init.lua
-
-Main entry point that loads all configuration modules.
-
-### lua/config/options.lua
-
-Sets Neovim options like:
-
-- `number` (line numbers)
-- `relativenumber` (relative line numbers)
-- `expandtab` (spaces instead of tabs)
-- `shiftwidth=2` (indentation width)
-- `cursorline` (highlight current line)
-- `signcolumn=yes` (always show sign column)
-
-### lua/config/keymaps.lua
-
-Defines keybindings including:
-
-- `jk` or `kj` → `<Esc>` (exit insert mode)
-- `H`/`L` → beginning/end of line
-- `<Leader>e` → toggle NvimTree
-- `gcc` → toggle comment
-
-### lua/config/plugins.lua
-
-Configures lazy.nvim with plugin specifications and lazy-loading settings.
-
-## Installation
-
-### Automated
-
-Run the main install script:
-
-```bash
-bash scripts/install.sh
-```
-
-This calls `scripts/nvim/zsh-plugins.sh` which installs all configured plugins.
-
-### Manual
-
-```bash
-# Clone plugins
-bash scripts/nvim/zsh-plugins.sh
-
-# Open Neovim (plugins auto-install via lazy)
+# 3. Verificar que todo funciona
 nvim
+# :Lazy sync  (si hay drift en el lockfile)
+# :Octo pr list  (si gh está en PATH)
 ```
 
-## Keybindings
+### Feature Flags (user/init.lua)
 
-| Key         | Mode   | Action              |
-| ----------- | ------ | ------------------- |
-| `jk` / `kj` | Insert | Exit to normal mode |
-| `H`         | Normal | Go to line start    |
-| `L`         | Normal | Go to line end      |
-| `<Space>e`  | Normal | Toggle NvimTree     |
-| `gcc`       | Normal | Toggle line comment |
-| `gc`        | Visual | Block comment       |
+El archivo `nvim/lua/user/init.lua` actúa como chokepoint para plugins opcionales:
 
-## Troubleshooting
+| Función | Condición | Plugin |
+|---|---|---|
+| `has_ai_keys()` | `GEMINI_API_KEY` o `ANTHROPIC_API_KEY` o `OPENAI_API_KEY` | CodeCompanion.nvim |
+| `has_biome()` | `BIOME_ENABLED=1` | biome formatter (opt-in) |
+| `has_octo()` | `gh` está en PATH | octo.nvim |
 
-### Plugins not loading
+Si una variable no está seteada, el plugin correspondiente no se carga — no hay errores, solo un fallback.
 
-Check that plugins.sh ran successfully and `~/.zsh-plugins` exists:
+### Testing
 
 ```bash
-ls ~/.zsh-plugins
+# Tests de la config (bats)
+bats --recursive tests/nvim/
+
+# Tests completos (incluye install, brew, etc.)
+bats --recursive tests/
 ```
 
-### Lazy.nvim errors
+Hay 5 tests pre-existentes fallando (#14, #17, #132, #369, #372) que no son parte de este cambio.
 
-Remove lock file and reload:
+---
+
+## EN
+
+### Overview
+
+This Neovim config uses **NvChad v2.5** as the base with **lazy.nvim** for plugin management. The goal is a powerful but fast editor with integrated AI (CodeCompanion.nvim) and MEAN/MERN tooling.
+
+**Prerequisites:**
+- Termux + proot-debian (Debian 12)
+- Neovim ≥0.10
+- `gh` CLI (for octo.nvim, optional)
+- AI environment variables: `GEMINI_API_KEY`, `ANTHROPIC_API_KEY`, and/or `OPENAI_API_KEY`
+
+### Directory Structure
+
+```
+nvim/
+├── init.lua                      # Bootstrap: loads NvChad + plugins + mappings
+├── lazy-lock.json                # Plugin commit pins (regen with :Lazy sync)
+├── lua/
+│   ├── config.lazy.lua           # lazy.nvim configuration
+│   ├── user/init.lua             # Feature flags: has_ai_keys, has_biome, has_octo
+│   ├── mappings.lua              # All keymaps (source of truth for docs)
+│   ├── options.lua               # Neovim options (NvChad base)
+│   └── plugins/
+│       ├── init.lua              # Imports all plugin groups
+│       ├── ai/init.lua           # CodeCompanion.nvim (lazy, cmd-triggered)
+│       ├── completion/init.lua   # nvim-cmp + luasnip
+│       ├── db/init.lua           # vim-dadbod + vim-dadbod-ui
+│       ├── editor/init.lua       # telescope + treesitter-textobjects
+│       ├── git/init.lua          # gitsigns.nvim (blame, preview, diff)
+│       ├── integrations/init.lua # octo.nvim (GitHub PR/issue, lazy, gated by has_octo)
+│       ├── lsp/init.lua          # Mason + lspconfig + angularls + lazydev
+│       ├── session/init.lua      # auto-session (restore on VimEnter)
+│       ├── terminal/init.lua     # toggleterm.nvim
+│       ├── testing/init.lua      # neotest + jest + playwright
+│       └── ui/init.lua           # nvim-tree + dashboard + which-key
+└── snippets/                     # Snippet packs (VSCode format)
+    ├── package.json              # Discoverability surface for luasnip
+    ├── react/
+    ├── angular/
+    ├── express/
+    └── mongoose/
+```
+
+### Quick Install
 
 ```bash
-rm nvim/lazy-lock.json
-nvim +Lazy sync
+# 1. Install plugins
+nvim --headless +'Lazy! sync' +q
+
+# 2. Install LSP servers (requires network)
+nvim --headless +'MasonInstallAll' +q
+
+# 3. Verify everything works
+nvim
+# :Lazy sync  (if lockfile has drift)
+# :Octo pr list  (if gh is on PATH)
 ```
 
-### Slow startup
+### Feature Flags (user/init.lua)
 
-Check lazy-loading configuration in `lua/config/plugins.lua` and ensure large plugins use proper event triggers.
+The file `nvim/lua/user/init.lua` acts as a chokepoint for optional plugins:
+
+| Function | Condition | Plugin |
+|---|---|---|
+| `has_ai_keys()` | `GEMINI_API_KEY` or `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` | CodeCompanion.nvim |
+| `has_biome()` | `BIOME_ENABLED=1` | biome formatter (opt-in) |
+| `has_octo()` | `gh` is on PATH | octo.nvim |
+
+If a variable is not set, the corresponding plugin does not load — no errors, just a fallback.
+
+### Testing
+
+```bash
+# Config tests (bats)
+bats --recursive tests/nvim/
+
+# Full test suite (includes install, brew, etc.)
+bats --recursive tests/
+```
+
+There are 5 pre-existing failing tests (#14, #17, #132, #369, #372) that are not part of this change.
