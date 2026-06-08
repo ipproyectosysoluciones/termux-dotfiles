@@ -9,26 +9,38 @@ MAPPINGS_FILE="$PROJECT_ROOT/nvim/lua/mappings.lua"
 @test "all <leader> keymap calls have a desc field" {
   [ -f "$MAPPINGS_FILE" ]
 
-  # Parse all map() calls with <leader> and verify each has desc.
-  # Uses perl (slurp mode) to handle multi-line map blocks.
+  # Find all map() calls with <leader> and check each has desc.
+  # Uses awk to parse multi-line map blocks without perl.
   local errors
-  errors=$(perl -0777 -ne '
-    my $content = $_;
-    my @failures;
-    while ($content =~ /map\s*\((?:[^)]*?)<leader>(?:[^)]*?)\{([[:print:]]*?)\}/gx) {
-      my $opts = $1 // "";
-      unless ($opts =~ /desc\s*=/x) {
-        my $match = $&;
-        $match =~ /<leader>([^"]*)"/;
-        my $key = "<leader>" . ($1 // "?");
-        push @failures, $key;
+  errors=$(awk '
+    /map\s*\(/ {
+      block = $0
+      in_block = 1
+    }
+    in_block {
+      block = block $0
+      open = (open ? open : 0) + gsub(/\{/, "{") - gsub(/\}/, "}")
+      if (open == 0 && block ~ /map\s*\(/) {
+        if (block ~ /<leader>/ && block !~ /desc\s*=/) {
+          # Extract the leader key
+          if (match(block, /<leader>([^"]*)"/, arr)) {
+            failures = failures "MISSING desc: <leader>" arr[1] "\n"
+          } else {
+            failures = failures "MISSING desc: <leader>? (parse error)\n"
+          }
+        }
+        block = ""
+        in_block = 0
+        open = 0
       }
     }
-    if (@failures) {
-      print "MISSING desc: " . join(", ", @failures) . "\n";
-      exit 1;
+    END {
+      if (failures) {
+        printf "%s", failures
+        exit 1
+      }
+      exit 0
     }
-    exit 0;
   ' "$MAPPINGS_FILE" 2>&1) || {
     echo "$errors" >&2
     return 1
