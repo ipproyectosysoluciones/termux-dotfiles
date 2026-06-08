@@ -68,7 +68,6 @@ return {
         sort = { sorter = "case_sensitive" },
         view = {
           width = 30,
-          hide_root_folder = false,
           side = "left",
           preserve_window_proportions = false,
           number = false,
@@ -77,19 +76,15 @@ return {
           float = {
             enable = false,
             quit_on_focus_loss = true,
-            open_on_config_dir = false,
           },
         },
         renderer = {
           highlight_git = true,
           highlight_opened_files = "name",
-          root_markers = { "init.lua", ".git", ".hg", ".svn" },
-          indent_markers = { "├──", "└──" },
           icons = {
             webdev_colors = true,
             git_placement = "before",
             modified_placement = "signcolumn",
-            bookmark_placement = "signcolumn",
           },
         },
         filters = {
